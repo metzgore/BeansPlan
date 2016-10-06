@@ -18,6 +18,7 @@ import butterknife.Unbinder;
 import de.metzgore.rbtvschedule.R;
 import de.metzgore.rbtvschedule.data.Schedule;
 import de.metzgore.rbtvschedule.data.Show;
+import de.metzgore.rbtvschedule.util.DividerItemDecoration;
 
 public class DailyScheduleFragment extends Fragment implements DailyScheduleContract.View {
 
@@ -52,6 +53,7 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
         View view = inflater.inflate(R.layout.fragment_daily_schedule, container, false);
         mUnbinder = ButterKnife.bind(this, view);
 
+        mDailyScheduleRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
         mDailyScheduleRecyclerView.setAdapter(mScheduleAdapter);
         mDailyScheduleRecyclerView.setHasFixedSize(true);
         mDailyScheduleRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
