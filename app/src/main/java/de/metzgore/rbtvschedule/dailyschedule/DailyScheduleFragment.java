@@ -3,8 +3,10 @@ package de.metzgore.rbtvschedule.dailyschedule;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,8 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
 
     @BindView(R.id.fragment_daily_schedule_recycler_view)
     RecyclerView mDailyScheduleRecyclerView;
+    @BindView(R.id.fragment_daily_schedule_swipe_refresh)
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     private ScheduleAdapter mScheduleAdapter;
 
@@ -40,8 +44,6 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
 
         mActionsListener = new DailySchedulePresenter(this);
         mScheduleAdapter = new ScheduleAdapter();
-
-        mActionsListener.loadDailySchedule();
     }
 
     @Nullable
@@ -53,7 +55,22 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
         mDailyScheduleRecyclerView.setAdapter(mScheduleAdapter);
         mDailyScheduleRecyclerView.setHasFixedSize(true);
         mDailyScheduleRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mActionsListener.loadDailySchedule();
+            }
+        });
+
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        mActionsListener.loadDailySchedule();
     }
 
     @Override
@@ -65,6 +82,11 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
     @Override
     public void showSchedule(Schedule schedule) {
         mScheduleAdapter.setSchedule(schedule);
+    }
+
+    @Override
+    public void showRefreshIndicator(boolean isRefreshing) {
+        mSwipeRefreshLayout.setRefreshing(isRefreshing);
     }
 
     protected class ShowHolder extends RecyclerView.ViewHolder {

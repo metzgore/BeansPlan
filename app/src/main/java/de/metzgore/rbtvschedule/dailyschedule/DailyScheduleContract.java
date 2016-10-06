@@ -6,6 +6,8 @@ interface DailyScheduleContract {
 
     interface View {
         void showSchedule(Schedule schedule);
+
+        void showRefreshIndicator(boolean isRefreshing);
     }
 
     interface UserActionListener {

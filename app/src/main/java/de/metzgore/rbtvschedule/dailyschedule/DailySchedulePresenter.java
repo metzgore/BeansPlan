@@ -25,6 +25,8 @@ class DailySchedulePresenter implements DailyScheduleContract.UserActionListener
 
     @Override
     public void loadDailySchedule() {
+        mView.showRefreshIndicator(true);
+
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(new Date());
 
@@ -47,5 +49,7 @@ class DailySchedulePresenter implements DailyScheduleContract.UserActionListener
                 Log.d(TAG, "failed to download daily schedule");
             }
         });
+
+        mView.showRefreshIndicator(false);
     }
 }
