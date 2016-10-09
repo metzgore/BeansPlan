@@ -35,7 +35,7 @@ public class Show {
     @Expose
     private String mGame;
 
-    private enum Type {
+    public enum Type {
         @SerializedName("")
         NONE,
         @SerializedName("premiere")
@@ -78,6 +78,11 @@ public class Show {
 
     public String getGame() {
         return mGame;
+    }
+
+    public boolean isCurrentlyRunning() {
+        Date now = new Date();
+        return !now.before(mTimeStart) && !now.after(mTimeEnd);
     }
 
     @Override

@@ -26,4 +26,13 @@ public class Schedule {
 
         return shows.toString();
     }
+
+    public int getIdxOfCurrentShow() {
+        for (int i = 0; i < mShows.size(); i++) {
+            if (mShows.get(i).isCurrentlyRunning())
+                return i;
+        }
+
+        return 0;
+    }
 }

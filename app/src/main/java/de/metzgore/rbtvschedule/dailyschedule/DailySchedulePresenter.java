@@ -5,7 +5,6 @@ import android.util.Log;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import de.metzgore.rbtvschedule.data.RBTVScheduleApi;
 import de.metzgore.rbtvschedule.data.Schedule;
