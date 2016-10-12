@@ -3,6 +3,7 @@ package de.metzgore.rbtvschedule.dailyschedule;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -96,6 +97,18 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
     @Override
     public void showRefreshIndicator(boolean isRefreshing) {
         mSwipeRefreshLayout.setRefreshing(isRefreshing);
+    }
+
+    @Override
+    public void showRetrySnackbar(int messageId) {
+        Snackbar errorSnackbar = Snackbar.make(getView(), messageId, Snackbar.LENGTH_INDEFINITE)
+                .setAction("Retry", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mActionsListener.loadDailySchedule();
+                    }
+                });
+        errorSnackbar.show();
     }
 
     protected class ShowHolder extends RecyclerView.ViewHolder {

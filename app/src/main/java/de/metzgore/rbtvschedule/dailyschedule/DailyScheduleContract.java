@@ -8,6 +8,8 @@ interface DailyScheduleContract {
         void showSchedule(Schedule schedule);
 
         void showRefreshIndicator(boolean isRefreshing);
+
+        void showRetrySnackbar(int messageId);
     }
 
     interface UserActionListener {

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">RBTV Schedule</string>
+
+    <string name="error_message_schedule_general">Error while loading schedule</string>
+    <string name="error_message_device_offline">Your device appears to be offline</string>
+    <string name="retry">Retry</string>
 </resources>
