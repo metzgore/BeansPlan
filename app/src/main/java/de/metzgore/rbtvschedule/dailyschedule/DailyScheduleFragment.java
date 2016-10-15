@@ -1,6 +1,7 @@
 package de.metzgore.rbtvschedule.dailyschedule;
 
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -190,7 +191,17 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
             }
 
             if (mShow.isCurrentlyRunning()) {
-                mBase.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.border_current_show));
+                //padding is gone on api level < 21
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                    int paddingTop = mBase.getPaddingTop();
+                    int paddingLeft = mBase.getPaddingLeft();
+                    int paddingRight = mBase.getPaddingRight();
+                    int paddingBottom = mBase.getPaddingBottom();
+                    mBase.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.border_current_show));
+                    mBase.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
+                } else {
+                    mBase.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.border_current_show));
+                }
                 mTitleTextView.setCompoundDrawablesWithIntrinsicBounds(mNowPlaying, null, null, null);
             } else {
                 mBase.setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.white));
