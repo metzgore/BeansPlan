@@ -18,7 +18,7 @@ public interface RBTVScheduleApi {
                                  @Path("day") String day);
 
     Gson gson = new GsonBuilder()
-            .setDateFormat("yyyy-MM-dd'T'HH:mm:ssX")
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
             .create();
 
     Retrofit retrofit = new Retrofit.Builder()
