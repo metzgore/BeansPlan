@@ -85,6 +85,11 @@ public class Show {
         return !now.before(mTimeStart) && !now.after(mTimeEnd);
     }
 
+    public boolean wasAlreadyShown() {
+        Date now = new Date();
+        return now.before(mTimeEnd);
+    }
+
     @Override
     public String toString() {
         return "Show{" +

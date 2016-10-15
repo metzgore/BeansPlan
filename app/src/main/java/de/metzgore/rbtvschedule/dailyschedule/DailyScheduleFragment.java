@@ -146,6 +146,8 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
         TextView mTopicTextView;
         @BindView(R.id.list_item_show_start_text_view)
         TextView mStartTextView;
+        @BindView(R.id.list_item_show_time_dash)
+        TextView mShowTimeDash;
         @BindView(R.id.list_item_show_end_text_view)
         TextView mEndTextView;
         @BindView(R.id.list_item_show_length_text_view)
@@ -180,10 +182,11 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
                 case LIVE:
                 case PREMIERE:
                     mTypeTextView.setText(mShow.getType().toString());
-                    mTypeTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
                     break;
                 case NONE:
+                default:
                     mTypeTextView.setText("");
+                    break;
             }
 
             if (mShow.isCurrentlyRunning()) {
@@ -194,6 +197,18 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
                 mBase.getBackground().setAlpha(100);
                 mTitleTextView.setCompoundDrawables(null, null, null, null);
             }
+
+            setAllViewsEnabled(mShow.wasAlreadyShown());
+        }
+
+        private void setAllViewsEnabled(boolean enabled) {
+            mTitleTextView.setEnabled(enabled);
+            mTopicTextView.setEnabled(enabled);
+            mStartTextView.setEnabled(enabled);
+            mShowTimeDash.setEnabled(enabled);
+            mEndTextView.setEnabled(enabled);
+            mLengthTextView.setEnabled(enabled);
+            mTypeTextView.setEnabled(enabled);
         }
     }
 
