@@ -187,8 +187,7 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
             }
 
             if (mShow.isCurrentlyRunning()) {
-                mBase.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryLight));
-                mBase.getBackground().setAlpha(60);
+                mBase.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.border_current_show));
                 mTitleTextView.setCompoundDrawablesWithIntrinsicBounds(mNowPlaying, null, null, null);
             } else {
                 mBase.setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.white));
