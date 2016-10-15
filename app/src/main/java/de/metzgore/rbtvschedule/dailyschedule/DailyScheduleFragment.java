@@ -10,6 +10,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -36,6 +39,8 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
     @BindView(R.id.fragment_daily_schedule_swipe_refresh)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
+    private Snackbar mErrorSnackbar;
+
     private ScheduleAdapter mScheduleAdapter;
 
     private DailySchedulePresenter mActionsListener;
@@ -52,6 +57,8 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
 
         mActionsListener = new DailySchedulePresenter(this);
         mScheduleAdapter = new ScheduleAdapter();
+
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -83,6 +90,26 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_fragment_daily_schedule, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                if (mErrorSnackbar != null && mErrorSnackbar.isShown())
+                    mErrorSnackbar.dismiss();
+
+                mActionsListener.loadDailySchedule();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
@@ -101,14 +128,14 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
 
     @Override
     public void showRetrySnackbar(int messageId) {
-        Snackbar errorSnackbar = Snackbar.make(getView(), messageId, Snackbar.LENGTH_INDEFINITE)
-                .setAction("Retry", new View.OnClickListener() {
+        mErrorSnackbar = Snackbar.make(getView(), messageId, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.action_retry, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         mActionsListener.loadDailySchedule();
                     }
                 });
-        errorSnackbar.show();
+        mErrorSnackbar.show();
     }
 
     protected class ShowHolder extends RecyclerView.ViewHolder {
