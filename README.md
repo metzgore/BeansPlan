@@ -3,6 +3,9 @@
 **RBTV Schedule** is an Android app which download and shows the daily schedule of the online streaming station [Rocketbeans TV](https://www.rocketbeans.tv/).
 The schedule data is used from <http://api.rbtv.rodney.io>.
 
+## Screenshots
+<img src="/screenshots/screenshot_daily_schedule.png" width="40%">
+
 ## Used patterns and libraries
 The app uses MVP pattern and various libraries, including:
 * [Butter Knife](http://jakewharton.github.io/butterknife/)
