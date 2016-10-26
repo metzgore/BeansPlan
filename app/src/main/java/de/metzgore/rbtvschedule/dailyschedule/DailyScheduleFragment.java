@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.DividerItemDecoration;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,7 +30,6 @@ import butterknife.Unbinder;
 import de.metzgore.rbtvschedule.R;
 import de.metzgore.rbtvschedule.data.Schedule;
 import de.metzgore.rbtvschedule.data.Show;
-import de.metzgore.rbtvschedule.util.DividerItemDecoration;
 
 public class DailyScheduleFragment extends Fragment implements DailyScheduleContract.View {
 
@@ -68,7 +68,8 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
         View view = inflater.inflate(R.layout.fragment_daily_schedule, container, false);
         mUnbinder = ButterKnife.bind(this, view);
 
-        mDailyScheduleRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
+        mDailyScheduleRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),
+                DividerItemDecoration.VERTICAL));
         mDailyScheduleRecyclerView.setAdapter(mScheduleAdapter);
         mDailyScheduleRecyclerView.setHasFixedSize(true);
         mDailyScheduleRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
