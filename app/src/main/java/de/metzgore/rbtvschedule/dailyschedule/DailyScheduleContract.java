@@ -10,6 +10,8 @@ interface DailyScheduleContract {
         void showRefreshIndicator(boolean isRefreshing);
 
         void showRetrySnackbar(int messageId);
+
+        void hideSnackbar();
     }
 
     interface UserActionListener {

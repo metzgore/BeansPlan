@@ -27,6 +27,7 @@ class DailySchedulePresenter implements DailyScheduleContract.UserActionListener
 
     @Override
     public void loadDailySchedule() {
+        mView.hideSnackbar();
         mView.showRefreshIndicator(true);
 
         Calendar calendar = new GregorianCalendar();

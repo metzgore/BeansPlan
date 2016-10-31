@@ -85,8 +85,8 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onResume() {
+        super.onResume();
 
         mActionsListener.loadDailySchedule();
     }
@@ -101,9 +101,6 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                if (mErrorSnackbar != null && mErrorSnackbar.isShown())
-                    mErrorSnackbar.dismiss();
-
                 mActionsListener.loadDailySchedule();
                 return true;
             default:
@@ -138,6 +135,12 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
                     }
                 });
         mErrorSnackbar.show();
+    }
+
+    @Override
+    public void hideSnackbar() {
+        if (mErrorSnackbar != null && mErrorSnackbar.isShown())
+            mErrorSnackbar.dismiss();
     }
 
     protected class ShowHolder extends RecyclerView.ViewHolder {
