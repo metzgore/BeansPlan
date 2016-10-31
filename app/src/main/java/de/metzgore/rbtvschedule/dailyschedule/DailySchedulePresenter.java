@@ -10,6 +10,7 @@ import java.util.GregorianCalendar;
 import de.metzgore.rbtvschedule.R;
 import de.metzgore.rbtvschedule.data.RBTVScheduleApi;
 import de.metzgore.rbtvschedule.data.Schedule;
+import de.metzgore.rbtvschedule.util.Injector;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,7 +32,7 @@ class DailySchedulePresenter implements DailyScheduleContract.UserActionListener
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(new Date());
 
-        RBTVScheduleApi rbtvScheduleApi = RBTVScheduleApi.retrofit.create(RBTVScheduleApi.class);
+        RBTVScheduleApi rbtvScheduleApi = Injector.provideRBTVScheduleApi();
         Call<Schedule>  call = rbtvScheduleApi.dailySchedule(
                 String.valueOf(calendar.get(Calendar.YEAR)),
                 //Calendar.MONTH starts at 0
