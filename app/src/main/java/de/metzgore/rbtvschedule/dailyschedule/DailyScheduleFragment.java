@@ -4,17 +4,12 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -23,24 +18,25 @@ import android.widget.TextView;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import de.metzgore.rbtvschedule.R;
-import de.metzgore.rbtvschedule.data.Schedule;
 import de.metzgore.rbtvschedule.data.Show;
 
 public class DailyScheduleFragment extends Fragment implements DailyScheduleContract.View {
 
     private static final String TAG = DailyScheduleFragment.class.getSimpleName();
 
+    private static final String ARG_SCHEDULE = "arg_schedule";
+
     @BindView(R.id.fragment_daily_schedule_recycler_view)
     RecyclerView mDailyScheduleRecyclerView;
-    @BindView(R.id.fragment_daily_schedule_swipe_refresh)
-    SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private Snackbar mErrorSnackbar;
+    private List<Show> mSchedule;
 
     private ScheduleAdapter mScheduleAdapter;
 
@@ -48,18 +44,28 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
 
     private Unbinder mUnbinder;
 
-    public static Fragment newInstance() {
-        return  new DailyScheduleFragment();
+    public static Fragment newInstance(List<Show> shows) {
+        DailyScheduleFragment fragment = new DailyScheduleFragment();
+
+        Bundle args = new Bundle();
+        args.putParcelableArrayList(ARG_SCHEDULE, (ArrayList) shows);
+
+        fragment.setArguments(args);
+
+        return fragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mActionsListener = new DailySchedulePresenter(this);
         mScheduleAdapter = new ScheduleAdapter();
 
-        setHasOptionsMenu(true);
+        Bundle args = getArguments();
+
+        mSchedule = args.getParcelableArrayList(ARG_SCHEDULE);
+
+        mActionsListener = new DailySchedulePresenter(this);
     }
 
     @Nullable
@@ -74,38 +80,13 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
         mDailyScheduleRecyclerView.setHasFixedSize(true);
         mDailyScheduleRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mActionsListener.loadDailySchedule();
-            }
-        });
-
         return view;
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-        mActionsListener.loadDailySchedule();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_fragment_daily_schedule, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_refresh:
-                mActionsListener.loadDailySchedule();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+    public void onStart() {
+        super.onStart();
+        mActionsListener.loadDailySchedule(mSchedule);
     }
 
     @Override
@@ -115,32 +96,9 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
     }
 
     @Override
-    public void showSchedule(Schedule schedule) {
+    public void showSchedule(List<Show> schedule) {
         mScheduleAdapter.setSchedule(schedule);
         mDailyScheduleRecyclerView.smoothScrollToPosition(mScheduleAdapter.getIdxOfCurrentShow());
-    }
-
-    @Override
-    public void showRefreshIndicator(boolean isRefreshing) {
-        mSwipeRefreshLayout.setRefreshing(isRefreshing);
-    }
-
-    @Override
-    public void showRetrySnackbar(int messageId) {
-        mErrorSnackbar = Snackbar.make(getView(), messageId, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.action_retry, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mActionsListener.loadDailySchedule();
-                    }
-                });
-        mErrorSnackbar.show();
-    }
-
-    @Override
-    public void hideSnackbar() {
-        if (mErrorSnackbar != null && mErrorSnackbar.isShown())
-            mErrorSnackbar.dismiss();
     }
 
     protected class ShowHolder extends RecyclerView.ViewHolder {
@@ -229,7 +187,7 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
 
     private class ScheduleAdapter extends RecyclerView.Adapter<ShowHolder> {
 
-        private Schedule mSchedule = new Schedule();
+        private List<Show> mSchedule;
 
         @Override
         public ShowHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -240,21 +198,26 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
 
         @Override
         public void onBindViewHolder(ShowHolder holder, int position) {
-            holder.bindView(mSchedule.getShows().get(position));
+            holder.bindView(mSchedule.get(position));
         }
 
         @Override
         public int getItemCount() {
-            return mSchedule.getShows().size();
+            return mSchedule.size();
         }
 
-        void setSchedule(Schedule schedule) {
+        void setSchedule(List<Show> schedule) {
             mSchedule = schedule;
             notifyDataSetChanged();
         }
 
         int getIdxOfCurrentShow() {
-            return mSchedule.getIdxOfCurrentShow();
+            for (int i = 0; i < mSchedule.size(); i++) {
+                if (mSchedule.get(i).isCurrentlyRunning())
+                    return i;
+            }
+
+            return 0;
         }
     }
 }

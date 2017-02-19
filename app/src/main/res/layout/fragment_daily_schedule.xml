@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout
+<android.support.v7.widget.RecyclerView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragment_daily_schedule_swipe_refresh"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_daily_schedule_recycler_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <android.support.v7.widget.RecyclerView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/fragment_daily_schedule_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="de.metzgore.rbtvschedule.MainActivity"/>
-
-</android.support.v4.widget.SwipeRefreshLayout>
+    android:layout_height="match_parent"
+    tools:context="de.metzgore.rbtvschedule.MainActivity"/>

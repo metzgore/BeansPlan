@@ -1,20 +1,16 @@
 package de.metzgore.rbtvschedule.dailyschedule;
 
-import de.metzgore.rbtvschedule.data.Schedule;
+import java.util.List;
+
+import de.metzgore.rbtvschedule.data.Show;
 
 interface DailyScheduleContract {
 
     interface View {
-        void showSchedule(Schedule schedule);
-
-        void showRefreshIndicator(boolean isRefreshing);
-
-        void showRetrySnackbar(int messageId);
-
-        void hideSnackbar();
+        void showSchedule(List<Show> schedule);
     }
 
     interface UserActionListener {
-        void loadDailySchedule();
+        void loadDailySchedule(List<Show> schedule);
     }
 }

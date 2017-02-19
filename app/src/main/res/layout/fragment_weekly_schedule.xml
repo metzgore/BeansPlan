@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_weekly_schedule_swipe_refresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v4.view.ViewPager
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/fragment_weekly_schedule_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <android.support.v4.view.PagerTabStrip
+                android:id="@+id/fragment_weekly_schedule_pager_tab_strip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"/>
+
+    </android.support.v4.view.ViewPager>
+
+    <TextView
+        android:id="@+id/fragment_weekly_schedule_empty_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/alert_message_schedule_failed"
+        android:textSize="24sp"
+        android:drawableTop="@drawable/ic_warning"
+        android:visibility="gone"/>
+
+    </FrameLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

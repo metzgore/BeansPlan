@@ -35,6 +35,7 @@ public class Injector {
     private static GsonConverterFactory provideGsonConverterFactory() {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .setDateFormat("dd.MM.yyyy")
                 .create();
 
         return GsonConverterFactory.create(gson);

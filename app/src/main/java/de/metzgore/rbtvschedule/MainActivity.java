@@ -4,8 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
-import de.metzgore.rbtvschedule.dailyschedule.DailyScheduleFragment;
+import de.metzgore.rbtvschedule.weeklyschedule.WeeklyScheduleFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +25,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected Fragment createFragment() {
-        return DailyScheduleFragment.newInstance();
+        return WeeklyScheduleFragment.newInstance();
     }
 }
