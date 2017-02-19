@@ -3,9 +3,12 @@ package de.metzgore.rbtvschedule.weeklyschedule;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,6 +37,12 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.fragment_weekly_schedule_empty_view)
     TextView mEmptyView;
+    @BindView(R.id.fragment_weekly_schedule_tabs)
+    TabLayout mWeeklyScheduleTabs;
+    @BindView(R.id.fragment_weekly_schedule_base)
+    LinearLayout mWeeklyScheduleBase;
+    @BindView(R.id.fragment_weekly_schedule_toolbar)
+    Toolbar mWeeklyScheduleToolbar;
 
     private WeeklyScheduleAdapter mWeeklyScheduleAdapter;
 
@@ -65,9 +74,11 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
         View view = inflater.inflate(R.layout.fragment_weekly_schedule, container, false);
         mUnbinder = ButterKnife.bind(this, view);
 
-        mWeeklyScheduleViewPager.setAdapter(mWeeklyScheduleAdapter);
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.setSupportActionBar(mWeeklyScheduleToolbar);
+
         mWeeklyScheduleViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
-        mWeeklyScheduleViewPager.addOnPageChangeListener( new ViewPager.OnPageChangeListener() {
+        mWeeklyScheduleViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mWeeklyScheduleTabs) {
             @Override
             public void onPageScrolled(int position, float v, int i1) {
             }
@@ -81,7 +92,7 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
             public void onPageScrollStateChanged(int state) {
                 enableDisableSwipeRefresh(state == ViewPager.SCROLL_STATE_IDLE);
             }
-        } );
+        });
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -135,9 +146,11 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
 
     @Override
     public void showSchedule(Schedule schedule) {
-        mWeeklyScheduleViewPager.setVisibility(View.VISIBLE);
+        mWeeklyScheduleBase.setVisibility(View.VISIBLE);
         mWeeklyScheduleAdapter.setSchedule(schedule);
-        mWeeklyScheduleViewPager.setCurrentItem(mCurrentViewPagerItem, false);
+        mWeeklyScheduleViewPager.setAdapter(mWeeklyScheduleAdapter);
+        mWeeklyScheduleTabs.setupWithViewPager(mWeeklyScheduleViewPager);
+        mWeeklyScheduleViewPager.setCurrentItem(mCurrentViewPagerItem);
     }
 
     @Override
