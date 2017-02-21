@@ -18,11 +18,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import de.metzgore.rbtvschedule.R;
+import de.metzgore.rbtvschedule.dailyschedule.DailyScheduleFragment;
 import de.metzgore.rbtvschedule.data.Schedule;
 
 public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleContract.View {
@@ -139,6 +141,9 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
             case R.id.action_refresh:
                 mActionsListener.loadWeeklySchedule();
                 return true;
+            case R.id.action_today:
+                mActionsListener.goToCurrentShow();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -183,7 +188,20 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
 
     @Override
     public void showEmptyView(boolean visible) {
-        mEmptyView.setVisibility(visible ? View.VISIBLE : View.GONE);
+        mEmptyView.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    @Override
+    public void showCurrentDay(int idxOfCurrentDay) {
+        if (idxOfCurrentDay != mCurrentViewPagerItem)
+            mCurrentViewPagerItem = idxOfCurrentDay;
+
+        mWeeklyScheduleViewPager.setCurrentItem(mCurrentViewPagerItem);
+    }
+
+    @Override
+    public void showToast(int error_message_no_day_found) {
+        Toast.makeText(getContext(), R.string.error_message_no_day_found, Toast.LENGTH_LONG).show();
     }
 
     private class ZoomOutPageTransformer implements ViewPager.PageTransformer {

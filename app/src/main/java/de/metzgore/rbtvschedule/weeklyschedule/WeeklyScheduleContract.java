@@ -14,9 +14,15 @@ interface WeeklyScheduleContract {
         void showRefreshIndicator(boolean b);
 
         void showEmptyView(boolean visible);
+
+        void showCurrentDay(int idxOfCurrentDay);
+
+        void showToast(int error_message_no_day_found);
     }
 
     interface UserActionListener {
         void loadWeeklySchedule();
+
+        void goToCurrentShow();
     }
 }

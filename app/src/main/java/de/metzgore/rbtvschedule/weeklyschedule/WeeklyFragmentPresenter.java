@@ -20,6 +20,7 @@ public class WeeklyFragmentPresenter implements WeeklyScheduleContract.UserActio
     private static final String TAG = WeeklyScheduleContract.class.getSimpleName();
 
     private WeeklyScheduleContract.View mView;
+    private Schedule mSchedule;
 
     WeeklyFragmentPresenter(WeeklyScheduleContract.View view) {
         mView = view;
@@ -45,12 +46,14 @@ public class WeeklyFragmentPresenter implements WeeklyScheduleContract.UserActio
                 Log.d(TAG, "cache response: " + response.raw().cacheResponse());
                 Log.d(TAG, "network response: " + response.raw().networkResponse());
 
+                mSchedule = response.body();
+
                 mView.showEmptyView(false);
 
                 if (response.isSuccessful()) {
                     mView.showEmptyView(false);
-                    Log.d(TAG, response.body().toString());
-                    mView.showSchedule(response.body());
+                    Log.d(TAG, mSchedule.toString());
+                    mView.showSchedule(mSchedule);
                 } else
                     mView.showRetrySnackbar(R.string.error_message_schedule_general);
             }
@@ -72,5 +75,18 @@ public class WeeklyFragmentPresenter implements WeeklyScheduleContract.UserActio
         });
 
         mView.showRefreshIndicator(false);
+    }
+
+    @Override
+    public void goToCurrentShow() {
+        int idxOfCurrentDay = -1;
+
+        if (mSchedule != null)
+            idxOfCurrentDay = mSchedule.getIndexOfTodaysSchedule();
+
+        if (idxOfCurrentDay == -1)
+            mView.showToast(R.string.error_message_no_day_found);
+        else
+            mView.showCurrentDay(idxOfCurrentDay);
     }
 }
