@@ -43,7 +43,7 @@ public class Injector {
 
     private static OkHttpClient provideOkHttpClient() {
         return new OkHttpClient.Builder()
-                .addNetworkInterceptor(provideCachingInterceptor())
+                .addInterceptor(provideCachingInterceptor())
                 .addInterceptor(provideOfflineCacheInterceptor())
                 .cache(provideCache())
                 .build();
@@ -56,8 +56,8 @@ public class Injector {
                 Response response = chain.proceed(chain.request());
 
                 CacheControl cacheControl = new CacheControl.Builder()
-                                .maxAge(1, TimeUnit.DAYS)
-                                .build();
+                        .maxAge(0, TimeUnit.SECONDS)
+                        .build();
 
                 return response.newBuilder().addHeader("Cache-Control", cacheControl.toString()).build();
             }
