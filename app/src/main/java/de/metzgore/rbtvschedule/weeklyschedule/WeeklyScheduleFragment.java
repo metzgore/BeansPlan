@@ -5,11 +5,11 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,12 +24,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import de.metzgore.rbtvschedule.R;
-import de.metzgore.rbtvschedule.dailyschedule.DailyScheduleFragment;
 import de.metzgore.rbtvschedule.data.Schedule;
 
 public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleContract.View {
 
-    private static final String TAG = WeeklyFragmentPresenter.class.getSimpleName();
+    private static final String TAG = WeeklySchedulePresenter.class.getSimpleName();
 
     private static final String VIEW_PAGER_ITEM = "view_pager_item";
 
@@ -50,7 +49,7 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
 
     private Snackbar mErrorSnackbar;
 
-    private WeeklyFragmentPresenter mActionsListener;
+    private WeeklySchedulePresenter mActionsListener;
 
     private Unbinder mUnbinder;
 
@@ -64,7 +63,7 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mActionsListener = new WeeklyFragmentPresenter(this);
+        mActionsListener = new WeeklySchedulePresenter(this);
         mWeeklyScheduleAdapter = new WeeklyScheduleAdapter(getContext(), getChildFragmentManager());
 
         setHasOptionsMenu(true);
@@ -96,6 +95,7 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
             }
         });
 
+        mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

@@ -15,14 +15,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WeeklyFragmentPresenter implements WeeklyScheduleContract.UserActionListener {
+public class WeeklySchedulePresenter implements WeeklyScheduleContract.UserActionListener {
 
     private static final String TAG = WeeklyScheduleContract.class.getSimpleName();
 
     private WeeklyScheduleContract.View mView;
     private Schedule mSchedule;
 
-    WeeklyFragmentPresenter(WeeklyScheduleContract.View view) {
+    WeeklySchedulePresenter(WeeklyScheduleContract.View view) {
         mView = view;
     }
 
@@ -48,6 +48,7 @@ public class WeeklyFragmentPresenter implements WeeklyScheduleContract.UserActio
 
                 mSchedule = response.body();
 
+                mView.showRefreshIndicator(false);
                 mView.showEmptyView(false);
 
                 if (response.isSuccessful()) {
@@ -62,6 +63,7 @@ public class WeeklyFragmentPresenter implements WeeklyScheduleContract.UserActio
             public void onFailure(Call<Schedule> call, Throwable t) {
                 Log.d(TAG, "did not receive response for weekly schedule: " + t.getMessage());
                 Log.d(TAG, call.request().toString());
+                mView.showRefreshIndicator(false);
                 mView.showEmptyView(true);
 
                 if (t instanceof IOException) {
@@ -73,8 +75,6 @@ public class WeeklyFragmentPresenter implements WeeklyScheduleContract.UserActio
                 }
             }
         });
-
-        mView.showRefreshIndicator(false);
     }
 
     @Override
