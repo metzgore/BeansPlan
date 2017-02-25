@@ -123,8 +123,6 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
         @BindView(R.id.list_view_item_show_youtube_image_view)
         ImageView mYoutubeImageView;
 
-        Drawable mNowPlaying = ContextCompat.getDrawable(getActivity(), R.drawable.ic_videocam);
-
         private Show mShow;
 
         private SimpleDateFormat mTimeFormat = new SimpleDateFormat("HH:mm");
@@ -167,18 +165,15 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
                 } else {
                     mBase.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.border_current_show));
                 }
-                mTitleTextView.setCompoundDrawablesWithIntrinsicBounds(mNowPlaying, null, null, null);
             } else {
                 mBase.setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.white));
                 mBase.getBackground().setAlpha(100);
-                mTitleTextView.setCompoundDrawables(null, null, null, null);
             }
 
             if (mShow.isOnYoutube()) {
                 mYoutubeImageView.setVisibility(View.VISIBLE);
             } else {
                 mYoutubeImageView.setVisibility(View.INVISIBLE);
-
             }
 
             setAllViewsEnabled(mShow.wasAlreadyShown());
