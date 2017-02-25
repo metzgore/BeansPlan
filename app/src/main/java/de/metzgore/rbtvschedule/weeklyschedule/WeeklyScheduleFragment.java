@@ -178,12 +178,14 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
 
     @Override
     public void showRefreshIndicator(final boolean isRefreshing) {
-        mSwipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mSwipeRefreshLayout.setRefreshing(isRefreshing);
-            }
-        });
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipeRefreshLayout.setRefreshing(isRefreshing);
+                }
+            });
+        }
     }
 
     @Override
