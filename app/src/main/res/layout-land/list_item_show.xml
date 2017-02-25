@@ -71,7 +71,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="74dp"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
@@ -80,7 +80,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
-            tools:text="Length"/>
+            tools:text="12 h 10 min"/>
 
         <TextView
             android:id="@+id/list_item_show_type_text_view"
@@ -88,7 +88,14 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:textColor="@drawable/disabled_show_type_text_view"
-            tools:text="Type"/>
+            tools:text="PREMIERE"/>
+
+        <ImageView
+            android:id="@+id/list_view_item_show_youtube_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_youtube"
+            android:layout_gravity="right"/>
 
     </LinearLayout>
 

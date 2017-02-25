@@ -12,6 +12,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -119,6 +120,8 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
         TextView mTypeTextView;
         @BindView(R.id.list_item_show_base)
         LinearLayout mBase;
+        @BindView(R.id.list_view_item_show_youtube_image_view)
+        ImageView mYoutubeImageView;
 
         Drawable mNowPlaying = ContextCompat.getDrawable(getActivity(), R.drawable.ic_videocam);
 
@@ -171,6 +174,13 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
                 mTitleTextView.setCompoundDrawables(null, null, null, null);
             }
 
+            if (mShow.isOnYoutube()) {
+                mYoutubeImageView.setVisibility(View.VISIBLE);
+            } else {
+                mYoutubeImageView.setVisibility(View.INVISIBLE);
+
+            }
+
             setAllViewsEnabled(mShow.wasAlreadyShown());
         }
 
@@ -182,6 +192,8 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
             mEndTextView.setEnabled(enabled);
             mLengthTextView.setEnabled(enabled);
             mTypeTextView.setEnabled(enabled);
+            mYoutubeImageView.setEnabled(enabled);
+            mYoutubeImageView.setImageAlpha(enabled ? 100 : 25);
         }
     }
 

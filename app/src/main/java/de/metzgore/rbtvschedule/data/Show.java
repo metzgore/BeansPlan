@@ -2,6 +2,7 @@ package de.metzgore.rbtvschedule.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -37,6 +38,9 @@ public class Show implements Parcelable {
     @SerializedName("game")
     @Expose
     private String mGame;
+    @SerializedName("youtube")
+    @Expose
+    private String mYoutubeId;
 
     public enum Type {
         @SerializedName("")
@@ -81,6 +85,14 @@ public class Show implements Parcelable {
 
     public String getGame() {
         return mGame;
+    }
+
+    public String getYoutubeId() {
+        return mYoutubeId;
+    }
+
+    public boolean isOnYoutube() {
+        return mYoutubeId != null && !TextUtils.isEmpty(mYoutubeId);
     }
 
     public boolean isCurrentlyRunning() {
