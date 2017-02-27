@@ -10,6 +10,7 @@ import java.util.GregorianCalendar;
 import de.metzgore.rbtvschedule.R;
 import de.metzgore.rbtvschedule.data.RBTVScheduleApi;
 import de.metzgore.rbtvschedule.data.Schedule;
+import de.metzgore.rbtvschedule.settings.repository.AppSettings;
 import de.metzgore.rbtvschedule.util.Injector;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,9 +22,11 @@ public class WeeklySchedulePresenter implements WeeklyScheduleContract.UserActio
 
     private WeeklyScheduleContract.View mView;
     private Schedule mSchedule;
+    private AppSettings mAppSettings;
 
-    WeeklySchedulePresenter(WeeklyScheduleContract.View view) {
+    WeeklySchedulePresenter(WeeklyScheduleContract.View view, AppSettings appSettings) {
         mView = view;
+        mAppSettings = appSettings;
     }
 
     @Override
@@ -47,6 +50,11 @@ public class WeeklySchedulePresenter implements WeeklyScheduleContract.UserActio
                 Log.d(TAG, "network response: " + response.raw().networkResponse());
 
                 mSchedule = response.body();
+
+                if (mAppSettings.getHidePastShowsSetting())
+                    mSchedule.removePastShows();
+                else if (mAppSettings.getHidePastDaysSetting())
+                    mSchedule.removePastDays();
 
                 mView.showRefreshIndicator(false);
                 mView.showEmptyView(false);

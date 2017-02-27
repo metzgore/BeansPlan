@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:key="@string/pref_key_hide_past_shows"
+        android:title="@string/pref_hide_past_shows_title"
+        android:summary="@string/pref_hide_past_shows_summary"
+        android:disableDependentsState="true"/>
+
+    <CheckBoxPreference
+        android:key="@string/pref_key_hide_past_days"
+        android:title="@string/pref_hide_past_days_title"
+        android:summary="@string/pref_hide_past_days_summary"
+        android:dependency="@string/pref_key_hide_past_shows"/>
+
+</PreferenceScreen>

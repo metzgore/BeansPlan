@@ -1,6 +1,5 @@
 package de.metzgore.rbtvschedule.dailyschedule;
 
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -176,7 +175,7 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
                 mYoutubeImageView.setVisibility(View.INVISIBLE);
             }
 
-            setAllViewsEnabled(mShow.wasAlreadyShown());
+            setAllViewsEnabled(!mShow.isOver());
         }
 
         private void setAllViewsEnabled(boolean enabled) {

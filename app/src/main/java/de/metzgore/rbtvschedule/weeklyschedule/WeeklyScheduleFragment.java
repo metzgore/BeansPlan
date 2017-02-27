@@ -1,5 +1,6 @@
 package de.metzgore.rbtvschedule.weeklyschedule;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -8,8 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +24,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import de.metzgore.rbtvschedule.R;
 import de.metzgore.rbtvschedule.data.Schedule;
+import de.metzgore.rbtvschedule.settings.repository.AppSettingsImp;
 
 public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleContract.View {
 
@@ -42,8 +42,6 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
     TabLayout mWeeklyScheduleTabs;
     @BindView(R.id.fragment_weekly_schedule_base)
     LinearLayout mWeeklyScheduleBase;
-    @BindView(R.id.fragment_weekly_schedule_toolbar)
-    Toolbar mWeeklyScheduleToolbar;
 
     private WeeklyScheduleAdapter mWeeklyScheduleAdapter;
 
@@ -63,7 +61,7 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mActionsListener = new WeeklySchedulePresenter(this);
+        mActionsListener = new WeeklySchedulePresenter(this, new AppSettingsImp(getContext()));
         mWeeklyScheduleAdapter = new WeeklyScheduleAdapter(getContext(), getChildFragmentManager());
 
         setHasOptionsMenu(true);
@@ -74,9 +72,6 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_weekly_schedule, container, false);
         mUnbinder = ButterKnife.bind(this, view);
-
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.setSupportActionBar(mWeeklyScheduleToolbar);
 
         mWeeklyScheduleViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         mWeeklyScheduleViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mWeeklyScheduleTabs) {
@@ -94,6 +89,9 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
                 enableDisableSwipeRefresh(state == ViewPager.SCROLL_STATE_IDLE);
             }
         });
+
+        mWeeklyScheduleViewPager.setAdapter(mWeeklyScheduleAdapter);
+        mWeeklyScheduleTabs.setupWithViewPager(mWeeklyScheduleViewPager);
 
         mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -113,7 +111,11 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
         if (savedInstanceState != null) {
             mCurrentViewPagerItem = savedInstanceState.getInt(VIEW_PAGER_ITEM, 0);
         }
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
         mActionsListener.loadWeeklySchedule();
     }
 
@@ -153,8 +155,6 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
     public void showSchedule(Schedule schedule) {
         mWeeklyScheduleBase.setVisibility(View.VISIBLE);
         mWeeklyScheduleAdapter.setSchedule(schedule);
-        mWeeklyScheduleViewPager.setAdapter(mWeeklyScheduleAdapter);
-        mWeeklyScheduleTabs.setupWithViewPager(mWeeklyScheduleViewPager);
         mWeeklyScheduleViewPager.setCurrentItem(mCurrentViewPagerItem);
     }
 

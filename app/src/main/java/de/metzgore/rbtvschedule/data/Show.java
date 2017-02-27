@@ -100,9 +100,9 @@ public class Show implements Parcelable {
         return !now.before(mTimeStart) && !now.after(mTimeEnd);
     }
 
-    public boolean wasAlreadyShown() {
+    public boolean isOver() {
         Date now = new Date();
-        return now.before(mTimeEnd);
+        return mTimeEnd.before(now);
     }
 
     @Override

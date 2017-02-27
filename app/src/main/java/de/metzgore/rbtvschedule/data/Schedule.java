@@ -10,6 +10,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -44,7 +45,7 @@ public class Schedule {
 
     public int getIndexOfTodaysSchedule() {
         Date today = getTodaysDate();
-        Date[] schedules = mWeeklySchedule.keySet().toArray(new Date[mWeeklySchedule.size()]);
+        Date[] schedules = getKeysAsDate();
 
         for(int i = 0; i < schedules.length; i++) {
             if(schedules[i].equals(today))
@@ -64,5 +65,38 @@ public class Schedule {
         calendar.set(Calendar.MILLISECOND, 0);
 
         return calendar.getTime();
+    }
+
+    public void removePastShows() {
+        removePastDays();
+
+        Date today = getTodaysDate();
+        Date[] schedules = getKeysAsDate();
+
+        for(Date date : schedules) {
+            if(date.equals(today)) {
+                List<Show> showsOfToday = mWeeklySchedule.get(date);
+                Iterator<Show> iterator = showsOfToday.iterator();
+                while (iterator.hasNext()) {
+                    Show show = iterator.next();
+                    if (show.isOver())
+                        iterator.remove();
+                }
+            }
+        }
+    }
+
+    public void removePastDays() {
+        Date today = getTodaysDate();
+        Date[] schedules = getKeysAsDate();
+
+        for(Date date : schedules) {
+            if(date.before(today))
+                mWeeklySchedule.remove(date);
+        }
+    }
+
+    private Date[] getKeysAsDate() {
+        return mWeeklySchedule.keySet().toArray(new Date[mWeeklySchedule.size()]);
     }
 }

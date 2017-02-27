@@ -9,4 +9,18 @@
     <string name="action_refresh">Refresh</string>
     <string name="action_today">Today</string>
     <string name="error_message_no_day_found">Could not go to current day</string>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+    <string name="drawer_item_weekly_schedule">Weekly schedule</string>
+    <string name="drawer_item_todays_schedule">Today\'s schedule</string>
+    <string name="drawer_item_setting">Settings</string>
+
+    <string name="activity_settings_title">Settings</string>
+
+    <string name="pref_hide_past_shows_title">Hide past shows</string>
+    <string name="pref_hide_past_shows_summary">Hide past shows in today\'s schedule and weekly schedule</string>
+    <string name="pref_hide_past_days_title">Hide past days</string>
+    <string name="pref_hide_past_days_summary">Hide past days in weekly schedule</string>
 </resources>
