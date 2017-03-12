@@ -14,12 +14,12 @@ import de.metzgore.rbtvschedule.data.Schedule;
 import static android.text.format.DateUtils.FORMAT_SHOW_DATE;
 import static android.text.format.DateUtils.FORMAT_SHOW_WEEKDAY;
 
-public class WeeklyScheduleAdapter extends FragmentStatePagerAdapter {
+class WeeklyScheduleAdapter extends FragmentStatePagerAdapter {
 
     private Context mContext;
     private Schedule mSchedule;
 
-    public WeeklyScheduleAdapter(Context context, FragmentManager mgr) {
+    WeeklyScheduleAdapter(Context context, FragmentManager mgr) {
         super(mgr);
         mContext = context;
         mSchedule = new Schedule();
@@ -47,7 +47,7 @@ public class WeeklyScheduleAdapter extends FragmentStatePagerAdapter {
         return POSITION_NONE;
     }
 
-    public void setSchedule(Schedule schedule) {
+    void setSchedule(Schedule schedule) {
         mSchedule = schedule;
         notifyDataSetChanged();
     }

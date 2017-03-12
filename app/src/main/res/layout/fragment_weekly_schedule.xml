@@ -1,62 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.v4.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_weekly_schedule_swipe_refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="de.metzgore.rbtvschedule.MainActivity">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/fragment_weekly_schedule_swipe_refresh"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
+        <android.support.v4.view.ViewPager
+            android:id="@+id/fragment_weekly_schedule_view_pager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="gone">
 
-            <LinearLayout
-                android:id="@+id/fragment_weekly_schedule_base"
+            <android.support.design.widget.TabLayout
+                android:id="@+id/fragment_weekly_schedule_tabs"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/fragment_weekly_schedule_view_pager"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <android.support.design.widget.TabLayout
-                        android:id="@+id/fragment_weekly_schedule_tabs"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="top"
-                        android:background="@color/colorPrimary"
-                        app:tabMode="scrollable"
-                        app:tabGravity="fill"
-                        app:tabIndicatorHeight="4dp"
-                        app:tabTextColor="@android:color/white"
-                        app:tabSelectedTextColor="@android:color/white"
-                        app:tabIndicatorColor="@android:color/white"/>
-
-                </android.support.v4.view.ViewPager>
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/fragment_weekly_schedule_empty_view"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/alert_message_schedule_failed"
-                android:textSize="24sp"
-                android:drawableTop="@drawable/ic_warning"
-                android:visibility="gone"/>
+                android:layout_gravity="top"
+                android:background="@color/colorPrimary"
+                app:tabMode="scrollable"
+                app:tabGravity="fill"
+                app:tabIndicatorHeight="4dp"
+                app:tabTextColor="@android:color/white"
+                app:tabSelectedTextColor="@android:color/white"
+                app:tabIndicatorColor="@android:color/white"/>
 
-        </FrameLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
-</LinearLayout>
+        </android.support.v4.view.ViewPager>
+
+        <TextView
+            android:id="@+id/fragment_weekly_schedule_empty_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/alert_message_schedule_failed"
+            android:textSize="24sp"
+            android:drawableTop="@drawable/ic_warning"
+            android:visibility="gone"/>
+
+    </FrameLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

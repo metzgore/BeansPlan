@@ -15,7 +15,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,8 +39,6 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
     TextView mEmptyView;
     @BindView(R.id.fragment_weekly_schedule_tabs)
     TabLayout mWeeklyScheduleTabs;
-    @BindView(R.id.fragment_weekly_schedule_base)
-    LinearLayout mWeeklyScheduleBase;
 
     private WeeklyScheduleAdapter mWeeklyScheduleAdapter;
 
@@ -153,9 +150,10 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
 
     @Override
     public void showSchedule(Schedule schedule) {
-        mWeeklyScheduleBase.setVisibility(View.VISIBLE);
         mWeeklyScheduleAdapter.setSchedule(schedule);
+        mWeeklyScheduleViewPager.setAdapter(mWeeklyScheduleAdapter);
         mWeeklyScheduleViewPager.setCurrentItem(mCurrentViewPagerItem);
+        mWeeklyScheduleViewPager.setVisibility(View.VISIBLE);
     }
 
     @Override
