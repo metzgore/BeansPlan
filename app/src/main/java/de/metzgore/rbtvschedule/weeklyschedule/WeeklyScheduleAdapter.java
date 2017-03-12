@@ -8,7 +8,7 @@ import android.text.format.DateUtils;
 
 import java.util.Date;
 
-import de.metzgore.rbtvschedule.dailyschedule.DailyScheduleFragment;
+import de.metzgore.rbtvschedule.singledayschedule.SingleDayScheduleFragment;
 import de.metzgore.rbtvschedule.data.Schedule;
 
 import static android.text.format.DateUtils.FORMAT_SHOW_DATE;
@@ -33,7 +33,7 @@ public class WeeklyScheduleAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Date selectedDate = (Date) mSchedule.getWeeklySchedule().keySet().toArray()[position];
-        return DailyScheduleFragment.newInstance(mSchedule.getWeeklySchedule().get(selectedDate));
+        return SingleDayScheduleFragment.newInstance(mSchedule.getWeeklySchedule().get(selectedDate));
     }
 
     @Override

@@ -1,4 +1,4 @@
-package de.metzgore.rbtvschedule.dailyschedule;
+package de.metzgore.rbtvschedule.singledayschedule;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -27,9 +27,9 @@ import butterknife.Unbinder;
 import de.metzgore.rbtvschedule.R;
 import de.metzgore.rbtvschedule.data.Show;
 
-public class DailyScheduleFragment extends Fragment implements DailyScheduleContract.View {
+public class SingleDayScheduleFragment extends Fragment implements SingleDayScheduleContract.View {
 
-    private static final String TAG = DailyScheduleFragment.class.getSimpleName();
+    private static final String TAG = SingleDayScheduleFragment.class.getSimpleName();
 
     private static final String ARG_SCHEDULE = "arg_schedule";
 
@@ -40,12 +40,12 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
 
     private ScheduleAdapter mScheduleAdapter;
 
-    private DailySchedulePresenter mActionsListener;
+    private SingleDaySchedulePresenter mActionsListener;
 
     private Unbinder mUnbinder;
 
     public static Fragment newInstance(List<Show> shows) {
-        DailyScheduleFragment fragment = new DailyScheduleFragment();
+        SingleDayScheduleFragment fragment = new SingleDayScheduleFragment();
 
         Bundle args = new Bundle();
         args.putParcelableArrayList(ARG_SCHEDULE, (ArrayList) shows);
@@ -65,13 +65,13 @@ public class DailyScheduleFragment extends Fragment implements DailyScheduleCont
 
         mSchedule = args.getParcelableArrayList(ARG_SCHEDULE);
 
-        mActionsListener = new DailySchedulePresenter(this);
+        mActionsListener = new SingleDaySchedulePresenter(this);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_daily_schedule, container, false);
+        View view = inflater.inflate(R.layout.fragment_single_day_schedule, container, false);
         mUnbinder = ButterKnife.bind(this, view);
 
         mDailyScheduleRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),

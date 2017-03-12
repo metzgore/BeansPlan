@@ -1,10 +1,10 @@
-package de.metzgore.rbtvschedule.dailyschedule;
+package de.metzgore.rbtvschedule.singledayschedule;
 
 import java.util.List;
 
 import de.metzgore.rbtvschedule.data.Show;
 
-interface DailyScheduleContract {
+interface SingleDayScheduleContract {
 
     interface View {
         void showSchedule(List<Show> schedule);
