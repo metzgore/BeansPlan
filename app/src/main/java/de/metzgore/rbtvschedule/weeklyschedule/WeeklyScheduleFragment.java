@@ -1,6 +1,5 @@
 package de.metzgore.rbtvschedule.weeklyschedule;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -22,7 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import de.metzgore.rbtvschedule.R;
-import de.metzgore.rbtvschedule.data.Schedule;
+import de.metzgore.rbtvschedule.data.WeeklySchedule;
 import de.metzgore.rbtvschedule.settings.repository.AppSettingsImp;
 
 public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleContract.View {
@@ -149,8 +148,8 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
     }
 
     @Override
-    public void showSchedule(Schedule schedule) {
-        mWeeklyScheduleAdapter.setSchedule(schedule);
+    public void showSchedule(WeeklySchedule weeklySchedule) {
+        mWeeklyScheduleAdapter.setSchedule(weeklySchedule);
         mWeeklyScheduleViewPager.setAdapter(mWeeklyScheduleAdapter);
         mWeeklyScheduleViewPager.setCurrentItem(mCurrentViewPagerItem);
         mWeeklyScheduleViewPager.setVisibility(View.VISIBLE);

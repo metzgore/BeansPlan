@@ -5,12 +5,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.text.format.DateUtils;
-import android.util.Log;
 
 import java.util.Date;
 
 import de.metzgore.rbtvschedule.singledayschedule.SingleDayScheduleFragment;
-import de.metzgore.rbtvschedule.data.Schedule;
+import de.metzgore.rbtvschedule.data.WeeklySchedule;
 
 import static android.text.format.DateUtils.FORMAT_SHOW_DATE;
 import static android.text.format.DateUtils.FORMAT_SHOW_WEEKDAY;
@@ -18,28 +17,28 @@ import static android.text.format.DateUtils.FORMAT_SHOW_WEEKDAY;
 class WeeklyScheduleAdapter extends FragmentPagerAdapter {
 
     private Context mContext;
-    private Schedule mSchedule;
+    private WeeklySchedule mWeeklySchedule;
 
     WeeklyScheduleAdapter(Context context, FragmentManager mgr) {
         super(mgr);
         mContext = context;
-        mSchedule = new Schedule();
+        mWeeklySchedule = new WeeklySchedule();
     }
 
     @Override
     public int getCount() {
-        return mSchedule.getWeeklySchedule().size();
+        return mWeeklySchedule.getWeeklySchedule().size();
     }
 
     @Override
     public Fragment getItem(int position) {
-        Date selectedDate = (Date) mSchedule.getWeeklySchedule().keySet().toArray()[position];
-        return SingleDayScheduleFragment.newInstance(mSchedule.getWeeklySchedule().get(selectedDate));
+        Date selectedDate = (Date) mWeeklySchedule.getWeeklySchedule().keySet().toArray()[position];
+        return SingleDayScheduleFragment.newInstance(mWeeklySchedule.getWeeklySchedule().get(selectedDate));
     }
 
     @Override
     public String getPageTitle(int position) {
-        Date dateOfSchedule = (Date) mSchedule.getWeeklySchedule().keySet().toArray()[position];
+        Date dateOfSchedule = (Date) mWeeklySchedule.getWeeklySchedule().keySet().toArray()[position];
         return DateUtils.formatDateTime(mContext, dateOfSchedule.getTime(), FORMAT_SHOW_WEEKDAY|FORMAT_SHOW_DATE);
     }
 
@@ -53,8 +52,8 @@ class WeeklyScheduleAdapter extends FragmentPagerAdapter {
         return System.currentTimeMillis();
     }
 
-    void setSchedule(Schedule schedule) {
-        mSchedule = schedule;
+    void setSchedule(WeeklySchedule weeklySchedule) {
+        mWeeklySchedule = weeklySchedule;
         notifyDataSetChanged();
     }
 }

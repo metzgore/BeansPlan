@@ -1,11 +1,11 @@
 package de.metzgore.rbtvschedule.weeklyschedule;
 
-import de.metzgore.rbtvschedule.data.Schedule;
+import de.metzgore.rbtvschedule.data.WeeklySchedule;
 
 interface WeeklyScheduleContract {
 
     interface View {
-        void showSchedule(Schedule body);
+        void showSchedule(WeeklySchedule body);
 
         void showRetrySnackbar(int messageId);
 

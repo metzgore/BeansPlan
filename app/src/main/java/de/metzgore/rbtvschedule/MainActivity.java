@@ -14,6 +14,7 @@ import android.view.MenuItem;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.metzgore.rbtvschedule.dailyschedule.ScheduleFragment;
 import de.metzgore.rbtvschedule.settings.SettingsActivity;
 import de.metzgore.rbtvschedule.weeklyschedule.WeeklyScheduleFragment;
 
@@ -84,9 +85,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void selectDrawerItem(MenuItem menuItem) {
         switch(menuItem.getItemId()) {
-            /*case R.id.nav_first_fragment:
-                replaceFragment(WeeklyScheduleFragment.class, menuItem);
-                break;*/
+            case R.id.nav_first_fragment:
+                replaceFragment(ScheduleFragment.class, menuItem);
+                break;
             case R.id.nav_second_fragment:
                 replaceFragment(WeeklyScheduleFragment.class, menuItem);
                 break;
