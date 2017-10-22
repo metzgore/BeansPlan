@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import de.metzgore.rbtvschedule.R;
 import de.metzgore.rbtvschedule.data.Schedule;
 import de.metzgore.rbtvschedule.databinding.FragmentSingleDayScheduleBinding;
+import de.metzgore.rbtvschedule.util.di.ScheduleViewModelFactory;
 
 public class ScheduleFragment extends Fragment {
 
@@ -24,6 +25,8 @@ public class ScheduleFragment extends Fragment {
     private FragmentSingleDayScheduleBinding binding;
 
     private ScheduleViewModel viewModel;
+
+    private ScheduleRepository repo;
 
     public static Fragment newInstance() {
         return new ScheduleFragment();
@@ -49,7 +52,8 @@ public class ScheduleFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        viewModel = ViewModelProviders.of(this).get(ScheduleViewModel.class);
+        repo = new ScheduleRepository();
+        viewModel = ViewModelProviders.of(this, new ScheduleViewModelFactory(repo)).get(ScheduleViewModel.class);
         subscribeUi(viewModel);
     }
 
