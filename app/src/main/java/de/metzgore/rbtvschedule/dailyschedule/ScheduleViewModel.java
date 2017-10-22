@@ -12,10 +12,8 @@ public class ScheduleViewModel extends ViewModel {
 
     public ScheduleViewModel() {
         scheduleRepo = new ScheduleRepository();
-    }
 
-    public void init() {
-        if(schedule != null) {
+        if (schedule != null) {
             return;
         }
         schedule = scheduleRepo.getScheduleOfToday();

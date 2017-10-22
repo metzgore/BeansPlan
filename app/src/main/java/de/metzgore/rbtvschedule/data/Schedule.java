@@ -10,16 +10,20 @@ public class Schedule {
 
     @SerializedName("schedule")
     @Expose
-    private List<Show> schedule = new ArrayList<>();
+    private List<Show> shows = new ArrayList<>();
+
+    public List<Show> getShows() {
+        return shows;
+    }
 
     @Override
     public String toString() {
-        StringBuilder shows = new StringBuilder();
+        StringBuilder showsBuilder = new StringBuilder();
 
-        for (Show show : schedule) {
-            shows.append(show.toString()).append("\n");
+        for (Show show : shows) {
+            showsBuilder.append(show.toString()).append("\n");
         }
 
-        return shows.toString();
+        return showsBuilder.toString();
     }
 }

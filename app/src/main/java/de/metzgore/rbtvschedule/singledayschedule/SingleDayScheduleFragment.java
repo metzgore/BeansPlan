@@ -1,30 +1,22 @@
 package de.metzgore.rbtvschedule.singledayschedule;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.DividerItemDecoration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import org.apache.commons.lang3.time.DurationFormatUtils;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import de.metzgore.rbtvschedule.R;
+import de.metzgore.rbtvschedule.dailyschedule.ScheduleAdapter;
 import de.metzgore.rbtvschedule.data.Show;
 
 public class SingleDayScheduleFragment extends Fragment implements SingleDayScheduleContract.View {
@@ -33,7 +25,7 @@ public class SingleDayScheduleFragment extends Fragment implements SingleDaySche
 
     private static final String ARG_SCHEDULE = "arg_schedule";
 
-    @BindView(R.id.fragment_daily_schedule_recycler_view)
+    //@BindView(R.id.fragment_daily_schedule_recycler_view)
     RecyclerView mDailyScheduleRecyclerView;
 
     private List<Show> mSchedule;
@@ -63,7 +55,7 @@ public class SingleDayScheduleFragment extends Fragment implements SingleDaySche
 
         Bundle args = getArguments();
 
-        mSchedule = args.getParcelableArrayList(ARG_SCHEDULE);
+        //mSchedule = args.getParcelableArrayList(ARG_SCHEDULE);
 
         mActionsListener = new SingleDaySchedulePresenter(this);
     }
@@ -97,133 +89,8 @@ public class SingleDayScheduleFragment extends Fragment implements SingleDaySche
 
     @Override
     public void showSchedule(List<Show> schedule) {
-        mScheduleAdapter.setSchedule(schedule);
-        mDailyScheduleRecyclerView.smoothScrollToPosition(mScheduleAdapter.getIdxOfCurrentShow());
+        // mScheduleAdapter.setSchedule(schedule);
+        // mDailyScheduleRecyclerView.smoothScrollToPosition(mScheduleAdapter.getIdxOfCurrentShow());
     }
 
-    protected class ShowHolder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.list_item_show_title_text_view)
-        TextView mTitleTextView;
-        @BindView(R.id.list_item_show_topic_text_view)
-        TextView mTopicTextView;
-        @BindView(R.id.list_item_show_start_text_view)
-        TextView mStartTextView;
-        @BindView(R.id.list_item_show_time_dash)
-        TextView mShowTimeDash;
-        @BindView(R.id.list_item_show_end_text_view)
-        TextView mEndTextView;
-        @BindView(R.id.list_item_show_length_text_view)
-        TextView mLengthTextView;
-        @BindView(R.id.list_item_show_type_text_view)
-        TextView mTypeTextView;
-        @BindView(R.id.list_item_show_base)
-        LinearLayout mBase;
-        @BindView(R.id.list_view_item_show_youtube_image_view)
-        ImageView mYoutubeImageView;
-
-        private Show mShow;
-
-        private SimpleDateFormat mTimeFormat = new SimpleDateFormat("HH:mm");
-
-        ShowHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-
-        void bindView(Show show) {
-            mShow = show;
-
-            mTitleTextView.setText(mShow.getTitle());
-            mTopicTextView.setText(mShow.getTopic());
-            mStartTextView.setText(mTimeFormat.format(mShow.getTimeStart()));
-            mEndTextView.setText(mTimeFormat.format(mShow.getTimeEnd()));
-            mLengthTextView.setText(DurationFormatUtils.formatDuration(mShow.getLength() * 1000,
-                    mShow.getLength() > 3600 ? "H 'h' mm 'min'" : "m 'min'"));
-
-            switch (mShow.getType()) {
-                case LIVE:
-                case PREMIERE:
-                    mTypeTextView.setText(mShow.getType().toString());
-                    break;
-                case NONE:
-                default:
-                    mTypeTextView.setText("");
-                    break;
-            }
-
-            if (mShow.isCurrentlyRunning()) {
-                //padding is gone on api level < 21
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    int paddingTop = mBase.getPaddingTop();
-                    int paddingLeft = mBase.getPaddingLeft();
-                    int paddingRight = mBase.getPaddingRight();
-                    int paddingBottom = mBase.getPaddingBottom();
-                    mBase.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.border_current_show));
-                    mBase.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
-                } else {
-                    mBase.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.border_current_show));
-                }
-            } else {
-                mBase.setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.white));
-                mBase.getBackground().setAlpha(100);
-            }
-
-            if (mShow.isOnYoutube()) {
-                mYoutubeImageView.setVisibility(View.VISIBLE);
-            } else {
-                mYoutubeImageView.setVisibility(View.INVISIBLE);
-            }
-
-            setAllViewsEnabled(!mShow.isOver());
-        }
-
-        private void setAllViewsEnabled(boolean enabled) {
-            mTitleTextView.setEnabled(enabled);
-            mTopicTextView.setEnabled(enabled);
-            mStartTextView.setEnabled(enabled);
-            mShowTimeDash.setEnabled(enabled);
-            mEndTextView.setEnabled(enabled);
-            mLengthTextView.setEnabled(enabled);
-            mTypeTextView.setEnabled(enabled);
-            mYoutubeImageView.setEnabled(enabled);
-            mYoutubeImageView.setImageAlpha(enabled ? 100 : 25);
-        }
-    }
-
-    private class ScheduleAdapter extends RecyclerView.Adapter<ShowHolder> {
-
-        private List<Show> mSchedule;
-
-        @Override
-        public ShowHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            View view = inflater.inflate(R.layout.list_item_show, parent, false);
-            return new ShowHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(ShowHolder holder, int position) {
-            holder.bindView(mSchedule.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return mSchedule.size();
-        }
-
-        void setSchedule(List<Show> schedule) {
-            mSchedule = schedule;
-            notifyDataSetChanged();
-        }
-
-        int getIdxOfCurrentShow() {
-            for (int i = 0; i < mSchedule.size(); i++) {
-                if (mSchedule.get(i).isCurrentlyRunning())
-                    return i;
-            }
-
-            return 0;
-        }
-    }
 }
