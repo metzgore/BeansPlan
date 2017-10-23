@@ -16,15 +16,6 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ShowVi
 
     private List<Show> shows;
 
-    int getIdxOfCurrentShow() {
-        for (int i = 0; i < shows.size(); i++) {
-            if (shows.get(i).isCurrentlyRunning())
-                return i;
-        }
-
-        return 0;
-    }
-
     public void setShowList(final List<Show> showList) {
         if (shows == null) {
             shows = showList;

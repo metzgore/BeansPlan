@@ -18,18 +18,23 @@ import retrofit2.Response;
 public class ScheduleRepository {
 
     private final String TAG = ScheduleRepository.class.getSimpleName();
+    final MutableLiveData<Schedule> data = new MutableLiveData<>();
 
-    public LiveData<Schedule> getScheduleOfToday() {
-        final MutableLiveData<Schedule> data = new MutableLiveData<>();
-
-        RBTVScheduleApi rbtvScheduleApi = Injector.provideRBTVScheduleApi();
-
+    public LiveData<Schedule> loadScheduleOfToday() {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(new Date());
 
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
-        String dayOfMonth = String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH));
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        return loadScheduleOfDay(year, month, day);
+    }
+
+    public LiveData<Schedule> loadScheduleOfDay(int year, int month, int day) {
+        String dayOfMonth = String.format("%02d", day);
+
+        RBTVScheduleApi rbtvScheduleApi = Injector.provideRBTVScheduleApi();
 
         Call<Schedule> call = rbtvScheduleApi.scheduleOfDay(year, month, dayOfMonth);
 

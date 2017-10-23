@@ -10,16 +10,22 @@ import de.metzgore.rbtvschedule.data.Schedule;
 public class ScheduleViewModel extends ViewModel {
 
     private LiveData<Schedule> schedule;
+    private ScheduleRepository scheduleRepo;
 
     @Inject
     public ScheduleViewModel(ScheduleRepository scheduleRepo) {
         if (schedule != null) {
             return;
         }
-        schedule = scheduleRepo.getScheduleOfToday();
+        this.scheduleRepo = scheduleRepo;
+
     }
 
     public LiveData<Schedule> getSchedule() {
         return schedule;
+    }
+
+    public void loadSchedule(boolean forceRefresh) {
+        schedule = scheduleRepo.loadScheduleOfToday();
     }
 }
