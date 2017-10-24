@@ -1,6 +1,8 @@
 package de.metzgore.rbtvschedule.dailyschedule;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 
 import javax.inject.Inject;
@@ -9,15 +11,15 @@ import de.metzgore.rbtvschedule.data.Schedule;
 
 public class ScheduleViewModel extends ViewModel {
 
-    private LiveData<Schedule> schedule;
-    private ScheduleRepository scheduleRepo;
+    private final MutableLiveData<Boolean> refresh = new MutableLiveData<>();
+    private final LiveData<Schedule> schedule;
 
     @Inject
     public ScheduleViewModel(ScheduleRepository scheduleRepo) {
-        if (schedule != null) {
-            return;
-        }
-        this.scheduleRepo = scheduleRepo;
+        schedule = Transformations.switchMap(refresh, forceFromNetwork -> {
+            //TODO
+            return scheduleRepo.loadScheduleOfToday(forceFromNetwork);
+        });
 
     }
 
@@ -25,7 +27,7 @@ public class ScheduleViewModel extends ViewModel {
         return schedule;
     }
 
-    public void loadSchedule(boolean forceRefresh) {
-        schedule = scheduleRepo.loadScheduleOfToday();
+    public void loadSchedule(boolean forceFromNetwork) {
+        refresh.setValue(forceFromNetwork);
     }
 }

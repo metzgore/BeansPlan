@@ -34,8 +34,8 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ShowVi
 
                 @Override
                 public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                    return shows.get(oldItemPosition).getId() ==
-                            showList.get(newItemPosition).getId();
+                    //TODO check this
+                    return shows.get(oldItemPosition) == showList.get(newItemPosition);
                 }
 
                 @Override

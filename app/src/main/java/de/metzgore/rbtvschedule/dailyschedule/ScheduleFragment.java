@@ -72,10 +72,10 @@ public class ScheduleFragment extends Fragment {
             Log.d(TAG, "data refreshed");
             showRefreshIndicator(false);
             if (schedule != null) {
-                binding.setIsLoading(false);
+                //binding.setIsLoading(false);
                 scheduleAdapter.setShowList(schedule.getShows());
             } else {
-                binding.setIsLoading(true);
+                //binding.setIsLoading(true);
             }
 
             binding.executePendingBindings();

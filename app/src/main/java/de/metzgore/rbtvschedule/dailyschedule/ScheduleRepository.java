@@ -20,7 +20,7 @@ public class ScheduleRepository {
     private final String TAG = ScheduleRepository.class.getSimpleName();
     final MutableLiveData<Schedule> data = new MutableLiveData<>();
 
-    public LiveData<Schedule> loadScheduleOfToday() {
+    public LiveData<Schedule> loadScheduleOfToday(boolean forceRefresh) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(new Date());
 

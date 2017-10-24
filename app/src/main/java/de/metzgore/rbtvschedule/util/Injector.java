@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import de.metzgore.rbtvschedule.RBTVScheduleApp;
@@ -50,38 +49,32 @@ public class Injector {
     }
 
     private static Interceptor provideCachingInterceptor() {
-        return new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Response response = chain.proceed(chain.request());
+        return chain -> {
+            Response response = chain.proceed(chain.request());
 
-                CacheControl cacheControl = new CacheControl.Builder()
-                        .maxAge(0, TimeUnit.SECONDS)
-                        .build();
+            CacheControl cacheControl = new CacheControl.Builder()
+                    .maxAge(0, TimeUnit.SECONDS)
+                    .build();
 
-                return response.newBuilder().addHeader("Cache-Control", cacheControl.toString()).build();
-            }
+            return response.newBuilder().addHeader("Cache-Control", cacheControl.toString()).build();
         };
     }
 
     private static Interceptor provideOfflineCacheInterceptor() {
-        return new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Request request = chain.request();
+        return chain -> {
+            Request request = chain.request();
 
-                if (!RBTVScheduleApp.hasNetwork()) {
-                    CacheControl cacheControl = new CacheControl.Builder()
-                            .maxStale(7, TimeUnit.DAYS)
-                            .build();
+            if (!RBTVScheduleApp.hasNetwork()) {
+                CacheControl cacheControl = new CacheControl.Builder()
+                        .maxStale(7, TimeUnit.DAYS)
+                        .build();
 
-                    request = request.newBuilder()
-                            .cacheControl(cacheControl)
-                            .build();
-                }
-
-                return chain.proceed(request);
+                request = request.newBuilder()
+                        .cacheControl(cacheControl)
+                        .build();
             }
+
+            return chain.proceed(request);
         };
     }
 
