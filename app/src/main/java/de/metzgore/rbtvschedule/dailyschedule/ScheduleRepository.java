@@ -1,26 +1,33 @@
 package de.metzgore.rbtvschedule.dailyschedule;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.util.Log;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import de.metzgore.rbtvschedule.data.RBTVScheduleApi;
+import de.metzgore.rbtvschedule.api.ApiResponse;
+import de.metzgore.rbtvschedule.api.RBTVScheduleApi;
+import de.metzgore.rbtvschedule.data.Resource;
 import de.metzgore.rbtvschedule.data.Schedule;
+import de.metzgore.rbtvschedule.util.AbsentLiveData;
 import de.metzgore.rbtvschedule.util.Injector;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ScheduleRepository {
 
     private final String TAG = ScheduleRepository.class.getSimpleName();
-    final MutableLiveData<Schedule> data = new MutableLiveData<>();
 
-    public LiveData<Schedule> loadScheduleOfToday(boolean forceRefresh) {
+    private final RBTVScheduleApi api;
+
+    //TODO dagger
+    //@Inject
+    public ScheduleRepository(/*RBTVScheduleApi api*/) {
+        this.api = Injector.provideRBTVScheduleApi();
+    }
+
+    public LiveData<Resource<Schedule>> loadScheduleOfToday(boolean forceRefresh) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(new Date());
 
@@ -31,14 +38,36 @@ public class ScheduleRepository {
         return loadScheduleOfDay(year, month, day);
     }
 
-    public LiveData<Schedule> loadScheduleOfDay(int year, int month, int day) {
+    public LiveData<Resource<Schedule>> loadScheduleOfDay(int year, int month, int day) {
         String dayOfMonth = String.format("%02d", day);
 
-        RBTVScheduleApi rbtvScheduleApi = Injector.provideRBTVScheduleApi();
+        return new NetworkBoundResource<Schedule, Schedule>() {
+            @Override
+            protected void saveCallResult(@NonNull Schedule item) {
+                //TODO disk cache
+                //repoDao.insert(item);
+            }
 
-        Call<Schedule> call = rbtvScheduleApi.scheduleOfDay(year, month, dayOfMonth);
+            @Override
+            protected boolean shouldFetch(@Nullable Schedule data) {
+                return data == null;
+            }
 
-        call.enqueue(new Callback<Schedule>() {
+            @NonNull
+            @Override
+            protected LiveData<Schedule> loadFromDb() {
+                //TODO disk cache
+                return AbsentLiveData.create();
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<Schedule>> createCall() {
+                return api.scheduleOfDay(year, month, dayOfMonth);
+            }
+        }.asLiveData();
+
+        /*call.enqueue(new Callback<Schedule>() {
             @Override
             public void onResponse(Call<Schedule> call, Response<Schedule> response) {
                 Log.d(TAG, "received response for weekly schedule");
@@ -59,6 +88,6 @@ public class ScheduleRepository {
                 Log.d(TAG, call.request().toString());
             }
         });
-        return data;
+        return data;*/
     }
 }

@@ -7,12 +7,13 @@ import android.arch.lifecycle.ViewModel;
 
 import javax.inject.Inject;
 
+import de.metzgore.rbtvschedule.data.Resource;
 import de.metzgore.rbtvschedule.data.Schedule;
 
 public class ScheduleViewModel extends ViewModel {
 
     private final MutableLiveData<Boolean> refresh = new MutableLiveData<>();
-    private final LiveData<Schedule> schedule;
+    private final LiveData<Resource<Schedule>> schedule;
 
     @Inject
     public ScheduleViewModel(ScheduleRepository scheduleRepo) {
@@ -23,7 +24,7 @@ public class ScheduleViewModel extends ViewModel {
 
     }
 
-    public LiveData<Schedule> getSchedule() {
+    public LiveData<Resource<Schedule>> getSchedule() {
         return schedule;
     }
 

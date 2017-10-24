@@ -70,10 +70,12 @@ public class ScheduleFragment extends Fragment {
     private void subscribeUi(ScheduleViewModel viewModel) {
         viewModel.getSchedule().observe(this, schedule -> {
             Log.d(TAG, "data refreshed");
+            Log.d(TAG, schedule.status.toString());
+
             showRefreshIndicator(false);
-            if (schedule != null) {
+            if (schedule.data != null) {
                 //binding.setIsLoading(false);
-                scheduleAdapter.setShowList(schedule.getShows());
+                scheduleAdapter.setShowList(schedule.data.getShows());
             } else {
                 //binding.setIsLoading(true);
             }

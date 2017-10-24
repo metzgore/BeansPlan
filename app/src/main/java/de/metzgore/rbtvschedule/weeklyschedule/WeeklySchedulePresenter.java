@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import de.metzgore.rbtvschedule.R;
-import de.metzgore.rbtvschedule.data.RBTVScheduleApi;
+import de.metzgore.rbtvschedule.api.RBTVScheduleApi;
 import de.metzgore.rbtvschedule.data.WeeklySchedule;
 import de.metzgore.rbtvschedule.settings.repository.AppSettings;
 import de.metzgore.rbtvschedule.util.Injector;

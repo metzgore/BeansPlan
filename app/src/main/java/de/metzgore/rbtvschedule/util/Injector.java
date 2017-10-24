@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import de.metzgore.rbtvschedule.RBTVScheduleApp;
-import de.metzgore.rbtvschedule.data.RBTVScheduleApi;
+import de.metzgore.rbtvschedule.api.RBTVScheduleApi;
 import okhttp3.Cache;
 import okhttp3.CacheControl;
 import okhttp3.Interceptor;
@@ -28,6 +28,7 @@ public class Injector {
                 .baseUrl("http://api.rbtv.rodney.io/")
                 .client(provideOkHttpClient())
                 .addConverterFactory(provideGsonConverterFactory())
+                .addCallAdapterFactory(new LiveDataCallAdapterFactory())
                 .build();
     }
 
