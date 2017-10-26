@@ -62,9 +62,8 @@ public class ScheduleRepository {
         return new NetworkBoundResource<Schedule, Schedule>(appExecutors, forceRefresh) {
             @Override
             protected void saveCallResult(@NonNull Schedule item) {
-                //TODO disk cache
+                //TODO key
                 cache.put("test", item);
-                //repoDao.insert(item);
             }
 
             @Override
@@ -75,6 +74,7 @@ public class ScheduleRepository {
             @NonNull
             @Override
             protected LiveData<Schedule> loadFromDb() {
+                //TODO key
                 cacheData.setValue(cache.get("test"));
                 return cacheData;
             }

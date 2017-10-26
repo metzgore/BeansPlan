@@ -114,6 +114,7 @@ public class Show {
     }
 
     @PostDeserialize
+    @SuppressWarnings("unused")
     public void postDeserializeLogic() {
         Date now = new Date();
         isRunning = !now.before(timeStart) && !now.after(timeEnd);
