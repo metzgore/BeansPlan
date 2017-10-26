@@ -1,8 +1,10 @@
 package de.metzgore.rbtvschedule.util;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.vincentbrison.openlibraries.android.dualcache.CacheSerializer;
+
+import de.metzgore.rbtvschedule.data.Show;
+import io.gsonfire.GsonFireBuilder;
 
 public class GsonSerializer<T> implements CacheSerializer<T> {
 
@@ -12,10 +14,11 @@ public class GsonSerializer<T> implements CacheSerializer<T> {
     public GsonSerializer(Class<T> clazz) {
         this.mClazz = clazz;
 
-        GsonBuilder gsonBuilder = new GsonBuilder()
-                .setPrettyPrinting();
-        
-        this.mGson = gsonBuilder.create();
+        this.mGson = new GsonFireBuilder()
+                .enableHooks(Show.class)
+                .createGsonBuilder()
+                .setPrettyPrinting()
+                .create();
     }
 
     @Override

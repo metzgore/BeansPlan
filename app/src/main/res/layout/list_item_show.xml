@@ -20,7 +20,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:alpha="@{show.over ? 0.3f : 1.0f}"
-        android:background="@{show.currentlyRunning ? @drawable/border_current_show : null}">
+        android:background="@{show.running ? @drawable/border_current_show : null}">
 
         <LinearLayout
             android:layout_width="wrap_content"

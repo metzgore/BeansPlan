@@ -11,6 +11,8 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import io.gsonfire.annotations.PostDeserialize;
+
 public class Show {
 
     private static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
@@ -45,6 +47,10 @@ public class Show {
     @SerializedName("youtube")
     @Expose
     private String youtubeId;
+
+    private boolean isOver;
+
+    private boolean isRunning;
 
     public enum Type {
         @SerializedName("")
@@ -99,14 +105,19 @@ public class Show {
         return youtubeId != null && !TextUtils.isEmpty(youtubeId);
     }
 
-    public boolean isCurrentlyRunning() {
-        Date now = new Date();
-        return !now.before(timeStart) && !now.after(timeEnd);
+    public boolean isRunning() {
+        return isRunning;
     }
 
     public boolean isOver() {
+        return isOver;
+    }
+
+    @PostDeserialize
+    public void postDeserializeLogic() {
         Date now = new Date();
-        return timeEnd.before(now);
+        isRunning = !now.before(timeStart) && !now.after(timeEnd);
+        isOver = timeEnd.before(now);
     }
 
     @NonNull
@@ -144,11 +155,14 @@ public class Show {
                 ", title='" + title + '\'' +
                 ", topic='" + topic + '\'' +
                 ", show='" + show + '\'' +
-                ", timeStart='" + timeStart + '\'' +
-                ", timeEnd='" + timeEnd + '\'' +
+                ", timeStart=" + timeStart +
+                ", timeEnd=" + timeEnd +
                 ", length=" + length +
-                ", type='" + type + '\'' +
+                ", type=" + type +
                 ", game='" + game + '\'' +
+                ", youtubeId='" + youtubeId + '\'' +
+                ", isOver=" + isOver +
+                ", isRunning=" + isRunning +
                 '}';
     }
 
@@ -159,38 +173,35 @@ public class Show {
 
         Show show1 = (Show) o;
 
-        if (getId() != show1.getId()) return false;
-        if (getLength() != show1.getLength()) return false;
-        if (getTitle() != null ? !getTitle().equals(show1.getTitle()) : show1.getTitle() != null)
+        if (id != show1.id) return false;
+        if (length != show1.length) return false;
+        if (isOver != show1.isOver) return false;
+        if (isRunning != show1.isRunning) return false;
+        if (title != null ? !title.equals(show1.title) : show1.title != null) return false;
+        if (topic != null ? !topic.equals(show1.topic) : show1.topic != null) return false;
+        if (show != null ? !show.equals(show1.show) : show1.show != null) return false;
+        if (timeStart != null ? !timeStart.equals(show1.timeStart) : show1.timeStart != null)
             return false;
-        if (getTopic() != null ? !getTopic().equals(show1.getTopic()) : show1.getTopic() != null)
-            return false;
-        if (getShow() != null ? !getShow().equals(show1.getShow()) : show1.getShow() != null)
-            return false;
-        if (getTimeStart() != null ? !getTimeStart().equals(show1.getTimeStart()) : show1.getTimeStart() != null)
-            return false;
-        if (getTimeEnd() != null ? !getTimeEnd().equals(show1.getTimeEnd()) : show1.getTimeEnd() != null)
-            return false;
-        if (getType() != show1.getType()) return false;
-        if (getGame() != null ? !getGame().equals(show1.getGame()) : show1.getGame() != null)
-            return false;
-        if (isCurrentlyRunning() != show1.isCurrentlyRunning()) return false;
-        if (isOver() != show1.isOver()) return false;
-        return getYoutubeId() != null ? getYoutubeId().equals(show1.getYoutubeId()) : show1.getYoutubeId() == null;
+        if (timeEnd != null ? !timeEnd.equals(show1.timeEnd) : show1.timeEnd != null) return false;
+        if (type != show1.type) return false;
+        if (game != null ? !game.equals(show1.game) : show1.game != null) return false;
+        return youtubeId != null ? youtubeId.equals(show1.youtubeId) : show1.youtubeId == null;
     }
 
     @Override
     public int hashCode() {
-        int result = getId();
-        result = 31 * result + (getTitle() != null ? getTitle().hashCode() : 0);
-        result = 31 * result + (getTopic() != null ? getTopic().hashCode() : 0);
-        result = 31 * result + (getShow() != null ? getShow().hashCode() : 0);
-        result = 31 * result + (getTimeStart() != null ? getTimeStart().hashCode() : 0);
-        result = 31 * result + (getTimeEnd() != null ? getTimeEnd().hashCode() : 0);
-        result = 31 * result + getLength();
-        result = 31 * result + (getType() != null ? getType().hashCode() : 0);
-        result = 31 * result + (getGame() != null ? getGame().hashCode() : 0);
-        result = 31 * result + (getYoutubeId() != null ? getYoutubeId().hashCode() : 0);
+        int result = id;
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (topic != null ? topic.hashCode() : 0);
+        result = 31 * result + (show != null ? show.hashCode() : 0);
+        result = 31 * result + (timeStart != null ? timeStart.hashCode() : 0);
+        result = 31 * result + (timeEnd != null ? timeEnd.hashCode() : 0);
+        result = 31 * result + length;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (game != null ? game.hashCode() : 0);
+        result = 31 * result + (youtubeId != null ? youtubeId.hashCode() : 0);
+        result = 31 * result + (isOver ? 1 : 0);
+        result = 31 * result + (isRunning ? 1 : 0);
         return result;
     }
 }

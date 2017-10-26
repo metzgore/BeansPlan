@@ -7,8 +7,10 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -23,17 +25,19 @@ public class ScheduleFragment extends Fragment {
     private final String TAG = ScheduleFragment.class.getSimpleName();
 
     private ScheduleAdapter scheduleAdapter;
-
     private FragmentSingleDayScheduleBinding binding;
-
     private ScheduleViewModel viewModel;
-
     private ScheduleRepository repo;
-
     private Snackbar snackbar;
 
     public static Fragment newInstance() {
         return new ScheduleFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -45,14 +49,15 @@ public class ScheduleFragment extends Fragment {
         binding.showsList.addItemDecoration(new DividerItemDecoration(getActivity(),
                 DividerItemDecoration.VERTICAL));
         binding.showsList.setItemAnimator(null);
+        binding.showsList.setHasFixedSize(true);
 
         binding.swipeRefresh.setOnRefreshListener(() -> {
-            loadSchedule(true);
+            //TODO lambda
+            viewModel.loadSchedule(true);
         });
 
         scheduleAdapter = new ScheduleAdapter();
         binding.showsList.setAdapter(scheduleAdapter);
-
 
         return binding.getRoot();
     }
@@ -63,17 +68,25 @@ public class ScheduleFragment extends Fragment {
 
         repo = new ScheduleRepository();
         viewModel = ViewModelProviders.of(this, new ScheduleViewModelFactory(repo)).get(ScheduleViewModel.class);
-        loadSchedule(true);
+        viewModel.loadSchedule(true);
         subscribeUi(viewModel);
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_fragment_schedule, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
-    private void loadSchedule(boolean forceNetworkRefresh) {
-        viewModel.loadSchedule(forceNetworkRefresh);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                viewModel.loadSchedule(true);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void subscribeUi(ScheduleViewModel viewModel) {
@@ -91,7 +104,6 @@ public class ScheduleFragment extends Fragment {
     }
 
     private void handleState(Resource<Schedule> schedule) {
-        Log.d(TAG, schedule.status.toString());
         switch (schedule.status) {
             case LOADING:
                 showRefreshIndicator(true);
@@ -121,7 +133,8 @@ public class ScheduleFragment extends Fragment {
     public void showRetrySnackbar() {
         snackbar = Snackbar.make(getView(), R.string.error_message_schedule_general, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.action_retry, view -> {
-                    loadSchedule(true);
+                    //TODO lambda
+                    viewModel.loadSchedule(true);
                 });
         snackbar.show();
     }
