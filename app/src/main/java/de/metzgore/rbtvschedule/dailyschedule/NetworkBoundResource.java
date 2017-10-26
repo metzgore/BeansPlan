@@ -7,25 +7,31 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
-import java.util.Objects;
-
+import de.metzgore.rbtvschedule.AppExecutors;
 import de.metzgore.rbtvschedule.api.ApiResponse;
 import de.metzgore.rbtvschedule.data.Resource;
+import de.metzgore.rbtvschedule.util.Objects;
 
 public abstract class NetworkBoundResource<ResultType, RequestType> {
 
+    private final AppExecutors appExecutors;
+
     private final MediatorLiveData<Resource<ResultType>> result = new MediatorLiveData<>();
 
+    private boolean forceRefresh = false;
+
     @MainThread
-    NetworkBoundResource() {
-        result.setValue(Resource.loading(null));
+    NetworkBoundResource(AppExecutors appExecutors, boolean forceRefresh) {
+        this.appExecutors = appExecutors;
+        this.forceRefresh = forceRefresh;
+        result.setValue(Resource.loading(null, this.forceRefresh));
         LiveData<ResultType> dbSource = loadFromDb();
         result.addSource(dbSource, data -> {
             result.removeSource(dbSource);
             if (shouldFetch(data)) {
                 fetchFromNetwork(dbSource);
             } else {
-                result.addSource(dbSource, newData -> setValue(Resource.success(newData)));
+                result.addSource(dbSource, newData -> setValue(Resource.success(newData, this.forceRefresh)));
             }
         });
     }
@@ -40,27 +46,26 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
     private void fetchFromNetwork(final LiveData<ResultType> dbSource) {
         LiveData<ApiResponse<RequestType>> apiResponse = createCall();
         // we re-attach dbSource as a new source, it will dispatch its latest value quickly
-        result.addSource(dbSource, newData -> setValue(Resource.loading(newData)));
+        result.addSource(dbSource, newData -> setValue(Resource.loading(newData, forceRefresh)));
         result.addSource(apiResponse, response -> {
             result.removeSource(apiResponse);
             result.removeSource(dbSource);
             //noinspection ConstantConditions
             if (response.isSuccessful()) {
-                //TODO
-                //appExecutors.diskIO().execute(() -> {
-                saveCallResult(processResponse(response));
-                //appExecutors.mainThread().execute(() ->
-                // we specially request a new live data,
-                // otherwise we will get immediately last cached value,
-                // which may not be updated with latest results received from network.
-                result.addSource(loadFromDb(),
-                        newData -> setValue(Resource.success(newData)));
-                // );
-                // });
+                appExecutors.diskIO().execute(() -> {
+                    saveCallResult(processResponse(response));
+                    appExecutors.mainThread().execute(() ->
+                            // we specially request a new live data,
+                            // otherwise we will get immediately last cached value,
+                            // which may not be updated with latest results received from network.
+                            result.addSource(loadFromDb(),
+                                    newData -> setValue(Resource.success(newData, forceRefresh)))
+                    );
+                });
             } else {
                 onFetchFailed();
                 result.addSource(dbSource,
-                        newData -> setValue(Resource.error(response.errorMessage, newData)));
+                        newData -> setValue(Resource.error(response.errorMessage, newData, forceRefresh)));
             }
         });
     }

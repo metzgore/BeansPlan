@@ -13,7 +13,7 @@ import java.util.Date;
 
 public class Show {
 
-    private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+    private static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
     @SerializedName("id")
     @Expose
@@ -157,34 +157,40 @@ public class Show {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Show show = (Show) o;
+        Show show1 = (Show) o;
 
-        if (id != show.id) return false;
-        if (length != show.length) return false;
-        if (title != null ? !title.equals(show.title) : show.title != null) return false;
-        if (topic != null ? !topic.equals(show.topic) : show.topic != null) return false;
-        if (this.show != null ? !this.show.equals(show.show) : show.show != null) return false;
-        if (timeStart != null ? !timeStart.equals(show.timeStart) : show.timeStart != null)
+        if (getId() != show1.getId()) return false;
+        if (getLength() != show1.getLength()) return false;
+        if (getTitle() != null ? !getTitle().equals(show1.getTitle()) : show1.getTitle() != null)
             return false;
-        if (timeEnd != null ? !timeEnd.equals(show.timeEnd) : show.timeEnd != null)
+        if (getTopic() != null ? !getTopic().equals(show1.getTopic()) : show1.getTopic() != null)
             return false;
-        if (type != show.type) return false;
-        if (game != null ? !game.equals(show.game) : show.game != null) return false;
-        return youtubeId != null ? youtubeId.equals(show.youtubeId) : show.youtubeId == null;
+        if (getShow() != null ? !getShow().equals(show1.getShow()) : show1.getShow() != null)
+            return false;
+        if (getTimeStart() != null ? !getTimeStart().equals(show1.getTimeStart()) : show1.getTimeStart() != null)
+            return false;
+        if (getTimeEnd() != null ? !getTimeEnd().equals(show1.getTimeEnd()) : show1.getTimeEnd() != null)
+            return false;
+        if (getType() != show1.getType()) return false;
+        if (getGame() != null ? !getGame().equals(show1.getGame()) : show1.getGame() != null)
+            return false;
+        if (isCurrentlyRunning() != show1.isCurrentlyRunning()) return false;
+        if (isOver() != show1.isOver()) return false;
+        return getYoutubeId() != null ? getYoutubeId().equals(show1.getYoutubeId()) : show1.getYoutubeId() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (topic != null ? topic.hashCode() : 0);
-        result = 31 * result + (show != null ? show.hashCode() : 0);
-        result = 31 * result + (timeStart != null ? timeStart.hashCode() : 0);
-        result = 31 * result + (timeEnd != null ? timeEnd.hashCode() : 0);
-        result = 31 * result + length;
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (game != null ? game.hashCode() : 0);
-        result = 31 * result + (youtubeId != null ? youtubeId.hashCode() : 0);
+        int result = getId();
+        result = 31 * result + (getTitle() != null ? getTitle().hashCode() : 0);
+        result = 31 * result + (getTopic() != null ? getTopic().hashCode() : 0);
+        result = 31 * result + (getShow() != null ? getShow().hashCode() : 0);
+        result = 31 * result + (getTimeStart() != null ? getTimeStart().hashCode() : 0);
+        result = 31 * result + (getTimeEnd() != null ? getTimeEnd().hashCode() : 0);
+        result = 31 * result + getLength();
+        result = 31 * result + (getType() != null ? getType().hashCode() : 0);
+        result = 31 * result + (getGame() != null ? getGame().hashCode() : 0);
+        result = 31 * result + (getYoutubeId() != null ? getYoutubeId().hashCode() : 0);
         return result;
     }
 }

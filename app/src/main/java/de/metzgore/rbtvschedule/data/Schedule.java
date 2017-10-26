@@ -26,4 +26,19 @@ public class Schedule {
 
         return showsBuilder.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Schedule schedule = (Schedule) o;
+
+        return getShows().equals(schedule.getShows());
+    }
+
+    @Override
+    public int hashCode() {
+        return getShows().hashCode();
+    }
 }

@@ -4,7 +4,7 @@
     <data>
 
         <variable
-            name="isLoading"
+            name="hadError"
             type="boolean"/>
     </data>
 
@@ -13,28 +13,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <!--<TextView
+            <TextView
                 android:id="@+id/fragment_weekly_schedule_empty_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical|center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="@string/alert_message_schedule_failed"
                 android:textSize="24sp"
-                android:textAlignment="center"
                 android:drawableTop="@drawable/ic_warning"
-                app:visibleGone="@{isLoading}"/>-->
+                app:visibleGone="@{hadError}"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/shows_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layoutManager="LinearLayoutManager"/>
+                app:layoutManager="LinearLayoutManager"
+                app:visibleGone="@{!hadError}"/>
 
-        </LinearLayout>
+        </FrameLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 </layout>

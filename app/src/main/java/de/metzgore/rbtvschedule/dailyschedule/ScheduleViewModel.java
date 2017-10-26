@@ -18,7 +18,7 @@ public class ScheduleViewModel extends ViewModel {
     @Inject
     public ScheduleViewModel(ScheduleRepository scheduleRepo) {
         schedule = Transformations.switchMap(refresh, forceFromNetwork -> {
-            //TODO
+            //TODO lambda
             return scheduleRepo.loadScheduleOfToday(forceFromNetwork);
         });
 

@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.util.Log;
@@ -12,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import de.metzgore.rbtvschedule.R;
+import de.metzgore.rbtvschedule.data.Resource;
+import de.metzgore.rbtvschedule.data.Schedule;
 import de.metzgore.rbtvschedule.databinding.FragmentSingleDayScheduleBinding;
 import de.metzgore.rbtvschedule.util.di.ScheduleViewModelFactory;
 
@@ -26,6 +29,8 @@ public class ScheduleFragment extends Fragment {
     private ScheduleViewModel viewModel;
 
     private ScheduleRepository repo;
+
+    private Snackbar snackbar;
 
     public static Fragment newInstance() {
         return new ScheduleFragment();
@@ -42,7 +47,7 @@ public class ScheduleFragment extends Fragment {
         binding.showsList.setItemAnimator(null);
 
         binding.swipeRefresh.setOnRefreshListener(() -> {
-            loadSchedule();
+            loadSchedule(true);
         });
 
         scheduleAdapter = new ScheduleAdapter();
@@ -58,37 +63,71 @@ public class ScheduleFragment extends Fragment {
 
         repo = new ScheduleRepository();
         viewModel = ViewModelProviders.of(this, new ScheduleViewModelFactory(repo)).get(ScheduleViewModel.class);
-        loadSchedule();
+        loadSchedule(true);
         subscribeUi(viewModel);
     }
 
-    private void loadSchedule() {
-        showRefreshIndicator(true);
-        viewModel.loadSchedule(true);
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    private void loadSchedule(boolean forceNetworkRefresh) {
+        viewModel.loadSchedule(forceNetworkRefresh);
     }
 
     private void subscribeUi(ScheduleViewModel viewModel) {
         viewModel.getSchedule().observe(this, schedule -> {
-            Log.d(TAG, "data refreshed");
-            Log.d(TAG, schedule.status.toString());
-
-            showRefreshIndicator(false);
-            if (schedule.data != null) {
-                //binding.setIsLoading(false);
-                scheduleAdapter.setShowList(schedule.data.getShows());
-            } else {
-                //binding.setIsLoading(true);
-            }
-
-            binding.executePendingBindings();
+            handleState(schedule);
+            handleData(schedule);
         });
+    }
+
+    private void handleData(Resource<Schedule> schedule) {
+        if (schedule.data != null) {
+            binding.setHadError(false);
+            scheduleAdapter.setShowList(schedule.data.getShows());
+        }
+    }
+
+    private void handleState(Resource<Schedule> schedule) {
+        Log.d(TAG, schedule.status.toString());
+        switch (schedule.status) {
+            case LOADING:
+                showRefreshIndicator(true);
+                hideSnackbar();
+                break;
+            case ERROR:
+                binding.setHadError(true);
+                showRefreshIndicator(false);
+                showRetrySnackbar();
+                break;
+            case SUCCESS:
+                showRefreshIndicator(false);
+                hideSnackbar();
+                break;
+        }
     }
 
     public void showRefreshIndicator(final boolean isRefreshing) {
         if (binding != null) {
             binding.swipeRefresh.post(() -> {
+                //TODO lambda
                 binding.swipeRefresh.setRefreshing(isRefreshing);
             });
         }
+    }
+
+    public void showRetrySnackbar() {
+        snackbar = Snackbar.make(getView(), R.string.error_message_schedule_general, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.action_retry, view -> {
+                    loadSchedule(true);
+                });
+        snackbar.show();
+    }
+
+    public void hideSnackbar() {
+        if (snackbar != null && snackbar.isShown())
+            snackbar.dismiss();
     }
 }
