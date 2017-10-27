@@ -1,6 +1,7 @@
 package de.metzgore.rbtvschedule.dailyschedule;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -38,6 +39,17 @@ public class ScheduleFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        repo = new ScheduleRepository();
+        viewModel = ViewModelProviders.of(this, new ScheduleViewModelFactory(repo)).get(ScheduleViewModel.class);
+        viewModel.loadSchedule(true);
+        subscribeUi(viewModel);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        viewModel.loadSchedule(scheduleAdapter.getItemCount() == 0);
     }
 
     @Nullable
@@ -60,16 +72,6 @@ public class ScheduleFragment extends Fragment {
         binding.showsList.setAdapter(scheduleAdapter);
 
         return binding.getRoot();
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        repo = new ScheduleRepository();
-        viewModel = ViewModelProviders.of(this, new ScheduleViewModelFactory(repo)).get(ScheduleViewModel.class);
-        viewModel.loadSchedule(true);
-        subscribeUi(viewModel);
     }
 
     @Override
