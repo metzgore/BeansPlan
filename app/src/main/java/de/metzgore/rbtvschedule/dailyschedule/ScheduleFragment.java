@@ -29,7 +29,6 @@ public class ScheduleFragment extends Fragment {
     private ScheduleAdapter scheduleAdapter;
     private FragmentSingleDayScheduleBinding binding;
     private ScheduleViewModel viewModel;
-    private ScheduleRepository repo;
     private Snackbar snackbar;
 
     public static Fragment newInstance() {
@@ -41,16 +40,8 @@ public class ScheduleFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        repo = new ScheduleRepository();
-        viewModel = ViewModelProviders.of(this, new ScheduleViewModelFactory(repo)).get(ScheduleViewModel.class);
-        viewModel.loadSchedule(true);
+        viewModel = ViewModelProviders.of(this, new ScheduleViewModelFactory(new ScheduleRepository())).get(ScheduleViewModel.class);
         subscribeUi(viewModel);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        viewModel.loadSchedule(scheduleAdapter.getItemCount() == 0);
     }
 
     @Nullable
@@ -74,6 +65,18 @@ public class ScheduleFragment extends Fragment {
         binding.showsList.setAdapter(scheduleAdapter);
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        viewModel.loadSchedule(scheduleAdapter.getItemCount() == 0);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        viewModel.loadSchedule(scheduleAdapter.getItemCount() == 0);
     }
 
     @Override
