@@ -20,6 +20,7 @@ import de.metzgore.rbtvschedule.R;
 import de.metzgore.rbtvschedule.data.Resource;
 import de.metzgore.rbtvschedule.data.Schedule;
 import de.metzgore.rbtvschedule.databinding.FragmentSingleDayScheduleBinding;
+import de.metzgore.rbtvschedule.shared.ScheduleRepository;
 import de.metzgore.rbtvschedule.util.di.ScheduleViewModelFactory;
 
 public class ScheduleFragment extends Fragment {
@@ -40,6 +41,9 @@ public class ScheduleFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
+        scheduleAdapter = new ScheduleAdapter();
+
+        //TODO dagger
         viewModel = ViewModelProviders.of(this, new ScheduleViewModelFactory(new ScheduleRepository())).get(ScheduleViewModel.class);
         subscribeUi(viewModel);
     }
@@ -50,10 +54,10 @@ public class ScheduleFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_single_day_schedule, container, false);
 
-        binding.showsList.addItemDecoration(new DividerItemDecoration(getActivity(),
+        binding.singleDayIncluded.showsList.addItemDecoration(new DividerItemDecoration(getActivity(),
                 DividerItemDecoration.VERTICAL));
-        binding.showsList.setItemAnimator(null);
-        binding.showsList.setHasFixedSize(true);
+        binding.singleDayIncluded.showsList.setItemAnimator(null);
+        binding.singleDayIncluded.showsList.setHasFixedSize(true);
 
         binding.swipeRefresh.setOnRefreshListener(() -> {
             //TODO lambda
@@ -61,8 +65,7 @@ public class ScheduleFragment extends Fragment {
         });
         binding.swipeRefresh.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
 
-        scheduleAdapter = new ScheduleAdapter();
-        binding.showsList.setAdapter(scheduleAdapter);
+        binding.singleDayIncluded.showsList.setAdapter(scheduleAdapter);
 
         return binding.getRoot();
     }
@@ -105,7 +108,7 @@ public class ScheduleFragment extends Fragment {
 
     private void handleData(Resource<Schedule> schedule) {
         if (schedule.data != null) {
-            binding.setHadError(false);
+            binding.singleDayIncluded.setHadError(false);
             scheduleAdapter.setShowList(schedule.data.getShows());
         }
     }
@@ -117,7 +120,7 @@ public class ScheduleFragment extends Fragment {
                 hideSnackbar();
                 break;
             case ERROR:
-                binding.setHadError(true);
+                binding.singleDayIncluded.setHadError(true);
                 showRefreshIndicator(false);
                 showRetrySnackbar();
                 break;

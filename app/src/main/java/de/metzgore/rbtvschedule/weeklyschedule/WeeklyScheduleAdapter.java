@@ -3,43 +3,43 @@ package de.metzgore.rbtvschedule.weeklyschedule;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.text.format.DateUtils;
 
 import java.util.Date;
 
-import de.metzgore.rbtvschedule.singledayschedule.SingleDayScheduleFragment;
 import de.metzgore.rbtvschedule.data.WeeklySchedule;
+import de.metzgore.rbtvschedule.singledayschedule.BaseScheduleFragment;
 
 import static android.text.format.DateUtils.FORMAT_SHOW_DATE;
 import static android.text.format.DateUtils.FORMAT_SHOW_WEEKDAY;
 
-class WeeklyScheduleAdapter extends FragmentPagerAdapter {
+class WeeklyScheduleAdapter extends FragmentStatePagerAdapter {
 
-    private Context mContext;
-    private WeeklySchedule mWeeklySchedule;
+    private Context context;
+    private WeeklySchedule weeklySchedule;
 
     WeeklyScheduleAdapter(Context context, FragmentManager mgr) {
         super(mgr);
-        mContext = context;
-        mWeeklySchedule = new WeeklySchedule();
+        this.context = context;
+        weeklySchedule = new WeeklySchedule();
     }
 
     @Override
     public int getCount() {
-        return mWeeklySchedule.getWeeklySchedule().size();
+        return weeklySchedule.getSchedule().size();
     }
 
     @Override
     public Fragment getItem(int position) {
-        Date selectedDate = (Date) mWeeklySchedule.getWeeklySchedule().keySet().toArray()[position];
-        return SingleDayScheduleFragment.newInstance(mWeeklySchedule.getWeeklySchedule().get(selectedDate));
+        Date selectedDate = (Date) weeklySchedule.getSchedule().keySet().toArray()[position];
+        return BaseScheduleFragment.newInstance(weeklySchedule.getSchedule().get(selectedDate));
     }
 
     @Override
     public String getPageTitle(int position) {
-        Date dateOfSchedule = (Date) mWeeklySchedule.getWeeklySchedule().keySet().toArray()[position];
-        return DateUtils.formatDateTime(mContext, dateOfSchedule.getTime(), FORMAT_SHOW_WEEKDAY|FORMAT_SHOW_DATE);
+        Date dateOfSchedule = (Date) weeklySchedule.getSchedule().keySet().toArray()[position];
+        return DateUtils.formatDateTime(context, dateOfSchedule.getTime(), FORMAT_SHOW_WEEKDAY | FORMAT_SHOW_DATE);
     }
 
     @Override
@@ -47,13 +47,10 @@ class WeeklyScheduleAdapter extends FragmentPagerAdapter {
         return POSITION_NONE;
     }
 
-    @Override
-    public long getItemId(int position) {
-        return System.currentTimeMillis();
-    }
-
     void setSchedule(WeeklySchedule weeklySchedule) {
-        mWeeklySchedule = weeklySchedule;
-        notifyDataSetChanged();
+        if (!this.weeklySchedule.equals(weeklySchedule)) {
+            this.weeklySchedule = weeklySchedule;
+            notifyDataSetChanged();
+        }
     }
 }

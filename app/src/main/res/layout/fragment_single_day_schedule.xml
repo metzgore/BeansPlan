@@ -1,39 +1,12 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <data>
-
-        <variable
-            name="hadError"
-            type="boolean"/>
-    </data>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/fragment_weekly_schedule_empty_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/alert_message_schedule_failed"
-                android:textSize="24sp"
-                android:drawableTop="@drawable/ic_warning"
-                app:visibleGone="@{hadError}"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/shows_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layoutManager="LinearLayoutManager"
-                app:visibleGone="@{!hadError}"/>
-
-        </FrameLayout>
+        <include
+            android:id="@+id/single_day_included"
+            layout="@layout/layout_schedule_base"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 </layout>

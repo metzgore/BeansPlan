@@ -1,4 +1,4 @@
-package de.metzgore.rbtvschedule.dailyschedule;
+package de.metzgore.rbtvschedule.shared;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
@@ -20,8 +20,10 @@ import de.metzgore.rbtvschedule.api.ApiResponse;
 import de.metzgore.rbtvschedule.api.RBTVScheduleApi;
 import de.metzgore.rbtvschedule.data.Resource;
 import de.metzgore.rbtvschedule.data.Schedule;
+import de.metzgore.rbtvschedule.data.WeeklySchedule;
 import de.metzgore.rbtvschedule.util.GsonSerializer;
-import de.metzgore.rbtvschedule.util.Injector;
+import de.metzgore.rbtvschedule.util.NetworkBoundResource;
+import de.metzgore.rbtvschedule.util.di.Injector;
 
 @Singleton
 public class ScheduleRepository {
@@ -29,8 +31,10 @@ public class ScheduleRepository {
     private final String TAG = ScheduleRepository.class.getSimpleName();
     private final RBTVScheduleApi api;
     private final AppExecutors appExecutors;
-    private DualCache<Schedule> cache;
-    private MutableLiveData<Schedule> cacheData = new MutableLiveData<>();
+    private DualCache<Schedule> scheduleCache;
+    private DualCache<WeeklySchedule> weeklyScheduleCache;
+    private MutableLiveData<Schedule> scheduleCacheData = new MutableLiveData<>();
+    private MutableLiveData<WeeklySchedule> weeklyScheduleCacheData = new MutableLiveData<>();
 
     //TODO dagger
     //@Inject
@@ -38,10 +42,16 @@ public class ScheduleRepository {
         api = Injector.provideRBTVScheduleApi();
         this.appExecutors = new AppExecutors();
         //TODO name
-        cache = new Builder<Schedule>("test", 1)
+        scheduleCache = new Builder<Schedule>("test", 1)
                 .enableLog()
-                .useSerializerInRam(10000, new GsonSerializer<>(Schedule.class))
-                .useSerializerInDisk(10000, true, new GsonSerializer<>(Schedule.class), RBTVScheduleApp.getAppContext())
+                .useSerializerInRam(1000000, new GsonSerializer<>(Schedule.class))
+                .useSerializerInDisk(1000000, true, new GsonSerializer<>(Schedule.class), RBTVScheduleApp.getAppContext())
+                .build();
+
+        weeklyScheduleCache = new Builder<WeeklySchedule>("test1", 1)
+                .enableLog()
+                .useSerializerInRam(1000000, new GsonSerializer<>(WeeklySchedule.class))
+                .useSerializerInDisk(1000000, true, new GsonSerializer<>(WeeklySchedule.class), RBTVScheduleApp.getAppContext())
                 .build();
     }
 
@@ -63,7 +73,7 @@ public class ScheduleRepository {
             @Override
             protected void saveCallResult(@NonNull Schedule item) {
                 //TODO key
-                cache.put("test", item);
+                scheduleCache.put("schedule", item);
             }
 
             @Override
@@ -75,14 +85,43 @@ public class ScheduleRepository {
             @Override
             protected LiveData<Schedule> loadFromDb() {
                 //TODO key
-                cacheData.setValue(cache.get("test"));
-                return cacheData;
+                scheduleCacheData.setValue(scheduleCache.get("schedule"));
+                return scheduleCacheData;
             }
 
             @NonNull
             @Override
             protected LiveData<ApiResponse<Schedule>> createCall() {
                 return api.scheduleOfDay(year, month, dayOfMonth);
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<WeeklySchedule>> loadWeeklySchedule(boolean forceRefresh) {
+        return new NetworkBoundResource<WeeklySchedule, WeeklySchedule>(appExecutors, forceRefresh) {
+            @Override
+            protected void saveCallResult(@NonNull WeeklySchedule item) {
+                //TODO key
+                weeklyScheduleCache.put("weeklyschedule", item);
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable WeeklySchedule data) {
+                return forceRefresh;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<WeeklySchedule> loadFromDb() {
+                //TODO key
+                weeklyScheduleCacheData.setValue(weeklyScheduleCache.get("weeklyschedule"));
+                return weeklyScheduleCacheData;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<WeeklySchedule>> createCall() {
+                return api.scheduleOfCurrentWeek();
             }
         }.asLiveData();
     }

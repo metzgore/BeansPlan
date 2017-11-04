@@ -1,9 +1,10 @@
-package de.metzgore.rbtvschedule.util;
+package de.metzgore.rbtvschedule.util.di;
 
 import com.google.gson.Gson;
 
 import de.metzgore.rbtvschedule.api.RBTVScheduleApi;
 import de.metzgore.rbtvschedule.data.Show;
+import de.metzgore.rbtvschedule.util.LiveDataCallAdapterFactory;
 import io.gsonfire.GsonFireBuilder;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -22,14 +23,16 @@ public class Injector {
                 .build();
     }
 
-    public static GsonConverterFactory provideGsonConverterFactory() {
-        Gson gson = new GsonFireBuilder()
+    private static GsonConverterFactory provideGsonConverterFactory() {
+        return GsonConverterFactory.create(provideGson());
+    }
+
+    public static Gson provideGson() {
+        return new GsonFireBuilder()
                 .enableHooks(Show.class)
                 .createGsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                 .setDateFormat("dd.MM.yyyy")
                 .create();
-
-        return GsonConverterFactory.create(gson);
     }
 }

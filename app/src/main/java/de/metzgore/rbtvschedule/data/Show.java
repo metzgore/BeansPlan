@@ -1,5 +1,7 @@
 package de.metzgore.rbtvschedule.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
@@ -13,7 +15,7 @@ import java.util.Date;
 
 import io.gsonfire.annotations.PostDeserialize;
 
-public class Show {
+public class Show implements Parcelable {
 
     private static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
@@ -205,4 +207,56 @@ public class Show {
         result = 31 * result + (isRunning ? 1 : 0);
         return result;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.title);
+        dest.writeString(this.topic);
+        dest.writeString(this.show);
+        dest.writeLong(this.timeStart != null ? this.timeStart.getTime() : -1);
+        dest.writeLong(this.timeEnd != null ? this.timeEnd.getTime() : -1);
+        dest.writeInt(this.length);
+        dest.writeInt(this.type == null ? -1 : this.type.ordinal());
+        dest.writeString(this.game);
+        dest.writeString(this.youtubeId);
+        dest.writeByte(this.isOver ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isRunning ? (byte) 1 : (byte) 0);
+    }
+
+    protected Show(Parcel in) {
+        this.id = in.readInt();
+        this.title = in.readString();
+        this.topic = in.readString();
+        this.show = in.readString();
+        long tmpTimeStart = in.readLong();
+        this.timeStart = tmpTimeStart == -1 ? null : new Date(tmpTimeStart);
+        long tmpTimeEnd = in.readLong();
+        this.timeEnd = tmpTimeEnd == -1 ? null : new Date(tmpTimeEnd);
+        this.length = in.readInt();
+        int tmpType = in.readInt();
+        this.type = tmpType == -1 ? null : Type.values()[tmpType];
+        this.game = in.readString();
+        this.youtubeId = in.readString();
+        this.isOver = in.readByte() != 0;
+        this.isRunning = in.readByte() != 0;
+    }
+
+    public static final Parcelable.Creator<Show> CREATOR = new Parcelable.Creator<Show>() {
+        @Override
+        public Show createFromParcel(Parcel source) {
+            return new Show(source);
+        }
+
+        @Override
+        public Show[] newArray(int size) {
+            return new Show[size];
+        }
+    };
 }

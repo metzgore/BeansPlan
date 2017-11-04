@@ -1,4 +1,4 @@
-package de.metzgore.rbtvschedule.dailyschedule;
+package de.metzgore.rbtvschedule.util;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
@@ -10,7 +10,6 @@ import android.support.annotation.WorkerThread;
 import de.metzgore.rbtvschedule.AppExecutors;
 import de.metzgore.rbtvschedule.api.ApiResponse;
 import de.metzgore.rbtvschedule.data.Resource;
-import de.metzgore.rbtvschedule.util.Objects;
 
 public abstract class NetworkBoundResource<ResultType, RequestType> {
 
@@ -21,7 +20,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
     private boolean forceRefresh = false;
 
     @MainThread
-    NetworkBoundResource(AppExecutors appExecutors, boolean forceRefresh) {
+    public NetworkBoundResource(AppExecutors appExecutors, boolean forceRefresh) {
         this.appExecutors = appExecutors;
         this.forceRefresh = forceRefresh;
         result.setValue(Resource.loading(null, this.forceRefresh));
@@ -55,9 +54,6 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
                 appExecutors.diskIO().execute(() -> {
                     saveCallResult(processResponse(response));
                     appExecutors.mainThread().execute(() ->
-                            // we specially request a new live data,
-                            // otherwise we will get immediately last cached value,
-                            // which may not be updated with latest results received from network.
                             result.addSource(loadFromDb(),
                                     newData -> setValue(Resource.success(newData, forceRefresh)))
                     );

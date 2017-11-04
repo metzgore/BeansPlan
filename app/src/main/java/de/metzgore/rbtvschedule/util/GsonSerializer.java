@@ -17,7 +17,7 @@ public class GsonSerializer<T> implements CacheSerializer<T> {
         this.mGson = new GsonFireBuilder()
                 .enableHooks(Show.class)
                 .createGsonBuilder()
-                .setPrettyPrinting()
+                .setDateFormat("EEE MMM dd HH:mm:ss z yyyy")
                 .create();
     }
 
@@ -30,5 +30,4 @@ public class GsonSerializer<T> implements CacheSerializer<T> {
     public String toString(T object) {
         return mGson.toJson(object, mClazz);
     }
-
 }

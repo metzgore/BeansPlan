@@ -122,6 +122,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     protected Fragment createFragment() {
-        return ScheduleFragment.newInstance();
+        return WeeklyScheduleFragment.newInstance();
     }
 }

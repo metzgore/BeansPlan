@@ -1,6 +1,7 @@
 package de.metzgore.rbtvschedule.dailyschedule;
 
 import android.databinding.DataBindingUtil;
+import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,7 +17,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ShowVi
 
     private List<Show> shows;
 
-    public void setShowList(final List<Show> showList) {
+    public void setShowList(@NonNull final List<Show> showList) {
         if (shows == null) {
             shows = showList;
             notifyItemRangeInserted(0, showList.size());

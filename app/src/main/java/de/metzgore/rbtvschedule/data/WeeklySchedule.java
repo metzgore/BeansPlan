@@ -17,33 +17,19 @@ public class WeeklySchedule {
 
     @SerializedName("schedule")
     @Expose
-    private TreeMap<Date, List<Show>> mWeeklySchedule = new TreeMap<>();
+    private TreeMap<Date, List<Show>> schedule = new TreeMap<>();
 
-    @Override
-    public String toString() {
-        StringBuilder shows = new StringBuilder();
-
-        for (Date key : mWeeklySchedule.keySet()) {
-            shows.append(key).append("\n");
-            for (Show show : mWeeklySchedule.get(key)) {
-                shows.append(show.toString()).append("\n");
-            }
-        }
-
-        return shows.toString();
-    }
-
-    public TreeMap<Date, List<Show>> getWeeklySchedule() {
-        return mWeeklySchedule;
+    public TreeMap<Date, List<Show>> getSchedule() {
+        return schedule;
     }
 
     @Nullable
-    public List<Show> getScheduleOfToday() {
-        return mWeeklySchedule.get(getTodaysDate());
+    public List<Show> getShowsOfToday() {
+        return schedule.get(getCurrentDate());
     }
 
     public int getIndexOfTodaysSchedule() {
-        Date today = getTodaysDate();
+        Date today = getCurrentDate();
         Date[] schedules = getKeysAsDate();
 
         for (int i = 0; i < schedules.length; i++) {
@@ -55,7 +41,7 @@ public class WeeklySchedule {
     }
 
     @NonNull
-    private Date getTodaysDate() {
+    private Date getCurrentDate() {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(new Date());
         calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -69,12 +55,12 @@ public class WeeklySchedule {
     public void removePastShows() {
         removePastDays();
 
-        Date today = getTodaysDate();
+        Date today = getCurrentDate();
         Date[] schedules = getKeysAsDate();
 
         for (Date date : schedules) {
             if (date.equals(today)) {
-                List<Show> showsOfToday = mWeeklySchedule.get(date);
+                List<Show> showsOfToday = schedule.get(date);
                 Iterator<Show> iterator = showsOfToday.iterator();
                 while (iterator.hasNext()) {
                     Show show = iterator.next();
@@ -86,16 +72,45 @@ public class WeeklySchedule {
     }
 
     public void removePastDays() {
-        Date today = getTodaysDate();
+        Date today = getCurrentDate();
         Date[] schedules = getKeysAsDate();
 
         for (Date date : schedules) {
             if (date.before(today))
-                mWeeklySchedule.remove(date);
+                schedule.remove(date);
         }
     }
 
     private Date[] getKeysAsDate() {
-        return mWeeklySchedule.keySet().toArray(new Date[mWeeklySchedule.size()]);
+        return schedule.keySet().toArray(new Date[schedule.size()]);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder shows = new StringBuilder();
+
+        for (Date key : schedule.keySet()) {
+            shows.append(key).append("\n");
+            for (Show show : schedule.get(key)) {
+                shows.append(show.toString()).append("\n");
+            }
+        }
+
+        return shows.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof WeeklySchedule)) return false;
+
+        WeeklySchedule that = (WeeklySchedule) o;
+
+        return schedule != null ? schedule.equals(that.schedule) : that.schedule == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return schedule != null ? schedule.hashCode() : 0;
     }
 }
