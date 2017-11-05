@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -61,6 +62,7 @@ public class WeeklyScheduleFragment extends Fragment {
         binding.fragmentWeeklyScheduleViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(binding.fragmentWeeklyScheduleTabs) {
             @Override
             public void onPageScrolled(int position, float v, int i1) {
+                //NOOP
             }
 
             @Override
@@ -75,7 +77,6 @@ public class WeeklyScheduleFragment extends Fragment {
         });
 
         binding.fragmentWeeklyScheduleViewPager.setAdapter(weeklyScheduleAdapter);
-        binding.fragmentWeeklyScheduleTabs.setupWithViewPager(binding.fragmentWeeklyScheduleViewPager);
 
         binding.fragmentWeeklyScheduleSwipeRefresh.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         binding.fragmentWeeklyScheduleSwipeRefresh.setOnRefreshListener(() -> {
@@ -143,7 +144,16 @@ public class WeeklyScheduleFragment extends Fragment {
         if (schedule.data != null) {
             binding.setHadError(false);
             weeklyScheduleAdapter.setSchedule(schedule.data);
-            //binding.fragmentWeeklyScheduleViewPager.setCurrentItem(mCurrentViewPagerItem);
+
+            //workaround for weird tab updating
+            //see https://stackoverflow.com/a/43436472/5925185
+            new Handler().postDelayed(() -> {
+                final TabLayout.Tab selectedTab = binding.fragmentWeeklyScheduleTabs.getTabAt(
+                        binding.fragmentWeeklyScheduleTabs.getSelectedTabPosition());
+                if (selectedTab != null) {
+                    selectedTab.select();
+                }
+            }, 100);
         }
     }
 

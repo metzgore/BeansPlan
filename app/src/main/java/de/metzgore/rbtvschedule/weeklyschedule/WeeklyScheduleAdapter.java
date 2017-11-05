@@ -42,11 +42,6 @@ class WeeklyScheduleAdapter extends FragmentStatePagerAdapter {
         return DateUtils.formatDateTime(context, dateOfSchedule.getTime(), FORMAT_SHOW_WEEKDAY | FORMAT_SHOW_DATE);
     }
 
-    @Override
-    public int getItemPosition(Object object){
-        return POSITION_NONE;
-    }
-
     void setSchedule(WeeklySchedule weeklySchedule) {
         if (!this.weeklySchedule.equals(weeklySchedule)) {
             this.weeklySchedule = weeklySchedule;
