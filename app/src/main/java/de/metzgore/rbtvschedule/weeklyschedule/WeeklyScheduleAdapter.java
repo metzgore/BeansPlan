@@ -42,10 +42,14 @@ class WeeklyScheduleAdapter extends FragmentStatePagerAdapter {
         return DateUtils.formatDateTime(context, dateOfSchedule.getTime(), FORMAT_SHOW_WEEKDAY | FORMAT_SHOW_DATE);
     }
 
-    void setSchedule(WeeklySchedule weeklySchedule) {
+    public void setSchedule(WeeklySchedule weeklySchedule) {
         if (!this.weeklySchedule.equals(weeklySchedule)) {
             this.weeklySchedule = weeklySchedule;
             notifyDataSetChanged();
         }
+    }
+
+    public int getPositionOfCurrentDay() {
+        return weeklySchedule.getPositionOfCurrentDay();
     }
 }

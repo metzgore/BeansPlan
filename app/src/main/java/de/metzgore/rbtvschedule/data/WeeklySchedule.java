@@ -1,7 +1,6 @@
 package de.metzgore.rbtvschedule.data;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -23,12 +22,7 @@ public class WeeklySchedule {
         return schedule;
     }
 
-    @Nullable
-    public List<Show> getShowsOfToday() {
-        return schedule.get(getCurrentDate());
-    }
-
-    public int getIndexOfTodaysSchedule() {
+    public int getPositionOfCurrentDay() {
         Date today = getCurrentDate();
         Date[] schedules = getKeysAsDate();
 

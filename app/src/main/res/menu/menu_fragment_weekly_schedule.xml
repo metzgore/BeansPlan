@@ -3,12 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!--
     <item
         android:title="@string/action_today"
         android:id="@+id/action_today"
         app:showAsAction="always"
-        android:icon="@drawable/ic_today"/>-->
+        android:icon="@drawable/ic_today"/>
 
     <item android:title="@string/action_refresh"
           android:id="@+id/action_refresh"

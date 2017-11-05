@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import de.metzgore.rbtvschedule.R;
 import de.metzgore.rbtvschedule.data.Resource;
@@ -125,11 +126,20 @@ public class WeeklyScheduleFragment extends Fragment {
             case R.id.action_refresh:
                 viewModel.loadSchedule(true);
                 return true;
-            /*case R.id.action_today:
-                //mActionsListener.goToCurrentShow();
-                return true;*/
+            case R.id.action_today:
+                goToCurrentDay();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void goToCurrentDay() {
+        int positionOfCurrentDay = weeklyScheduleAdapter.getPositionOfCurrentDay();
+        if (positionOfCurrentDay >= 0 && positionOfCurrentDay < weeklyScheduleAdapter.getCount()) {
+            binding.fragmentWeeklyScheduleViewPager.setCurrentItem(positionOfCurrentDay);
+        } else {
+            Toast.makeText(getContext(), R.string.error_message_no_day_found, Toast.LENGTH_LONG).show();
         }
     }
 
