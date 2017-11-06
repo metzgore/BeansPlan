@@ -2,45 +2,57 @@ package de.metzgore.rbtvschedule.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.apache.commons.lang3.time.DurationFormatUtils;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import io.gsonfire.annotations.PostDeserialize;
 
 public class Show implements Parcelable {
 
+    private static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
     @SerializedName("id")
     @Expose
-    private int mId;
+    private int id;
     @SerializedName("title")
     @Expose
-    private String mTitle;
+    private String title;
     @SerializedName("topic")
     @Expose
-    private String mTopic;
+    private String topic;
     @SerializedName("show")
     @Expose
-    private String mShow;
+    private String show;
     @SerializedName("timeStart")
     @Expose
-    private Date mTimeStart;
+    private Date timeStart;
     @SerializedName("timeEnd")
     @Expose
-    private Date mTimeEnd;
+    private Date timeEnd;
     @SerializedName("length")
     @Expose
-    private int mLength;
+    private int length;
     @SerializedName("type")
     @Expose
-    private Type mType;
+    private Type type;
     @SerializedName("game")
     @Expose
-    private String mGame;
+    private String game;
     @SerializedName("youtube")
     @Expose
-    private String mYoutubeId;
+    private String youtubeId;
+
+    private boolean isOver;
+
+    private boolean isRunning;
 
     public enum Type {
         @SerializedName("")
@@ -52,73 +64,150 @@ public class Show implements Parcelable {
     }
 
     public int getId() {
-        return mId;
+        return id;
     }
 
     public String getTitle() {
-        return mTitle;
+        return title;
     }
 
     public String getTopic() {
-        return mTopic;
+        return topic;
     }
 
     public String getShow() {
-        return mShow;
+        return show;
     }
 
     public Date getTimeStart() {
-        return mTimeStart;
+        return timeStart;
     }
 
     public Date getTimeEnd() {
-        return mTimeEnd;
+        return timeEnd;
     }
 
     public int getLength() {
-        return mLength;
+        return length;
     }
 
     public Type getType() {
-        return mType;
+        return type;
     }
 
     public String getGame() {
-        return mGame;
+        return game;
     }
 
     public String getYoutubeId() {
-        return mYoutubeId;
+        return youtubeId;
     }
 
     public boolean isOnYoutube() {
-        return mYoutubeId != null && !TextUtils.isEmpty(mYoutubeId);
+        return youtubeId != null && !TextUtils.isEmpty(youtubeId);
     }
 
-    public boolean isCurrentlyRunning() {
-        Date now = new Date();
-        return !now.before(mTimeStart) && !now.after(mTimeEnd);
+    public boolean isRunning() {
+        return isRunning;
     }
 
     public boolean isOver() {
+        return isOver;
+    }
+
+    @PostDeserialize
+    @SuppressWarnings("unused")
+    public void postDeserializeLogic() {
         Date now = new Date();
-        return mTimeEnd.before(now);
+        isRunning = !now.before(timeStart) && !now.after(timeEnd);
+        isOver = timeEnd.before(now);
+    }
+
+    @NonNull
+    public String getTimeStartFormatted() {
+        return timeFormat.format(timeStart);
+    }
+
+    @NonNull
+    public String getTimeEndFormatted() {
+        return timeFormat.format(timeEnd);
+    }
+
+    @NonNull
+    public String getLengthFormatted() {
+        return DurationFormatUtils.formatDuration(length * 1000,
+                length > 3600 ? "H 'h' mm 'min'" : "m 'min'");
+    }
+
+    @NonNull
+    public String getTypeFormatted() {
+        switch (type) {
+            case LIVE:
+            case PREMIERE:
+                return type.toString();
+            case NONE:
+            default:
+                return "";
+        }
     }
 
     @Override
     public String toString() {
         return "Show{" +
-                "mId=" + mId +
-                ", mTitle='" + mTitle + '\'' +
-                ", mTopic='" + mTopic + '\'' +
-                ", mShow='" + mShow + '\'' +
-                ", mTimeStart='" + mTimeStart + '\'' +
-                ", mTimeEnd='" + mTimeEnd + '\'' +
-                ", mLength=" + mLength +
-                ", mType='" + mType + '\'' +
-                ", mGame='" + mGame + '\'' +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", topic='" + topic + '\'' +
+                ", show='" + show + '\'' +
+                ", timeStart=" + timeStart +
+                ", timeEnd=" + timeEnd +
+                ", length=" + length +
+                ", type=" + type +
+                ", game='" + game + '\'' +
+                ", youtubeId='" + youtubeId + '\'' +
+                ", isOver=" + isOver +
+                ", isRunning=" + isRunning +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Show show1 = (Show) o;
+
+        if (id != show1.id) return false;
+        if (length != show1.length) return false;
+        if (isOver != show1.isOver) return false;
+        if (isRunning != show1.isRunning) return false;
+        if (title != null ? !title.equals(show1.title) : show1.title != null) return false;
+        if (topic != null ? !topic.equals(show1.topic) : show1.topic != null) return false;
+        if (show != null ? !show.equals(show1.show) : show1.show != null) return false;
+        if (timeStart != null ? !timeStart.equals(show1.timeStart) : show1.timeStart != null)
+            return false;
+        if (timeEnd != null ? !timeEnd.equals(show1.timeEnd) : show1.timeEnd != null) return false;
+        if (type != show1.type) return false;
+        if (game != null ? !game.equals(show1.game) : show1.game != null) return false;
+        return youtubeId != null ? youtubeId.equals(show1.youtubeId) : show1.youtubeId == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (topic != null ? topic.hashCode() : 0);
+        result = 31 * result + (show != null ? show.hashCode() : 0);
+        result = 31 * result + (timeStart != null ? timeStart.hashCode() : 0);
+        result = 31 * result + (timeEnd != null ? timeEnd.hashCode() : 0);
+        result = 31 * result + length;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (game != null ? game.hashCode() : 0);
+        result = 31 * result + (youtubeId != null ? youtubeId.hashCode() : 0);
+        result = 31 * result + (isOver ? 1 : 0);
+        result = 31 * result + (isRunning ? 1 : 0);
+        return result;
+    }
+
 
     @Override
     public int describeContents() {
@@ -127,33 +216,36 @@ public class Show implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.mId);
-        dest.writeString(this.mTitle);
-        dest.writeString(this.mTopic);
-        dest.writeString(this.mShow);
-        dest.writeLong(this.mTimeStart != null ? this.mTimeStart.getTime() : -1);
-        dest.writeLong(this.mTimeEnd != null ? this.mTimeEnd.getTime() : -1);
-        dest.writeInt(this.mLength);
-        dest.writeInt(this.mType == null ? -1 : this.mType.ordinal());
-        dest.writeString(this.mGame);
-    }
-
-    public Show() {
+        dest.writeInt(this.id);
+        dest.writeString(this.title);
+        dest.writeString(this.topic);
+        dest.writeString(this.show);
+        dest.writeLong(this.timeStart != null ? this.timeStart.getTime() : -1);
+        dest.writeLong(this.timeEnd != null ? this.timeEnd.getTime() : -1);
+        dest.writeInt(this.length);
+        dest.writeInt(this.type == null ? -1 : this.type.ordinal());
+        dest.writeString(this.game);
+        dest.writeString(this.youtubeId);
+        dest.writeByte(this.isOver ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isRunning ? (byte) 1 : (byte) 0);
     }
 
     protected Show(Parcel in) {
-        this.mId = in.readInt();
-        this.mTitle = in.readString();
-        this.mTopic = in.readString();
-        this.mShow = in.readString();
-        long tmpMTimeStart = in.readLong();
-        this.mTimeStart = tmpMTimeStart == -1 ? null : new Date(tmpMTimeStart);
-        long tmpMTimeEnd = in.readLong();
-        this.mTimeEnd = tmpMTimeEnd == -1 ? null : new Date(tmpMTimeEnd);
-        this.mLength = in.readInt();
-        int tmpMType = in.readInt();
-        this.mType = tmpMType == -1 ? null : Type.values()[tmpMType];
-        this.mGame = in.readString();
+        this.id = in.readInt();
+        this.title = in.readString();
+        this.topic = in.readString();
+        this.show = in.readString();
+        long tmpTimeStart = in.readLong();
+        this.timeStart = tmpTimeStart == -1 ? null : new Date(tmpTimeStart);
+        long tmpTimeEnd = in.readLong();
+        this.timeEnd = tmpTimeEnd == -1 ? null : new Date(tmpTimeEnd);
+        this.length = in.readInt();
+        int tmpType = in.readInt();
+        this.type = tmpType == -1 ? null : Type.values()[tmpType];
+        this.game = in.readString();
+        this.youtubeId = in.readString();
+        this.isOver = in.readByte() != 0;
+        this.isRunning = in.readByte() != 0;
     }
 
     public static final Parcelable.Creator<Show> CREATOR = new Parcelable.Creator<Show>() {

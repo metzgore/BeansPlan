@@ -2,18 +2,19 @@ package de.metzgore.rbtvschedule;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.metzgore.rbtvschedule.dailyschedule.ScheduleFragment;
 import de.metzgore.rbtvschedule.settings.SettingsActivity;
 import de.metzgore.rbtvschedule.weeklyschedule.WeeklyScheduleFragment;
 
@@ -84,9 +85,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void selectDrawerItem(MenuItem menuItem) {
         switch(menuItem.getItemId()) {
-            /*case R.id.nav_first_fragment:
-                replaceFragment(WeeklyScheduleFragment.class, menuItem);
-                break;*/
+            case R.id.nav_first_fragment:
+                replaceFragment(ScheduleFragment.class, menuItem);
+                break;
             case R.id.nav_second_fragment:
                 replaceFragment(WeeklyScheduleFragment.class, menuItem);
                 break;

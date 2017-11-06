@@ -1,54 +1,42 @@
 package de.metzgore.rbtvschedule.weeklyschedule;
 
-import android.content.SharedPreferences;
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.res.Configuration;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import de.metzgore.rbtvschedule.R;
-import de.metzgore.rbtvschedule.data.Schedule;
-import de.metzgore.rbtvschedule.settings.repository.AppSettingsImp;
+import de.metzgore.rbtvschedule.data.Resource;
+import de.metzgore.rbtvschedule.data.WeeklySchedule;
+import de.metzgore.rbtvschedule.databinding.FragmentWeeklyScheduleBinding;
+import de.metzgore.rbtvschedule.shared.ScheduleRepository;
+import de.metzgore.rbtvschedule.util.di.WeeklyScheduleViewModelFactory;
 
-public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleContract.View {
+public class WeeklyScheduleFragment extends Fragment {
 
-    private static final String TAG = WeeklySchedulePresenter.class.getSimpleName();
+    private static final String TAG = WeeklyScheduleFragment.class.getSimpleName();
 
-    private static final String VIEW_PAGER_ITEM = "view_pager_item";
+    //private static final String VIEW_PAGER_ITEM = "view_pager_item";
 
-    @BindView(R.id.fragment_weekly_schedule_view_pager)
-    ViewPager mWeeklyScheduleViewPager;
-    @BindView(R.id.fragment_weekly_schedule_swipe_refresh)
-    SwipeRefreshLayout mSwipeRefreshLayout;
-    @BindView(R.id.fragment_weekly_schedule_empty_view)
-    TextView mEmptyView;
-    @BindView(R.id.fragment_weekly_schedule_tabs)
-    TabLayout mWeeklyScheduleTabs;
-
-    private WeeklyScheduleAdapter mWeeklyScheduleAdapter;
-
-    private Snackbar mErrorSnackbar;
-
-    private WeeklySchedulePresenter mActionsListener;
-
-    private Unbinder mUnbinder;
-
+    private WeeklyScheduleAdapter weeklyScheduleAdapter;
+    private FragmentWeeklyScheduleBinding binding;
+    private Snackbar snackbar;
     private int mCurrentViewPagerItem;
+    private WeeklyScheduleViewModel viewModel;
 
     public static Fragment newInstance() {
         return  new WeeklyScheduleFragment();
@@ -57,23 +45,25 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mActionsListener = new WeeklySchedulePresenter(this, new AppSettingsImp(getContext()));
-        mWeeklyScheduleAdapter = new WeeklyScheduleAdapter(getContext(), getChildFragmentManager());
-
         setHasOptionsMenu(true);
+
+        weeklyScheduleAdapter = new WeeklyScheduleAdapter(getContext(), getChildFragmentManager());
+
+        //TODO dagger
+        viewModel = ViewModelProviders.of(this, new WeeklyScheduleViewModelFactory(new ScheduleRepository())).get(WeeklyScheduleViewModel.class);
+        subscribeUi(viewModel);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_weekly_schedule, container, false);
-        mUnbinder = ButterKnife.bind(this, view);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_weekly_schedule, container, false);
 
-        mWeeklyScheduleViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
-        mWeeklyScheduleViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mWeeklyScheduleTabs) {
+        binding.fragmentWeeklyScheduleViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
+        binding.fragmentWeeklyScheduleViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(binding.fragmentWeeklyScheduleTabs) {
             @Override
             public void onPageScrolled(int position, float v, int i1) {
+                //NOOP
             }
 
             @Override
@@ -87,45 +77,41 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
             }
         });
 
-        mWeeklyScheduleViewPager.setAdapter(mWeeklyScheduleAdapter);
-        mWeeklyScheduleTabs.setupWithViewPager(mWeeklyScheduleViewPager);
+        binding.fragmentWeeklyScheduleViewPager.setAdapter(weeklyScheduleAdapter);
 
-        mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mActionsListener.loadWeeklySchedule();
-            }
+        binding.fragmentWeeklyScheduleSwipeRefresh.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        binding.fragmentWeeklyScheduleSwipeRefresh.setOnRefreshListener(() -> {
+            viewModel.loadSchedule(true);
         });
 
-        return view;
+        return binding.getRoot();
     }
 
-    @Override
+   /*@Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         if (savedInstanceState != null) {
             mCurrentViewPagerItem = savedInstanceState.getInt(VIEW_PAGER_ITEM, 0);
         }
-    }
+    }    */
 
     @Override
     public void onStart() {
         super.onStart();
-        mActionsListener.loadWeeklySchedule();
+        viewModel.loadSchedule(weeklyScheduleAdapter.getCount() == 0);
     }
 
-    @Override
+    /*@Override
     public void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
         bundle.putInt(VIEW_PAGER_ITEM, mWeeklyScheduleViewPager.getCurrentItem());
-    }
+    }  */
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mUnbinder.unbind();
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        viewModel.loadSchedule(weeklyScheduleAdapter.getCount() == 0);
     }
 
     @Override
@@ -138,71 +124,97 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                mActionsListener.loadWeeklySchedule();
+                viewModel.loadSchedule(true);
                 return true;
             case R.id.action_today:
-                mActionsListener.goToCurrentShow();
+                goToCurrentDay();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    @Override
-    public void showSchedule(Schedule schedule) {
-        mWeeklyScheduleAdapter.setSchedule(schedule);
-        mWeeklyScheduleViewPager.setAdapter(mWeeklyScheduleAdapter);
-        mWeeklyScheduleViewPager.setCurrentItem(mCurrentViewPagerItem);
-        mWeeklyScheduleViewPager.setVisibility(View.VISIBLE);
+    private void goToCurrentDay() {
+        int positionOfCurrentDay = weeklyScheduleAdapter.getPositionOfCurrentDay();
+        if (positionOfCurrentDay >= 0 && positionOfCurrentDay < weeklyScheduleAdapter.getCount()) {
+            binding.fragmentWeeklyScheduleViewPager.setCurrentItem(positionOfCurrentDay);
+        } else {
+            Toast.makeText(getContext(), R.string.error_message_no_day_found, Toast.LENGTH_LONG).show();
+        }
     }
 
-    @Override
-    public void showRetrySnackbar(int messageId) {
-        mErrorSnackbar = Snackbar.make(getView(), messageId, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.action_retry, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mActionsListener.loadWeeklySchedule();
-                    }
-                });
-        mErrorSnackbar.show();
+    private void subscribeUi(WeeklyScheduleViewModel viewModel) {
+        viewModel.getSchedule().observe(this, schedule -> {
+            handleState(schedule);
+            handleData(schedule);
+        });
     }
 
-    @Override
-    public void hideSnackbar() {
-        if (mErrorSnackbar != null && mErrorSnackbar.isShown())
-            mErrorSnackbar.dismiss();
-    }
+    private void handleData(Resource<WeeklySchedule> schedule) {
+        if (schedule.data != null) {
+            binding.setHadError(false);
+            weeklyScheduleAdapter.setSchedule(schedule.data);
 
-    @Override
-    public void showRefreshIndicator(final boolean isRefreshing) {
-        if (mSwipeRefreshLayout != null) {
-            mSwipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    mSwipeRefreshLayout.setRefreshing(isRefreshing);
+            //workaround for weird tab updating
+            //see https://stackoverflow.com/a/43436472/5925185
+            new Handler().postDelayed(() -> {
+                final TabLayout.Tab selectedTab = binding.fragmentWeeklyScheduleTabs.getTabAt(
+                        binding.fragmentWeeklyScheduleTabs.getSelectedTabPosition());
+                if (selectedTab != null) {
+                    selectedTab.select();
                 }
+            }, 100);
+        }
+    }
+
+    private void handleState(Resource<WeeklySchedule> schedule) {
+        switch (schedule.status) {
+            case LOADING:
+                showRefreshIndicator(true);
+                hideSnackbar();
+                break;
+            case ERROR:
+                binding.setHadError(true);
+                showRefreshIndicator(false);
+                showRetrySnackbar();
+                break;
+            case SUCCESS:
+                showRefreshIndicator(false);
+                hideSnackbar();
+                break;
+        }
+    }
+
+    public void showRefreshIndicator(final boolean isRefreshing) {
+        if (binding != null) {
+            binding.fragmentWeeklyScheduleSwipeRefresh.post(() -> {
+                //TODO lambda
+                binding.fragmentWeeklyScheduleSwipeRefresh.setRefreshing(isRefreshing);
             });
         }
     }
 
-    @Override
-    public void showEmptyView(boolean visible) {
-        mEmptyView.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+    public void showRetrySnackbar() {
+        snackbar = Snackbar.make(getView(), R.string.error_message_schedule_general, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.action_retry, view -> {
+                    //TODO lambda
+                    viewModel.loadSchedule(true);
+                });
+        snackbar.show();
     }
 
-    @Override
+    public void hideSnackbar() {
+        if (snackbar != null && snackbar.isShown())
+            snackbar.dismiss();
+    }
+
+    /*@Override
     public void showCurrentDay(int idxOfCurrentDay) {
         if (idxOfCurrentDay != mCurrentViewPagerItem)
             mCurrentViewPagerItem = idxOfCurrentDay;
 
         mWeeklyScheduleViewPager.setCurrentItem(mCurrentViewPagerItem);
-    }
-
-    @Override
-    public void showToast(int error_message_no_day_found) {
-        Toast.makeText(getContext(), R.string.error_message_no_day_found, Toast.LENGTH_LONG).show();
-    }
+    }  */
 
     private class ZoomOutPageTransformer implements ViewPager.PageTransformer {
         private static final float MIN_SCALE = 0.85f;
@@ -244,8 +256,8 @@ public class WeeklyScheduleFragment extends Fragment implements WeeklyScheduleCo
     }
 
     private void enableDisableSwipeRefresh(boolean enable) {
-        if (mSwipeRefreshLayout != null) {
-            mSwipeRefreshLayout.setEnabled(enable);
+        if (binding.fragmentWeeklyScheduleSwipeRefresh != null) {
+            binding.fragmentWeeklyScheduleSwipeRefresh.setEnabled(enable);
         }
     }
 }

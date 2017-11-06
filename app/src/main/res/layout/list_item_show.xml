@@ -1,102 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list_item_show_base"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:baselineAligned="false">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="show"
+            type="de.metzgore.rbtvschedule.data.Show"/>
+    </data>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:id="@+id/list_item_show_base"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:alpha="@{show.over ? 0.3f : 1.0f}"
+        android:background="@{show.running ? @drawable/border_current_show : null}">
 
-        <TextView
-            android:id="@+id/list_item_show_start_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="Start"
-            android:gravity="center"/>
-
-        <TextView
-            android:id="@+id/list_item_show_time_dash"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="-"
-            tools:text="-"
-            android:gravity="center"/>
-
-        <TextView
-            android:id="@+id/list_item_show_end_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="End"
-            android:gravity="center"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin">
-
-        <TextView
-            android:id="@+id/list_item_show_title_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:textStyle="bold"
-            android:lines="1"
-            tools:text="Title"
-            android:gravity="center_vertical"/>
-
-        <TextView
-            android:id="@+id/list_item_show_topic_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:minLines="0"
-            android:maxLines="2"
-            tools:text="Topic"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="74dp"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/list_item_show_length_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            tools:text="12 h 10 min"/>
-
-        <TextView
-            android:id="@+id/list_item_show_type_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:textColor="@drawable/disabled_show_type_text_view"
-            tools:text="PREMIERE"/>
-
-        <ImageView
-            android:id="@+id/list_view_item_show_youtube_image_view"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_youtube"
-            android:layout_gravity="right"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/list_item_show_start_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Start"
+                android:gravity="center"
+                android:text="@{show.timeStartFormatted}"/>
+
+            <TextView
+                android:id="@+id/list_item_show_time_dash"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="-"
+                tools:text="-"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/list_item_show_end_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="End"
+                android:gravity="center"
+                android:text="@{show.timeEndFormatted}"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                android:id="@+id/list_item_show_title_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:textStyle="bold"
+                android:lines="1"
+                tools:text="Title"
+                android:gravity="center_vertical"
+                android:text="@{show.title}"/>
+
+            <TextView
+                android:id="@+id/list_item_show_topic_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:minLines="1"
+                android:maxLines="2"
+                tools:text="Topic"
+                android:text="@{show.topic}"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="74dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/list_item_show_length_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                tools:text="12 h 10 min"
+                android:text="@{show.lengthFormatted}"/>
+
+            <TextView
+                android:id="@+id/list_item_show_type_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:textColor="@color/colorAccent"
+                tools:text="PREMIERE"
+                android:text="@{show.typeFormatted}"/>
+
+            <ImageView
+                android:id="@+id/list_view_item_show_youtube_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_youtube"
+                android:layout_gravity="right"
+                app:visibleGone="@{show.onYoutube}"/>
+
+        </LinearLayout>
 
     </LinearLayout>
-
-</LinearLayout>
+</layout>

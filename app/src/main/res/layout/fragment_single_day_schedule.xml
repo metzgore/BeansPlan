@@ -1,8 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_daily_schedule_recycler_view"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="de.metzgore.rbtvschedule.MainActivity"/>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/single_day_included"
+            layout="@layout/layout_schedule_base"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</layout>
