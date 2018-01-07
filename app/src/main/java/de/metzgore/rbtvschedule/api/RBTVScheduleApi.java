@@ -12,5 +12,5 @@ public interface RBTVScheduleApi {
     LiveData<ApiResponse<WeeklySchedule>> scheduleOfCurrentWeek();
 
     @GET("/api/1.0/schedule/{year}/{month}/{day}.json")
-    LiveData<ApiResponse<Schedule>> scheduleOfDay(@Path("year") int year, @Path("month") int month, @Path("day") String day);
+    LiveData<ApiResponse<Schedule>> scheduleOfDay(@Path("year") int year, @Path("month") String month, @Path("day") String day);
 }

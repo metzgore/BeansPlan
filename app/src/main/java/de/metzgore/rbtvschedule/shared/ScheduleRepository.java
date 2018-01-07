@@ -67,7 +67,8 @@ public class ScheduleRepository {
     }
 
     public LiveData<Resource<Schedule>> loadScheduleOfDay(boolean forceRefresh, int year, int month, int day) {
-        String dayOfMonth = String.format("%02d", day);
+        String formattedDay = String.format("%02d", day);
+        String formattedMonth = String.format("%02d", month);
 
         return new NetworkBoundResource<Schedule, Schedule>(appExecutors, forceRefresh) {
             @Override
@@ -92,7 +93,7 @@ public class ScheduleRepository {
             @NonNull
             @Override
             protected LiveData<ApiResponse<Schedule>> createCall() {
-                return api.scheduleOfDay(year, month, dayOfMonth);
+                return api.scheduleOfDay(year, formattedMonth, formattedDay);
             }
         }.asLiveData();
     }
