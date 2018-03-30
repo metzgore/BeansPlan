@@ -1,11 +1,8 @@
 package de.metzgore.rbtvschedule.settings;
 
-import android.preference.PreferenceFragment;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 
 import de.metzgore.rbtvschedule.R;
 
@@ -17,6 +14,8 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
 
         addPreferencesFromResource(R.xml.preferences);
     }

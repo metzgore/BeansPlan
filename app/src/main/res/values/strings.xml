@@ -23,4 +23,7 @@
     <string name="pref_hide_past_shows_summary">Blende vergangene Sendungen im Tages- und Wochenplan aus</string>
     <string name="pref_hide_past_days_title">Vergangene Tage ausblenden</string>
     <string name="pref_hide_past_days_summary">Blende vergangene Tage im Wochenplan aus</string>
+    <string name="pref_select_default_plan_title">Plan, der beim Start angezeigt wird</string>
+    <string name="pref_select_default_plan_dialog_title">Plan wählen</string>
+    <string name="pref_select_default_plan_default">Tagesplan</string>
 </resources>

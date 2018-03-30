@@ -3,15 +3,24 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <CheckBoxPreference
+        android:disableDependentsState="true"
         android:key="@string/pref_key_hide_past_shows"
-        android:title="@string/pref_hide_past_shows_title"
         android:summary="@string/pref_hide_past_shows_summary"
-        android:disableDependentsState="true"/>
+        android:title="@string/pref_hide_past_shows_title"/>
 
     <CheckBoxPreference
+        android:dependency="@string/pref_key_hide_past_shows"
         android:key="@string/pref_key_hide_past_days"
-        android:title="@string/pref_hide_past_days_title"
         android:summary="@string/pref_hide_past_days_summary"
-        android:dependency="@string/pref_key_hide_past_shows"/>
+        android:title="@string/pref_hide_past_days_title"/>
+
+    <ListPreference
+        android:defaultValue="@string/pref_select_default_plan_default"
+        android:dialogTitle="@string/pref_select_default_plan_dialog_title"
+        android:entries="@array/pref_select_default_plan_entries"
+        android:entryValues="@array/pref_select_default_plan_entry_values"
+        android:key="@string/pref_key_select_default_plan"
+        android:summary="%s"
+        android:title="@string/pref_select_default_plan_title"/>
 
 </PreferenceScreen>
