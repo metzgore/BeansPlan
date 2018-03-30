@@ -1,26 +1,26 @@
 <resources>
     <string name="app_name">RBTV Plan</string>
 
-    <string name="error_message_schedule_general">Error while loading schedule</string>
-    <string name="error_message_device_offline">Your device appears to be offline</string>
-    <string name="alert_message_schedule_failed">Cannot load schedule</string>
+    <string name="error_message_schedule_general">Fehler beim Laden des Sendeplans</string>
+    <string name="error_message_device_offline">Dein Gerät scheint offline zu sein</string>
+    <string name="alert_message_schedule_failed">Sendeplan kann nicht geladen werden</string>
 
-    <string name="action_retry">Retry</string>
-    <string name="action_refresh">Refresh</string>
-    <string name="action_today">Today</string>
-    <string name="error_message_no_day_found">Could not go to current day</string>
+    <string name="action_retry">Wiederholen</string>
+    <string name="action_refresh">Aktualisieren</string>
+    <string name="action_today">Heute</string>
+    <string name="error_message_no_day_found">Konnte nicht zu aktuellem Tag wechseln</string>
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
 
-    <string name="drawer_item_weekly_schedule">Weekly schedule</string>
-    <string name="drawer_item_todays_schedule">Today\'s schedule</string>
-    <string name="drawer_item_setting">Settings</string>
+    <string name="drawer_item_weekly_schedule">Wochenplan</string>
+    <string name="drawer_item_todays_schedule">Tagesplan</string>
+    <string name="drawer_item_setting">Einstellungen</string>
 
-    <string name="activity_settings_title">Settings</string>
+    <string name="activity_settings_title">Einstellungen</string>
 
-    <string name="pref_hide_past_shows_title">Hide past shows</string>
-    <string name="pref_hide_past_shows_summary">Hide past shows in today\'s schedule and weekly schedule</string>
-    <string name="pref_hide_past_days_title">Hide past days</string>
-    <string name="pref_hide_past_days_summary">Hide past days in weekly schedule</string>
+    <string name="pref_hide_past_shows_title">Vergangene Sendungen ausblenden</string>
+    <string name="pref_hide_past_shows_summary">Blende vergangene Sendungen im Tages- und Wochenplan aus</string>
+    <string name="pref_hide_past_days_title">Vergangene Tage ausblenden</string>
+    <string name="pref_hide_past_days_summary">Blende vergangene Tage im Wochenplan aus</string>
 </resources>
