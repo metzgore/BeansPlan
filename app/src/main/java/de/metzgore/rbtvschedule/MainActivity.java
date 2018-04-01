@@ -10,12 +10,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.SparseArray;
 import android.view.MenuItem;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.metzgore.rbtvschedule.dailyschedule.ScheduleFragment;
 import de.metzgore.rbtvschedule.settings.SettingsActivity;
+import de.metzgore.rbtvschedule.settings.repository.AppSettings;
+import de.metzgore.rbtvschedule.settings.repository.AppSettingsImp;
 import de.metzgore.rbtvschedule.weeklyschedule.WeeklyScheduleFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
 
     private ActionBarDrawerToggle mDrawerToggle;
 
+    private SparseArray<ScheduleCreator> defaultSchedules = new SparseArray<>(2);
+    private AppSettings settings = new AppSettingsImp(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,17 +44,17 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open,  R.string.drawer_close);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
         mDrawer.addDrawerListener(mDrawerToggle);
 
         setupDrawerContent(mNavigationView);
 
         FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+        Fragment defaultFragment = fm.findFragmentById(R.id.fragment_container);
 
-        if (fragment == null) {
-            fragment = createFragment();
-            fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
+        if (defaultFragment == null) {
+            defaultFragment = createDefaultFragment();
+            fm.beginTransaction().add(R.id.fragment_container, defaultFragment).commit();
         }
     }
 
@@ -66,32 +72,30 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+    }
+
+    private void createDefaultSchedules() {
+        defaultSchedules.put(0, () -> ScheduleFragment.newInstance());
+        defaultSchedules.put(1, () -> WeeklyScheduleFragment.newInstance());
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        selectDrawerItem(menuItem);
-                        return true;
-                    }
-                });
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
+            selectDrawerItem(menuItem);
+            return true;
+        });
     }
 
     public void selectDrawerItem(MenuItem menuItem) {
-        switch(menuItem.getItemId()) {
-            case R.id.nav_first_fragment:
+        switch (menuItem.getItemId()) {
+            case R.id.nav_today_schedule:
                 replaceFragment(ScheduleFragment.class, menuItem);
                 break;
-            case R.id.nav_second_fragment:
+            case R.id.nav_weekly_schedule:
                 replaceFragment(WeeklyScheduleFragment.class, menuItem);
                 break;
-            case R.id.nav_third_fragment:
+            case R.id.nav_settings:
                 openActivity(SettingsActivity.class);
                 break;
         }
@@ -121,7 +125,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    protected Fragment createFragment() {
-        return WeeklyScheduleFragment.newInstance();
+    protected Fragment createDefaultFragment() {
+        if (defaultSchedules.size() == 0) {
+            createDefaultSchedules();
+        }
+
+        int defaultScheduleValue = settings.getDefaultScheduleValue();
+
+        ScheduleCreator creator = defaultSchedules.get(defaultScheduleValue, () -> ScheduleFragment.newInstance());
+
+        return creator.createDefaultScheduleFragment();
     }
+}
+
+interface ScheduleCreator {
+    Fragment createDefaultScheduleFragment();
 }

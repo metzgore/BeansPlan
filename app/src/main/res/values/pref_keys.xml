@@ -2,4 +2,5 @@
 <resources>
     <string name="pref_key_hide_past_shows" translatable="false">pref_key_hide_past_shows</string>
     <string name="pref_key_hide_past_days" translatable="false">pref_key_hide_past_days</string>
+    <string name="pref_key_select_default_plan" translatable="false">pref_key_select_default_plan</string>
 </resources>
