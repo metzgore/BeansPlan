@@ -5,4 +5,6 @@ public interface AppSettings {
     boolean getHidePastShowsSetting();
 
     boolean getHidePastDaysSetting();
+    
+    int getDefaultScheduleValue();
 }
