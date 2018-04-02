@@ -170,7 +170,7 @@ public class WeeklyScheduleFragment extends Fragment {
 
     private void handleData(Resource<WeeklySchedule> schedule) {
         if (schedule.data != null) {
-            binding.setHadError(false);
+            binding.setIsEmpty(false);
             weeklyScheduleAdapter.setSchedule(schedule.data);
             boolean containsCurrentDay = weeklyScheduleAdapter.containsScheduleForCurrentDay();
 
@@ -188,6 +188,8 @@ public class WeeklyScheduleFragment extends Fragment {
                     selectedTab.select();
                 }
             }, 100);
+        } else {
+            binding.setIsEmpty(true);
         }
     }
 
@@ -198,7 +200,6 @@ public class WeeklyScheduleFragment extends Fragment {
                 hideSnackbar();
                 break;
             case ERROR:
-                binding.setHadError(true);
                 showRefreshIndicator(false);
                 showRetrySnackbar();
                 break;

@@ -3,7 +3,7 @@
 
     <string name="error_message_schedule_general">Fehler beim Laden des Sendeplans</string>
     <string name="error_message_device_offline">Dein Gerät scheint offline zu sein</string>
-    <string name="alert_message_schedule_failed">Sendeplan kann nicht geladen werden</string>
+    <string name="alert_message_no_schedule_data">Kein Sendeplan vorhanden</string>
 
     <string name="action_retry">Wiederholen</string>
     <string name="action_refresh">Aktualisieren</string>
