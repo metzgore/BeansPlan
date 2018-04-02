@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (settings.shouldRememberLastOpenedSchedule()) {
             @IdRes int navDrawerItem = settings.getLastOpenedScheduleId();
-            selectNavDrawerItem(navDrawerItem);
+            selectDrawerItem(navDrawerItem);
         } else {
             createDefaultFragment();
         }
@@ -78,40 +78,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createDefaultSchedules() {
-        defaultSchedules.put(0, () -> selectNavDrawerItem(R.id.nav_today_schedule));
-        defaultSchedules.put(1, () -> selectNavDrawerItem(R.id.nav_weekly_schedule));
-    }
-
-    private void selectNavDrawerItem(@IdRes int itemId) {
-        if (itemId != R.id.nav_settings)
-            navigationView.setCheckedItem(itemId);
-        navigationView.getMenu().performIdentifierAction(itemId, 0);
+        defaultSchedules.put(0, () -> selectDrawerItem(R.id.nav_today_schedule));
+        defaultSchedules.put(1, () -> selectDrawerItem(R.id.nav_weekly_schedule));
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(menuItem -> {
-            selectDrawerItem(menuItem);
-            return menuItem.getItemId() != R.id.nav_settings;
-        });
+        navigationView.setNavigationItemSelectedListener(menuItem -> selectDrawerItem(menuItem.getItemId()));
     }
 
-    private void selectDrawerItem(MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
+    private boolean selectDrawerItem(@IdRes int menuItemId) {
+        drawer.closeDrawers();
+
+        switch (menuItemId) {
             case R.id.nav_today_schedule:
-                lastSelectedItemId = R.id.nav_today_schedule;
+                setMenuItemSelected(menuItemId);
                 replaceFragmentIfPossible(ScheduleFragment.class);
-                break;
+                return true;
             case R.id.nav_weekly_schedule:
-                lastSelectedItemId = R.id.nav_weekly_schedule;
+                setMenuItemSelected(menuItemId);
                 replaceFragmentIfPossible(WeeklyScheduleFragment.class);
-                break;
+                return true;
             case R.id.nav_settings:
                 openActivity(SettingsActivity.class);
-                menuItem.setChecked(false);
-                break;
+                return false;
+            default:
+                return false;
         }
+    }
 
-        drawer.closeDrawers();
+    private void setMenuItemSelected(@IdRes int menuItemId) {
+        lastSelectedItemId = menuItemId;
+        navigationView.setCheckedItem(menuItemId);
     }
 
     private void replaceFragmentIfPossible(Class<? extends Fragment> fragmentClass) {
@@ -146,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
 
         int defaultScheduleValue = settings.getDefaultScheduleValue();
 
-        Runnable createScheduleFragment = defaultSchedules.get(defaultScheduleValue, () -> selectNavDrawerItem(R.id.nav_today_schedule));
+        Runnable createScheduleFragment = defaultSchedules.get(defaultScheduleValue, () -> selectDrawerItem(R.id.nav_today_schedule));
         createScheduleFragment.run();
     }
 
