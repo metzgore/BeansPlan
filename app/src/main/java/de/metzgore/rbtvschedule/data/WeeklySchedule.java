@@ -34,6 +34,18 @@ public class WeeklySchedule {
         return -1;
     }
 
+    public boolean containsScheduleForCurrentDay() {
+        Date today = getCurrentDate();
+        Date[] schedules = getKeysAsDate();
+
+        for (Date date : schedules) {
+            if (date.equals(today))
+                return true;
+        }
+
+        return false;
+    }
+
     @NonNull
     private Date getCurrentDate() {
         Calendar calendar = new GregorianCalendar();

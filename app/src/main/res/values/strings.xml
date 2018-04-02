@@ -8,7 +8,7 @@
     <string name="action_retry">Wiederholen</string>
     <string name="action_refresh">Aktualisieren</string>
     <string name="action_today">Heute</string>
-    <string name="error_message_no_day_found">Konnte nicht zu aktuellem Tag wechseln</string>
+    <string name="error_message_no_day_found">Konnte nicht zum aktuellen Tag wechseln</string>
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>

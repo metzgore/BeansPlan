@@ -38,6 +38,7 @@ public class WeeklyScheduleFragment extends Fragment {
     private Snackbar snackbar;
     private int mCurrentViewPagerItem;
     private WeeklyScheduleViewModel viewModel;
+    private boolean scheduleContainsCurrentDay;
 
     public static Fragment newInstance() {
         return new WeeklyScheduleFragment();
@@ -124,6 +125,14 @@ public class WeeklyScheduleFragment extends Fragment {
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        if (!weeklyScheduleAdapter.containsScheduleForCurrentDay())
+            menu.removeItem(R.id.action_today);
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_fragment_weekly_schedule, menu);
         super.onCreateOptionsMenu(menu, inflater);
@@ -163,6 +172,12 @@ public class WeeklyScheduleFragment extends Fragment {
         if (schedule.data != null) {
             binding.setHadError(false);
             weeklyScheduleAdapter.setSchedule(schedule.data);
+            boolean containsCurrentDay = weeklyScheduleAdapter.containsScheduleForCurrentDay();
+
+            if (getActivity() != null && containsCurrentDay != scheduleContainsCurrentDay) {
+                scheduleContainsCurrentDay = containsCurrentDay;
+                getActivity().invalidateOptionsMenu();
+            }
 
             //workaround for weird tab updating
             //see https://stackoverflow.com/a/43436472/5925185

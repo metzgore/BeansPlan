@@ -61,4 +61,8 @@ class WeeklyScheduleAdapter extends FragmentStatePagerAdapter {
     public int getPositionOfCurrentDay() {
         return weeklySchedule.getPositionOfCurrentDay();
     }
+
+    public boolean containsScheduleForCurrentDay() {
+        return weeklySchedule.containsScheduleForCurrentDay();
+    }
 }
