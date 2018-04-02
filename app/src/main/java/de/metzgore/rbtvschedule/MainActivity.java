@@ -77,6 +77,14 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START))
+            drawer.closeDrawer(GravityCompat.START);
+        else
+            super.onBackPressed();
+    }
+
     private void createDefaultSchedules() {
         defaultSchedules.put(0, () -> selectDrawerItem(R.id.nav_today_schedule));
         defaultSchedules.put(1, () -> selectDrawerItem(R.id.nav_weekly_schedule));
@@ -87,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean selectDrawerItem(@IdRes int menuItemId) {
-        drawer.closeDrawers();
+        drawer.closeDrawer(GravityCompat.START);
 
         switch (menuItemId) {
             case R.id.nav_today_schedule:
