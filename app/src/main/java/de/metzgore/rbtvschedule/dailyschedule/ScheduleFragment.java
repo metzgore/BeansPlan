@@ -116,8 +116,10 @@ public class ScheduleFragment extends Fragment {
 
     private void handleData(Resource<Schedule> schedule) {
         if (schedule.data != null) {
-            binding.singleDayIncluded.setHadError(false);
+            binding.singleDayIncluded.setIsEmpty(false);
             scheduleAdapter.setShowList(schedule.data.getShows());
+        } else {
+            binding.singleDayIncluded.setIsEmpty(true);
         }
     }
 
@@ -128,7 +130,6 @@ public class ScheduleFragment extends Fragment {
                 hideSnackbar();
                 break;
             case ERROR:
-                binding.singleDayIncluded.setHadError(true);
                 showRefreshIndicator(false);
                 showRetrySnackbar();
                 break;
@@ -142,7 +143,6 @@ public class ScheduleFragment extends Fragment {
     public void showRefreshIndicator(final boolean isRefreshing) {
         if (binding != null) {
             binding.swipeRefresh.post(() -> {
-                //TODO lambda
                 binding.swipeRefresh.setRefreshing(isRefreshing);
             });
         }

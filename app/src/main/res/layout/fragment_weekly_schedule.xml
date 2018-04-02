@@ -5,15 +5,15 @@
     <data>
 
         <variable
-            name="hadError"
+            name="isEmpty"
             type="boolean"/>
     </data>
 
     <android.support.v4.widget.SwipeRefreshLayout
-    android:id="@+id/fragment_weekly_schedule_swipe_refresh"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="de.metzgore.rbtvschedule.MainActivity">
+        android:id="@+id/fragment_weekly_schedule_swipe_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="de.metzgore.rbtvschedule.MainActivity">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -24,16 +24,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/alert_message_schedule_failed"
-                android:textSize="24sp"
                 android:drawableTop="@drawable/ic_warning"
-                app:visibleGone="@{hadError}"/>
+                android:text="@string/alert_message_no_schedule_data"
+                android:textSize="24sp"
+                app:visibleGone="@{isEmpty}"/>
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/fragment_weekly_schedule_view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:visibleGone="@{!hadError}">
+                app:visibleGone="@{!isEmpty}">
 
                 <de.metzgore.rbtvschedule.util.RetainableTabLayout
                     android:id="@+id/fragment_weekly_schedule_tabs"
@@ -41,12 +41,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
                     android:background="@color/colorPrimary"
-                    app:tabMode="scrollable"
                     app:tabGravity="fill"
+                    app:tabIndicatorColor="@android:color/white"
                     app:tabIndicatorHeight="4dp"
-                    app:tabTextColor="@android:color/white"
+                    app:tabMode="scrollable"
                     app:tabSelectedTextColor="@android:color/white"
-                    app:tabIndicatorColor="@android:color/white"/>
+                    app:tabTextColor="@android:color/white"/>
 
             </android.support.v4.view.ViewPager>
 
