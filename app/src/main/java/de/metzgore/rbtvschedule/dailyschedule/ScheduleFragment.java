@@ -1,7 +1,6 @@
 package de.metzgore.rbtvschedule.dailyschedule;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -81,12 +80,6 @@ public class ScheduleFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        viewModel.loadSchedule(scheduleAdapter.getItemCount() == 0);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
         viewModel.loadSchedule(scheduleAdapter.getItemCount() == 0);
     }
 

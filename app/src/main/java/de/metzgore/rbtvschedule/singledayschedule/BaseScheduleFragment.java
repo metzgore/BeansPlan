@@ -16,11 +16,9 @@ import java.util.List;
 import de.metzgore.rbtvschedule.R;
 import de.metzgore.rbtvschedule.dailyschedule.ScheduleAdapter;
 import de.metzgore.rbtvschedule.data.Show;
-import de.metzgore.rbtvschedule.data.WeeklySchedule;
 import de.metzgore.rbtvschedule.databinding.LayoutScheduleBaseBinding;
-import de.metzgore.rbtvschedule.shared.UpdatableScheduleFragment;
 
-public class BaseScheduleFragment extends Fragment implements UpdatableScheduleFragment {
+public class BaseScheduleFragment extends Fragment {
 
     private static final String TAG = BaseScheduleFragment.class.getSimpleName();
 
@@ -79,14 +77,5 @@ public class BaseScheduleFragment extends Fragment implements UpdatableScheduleF
     public void onStart() {
         super.onStart();
         scheduleAdapter.setShowList(showList);
-    }
-
-    @Override
-    public void update(WeeklySchedule weeklySchedule) {
-        for (Date key : weeklySchedule.getSchedule().keySet()) {
-            if (key.equals(dateKey)) {
-                scheduleAdapter.setShowList(weeklySchedule.getSchedule().get(key));
-            }
-        }
     }
 }

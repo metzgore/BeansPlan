@@ -24,6 +24,8 @@ import de.metzgore.rbtvschedule.weeklyschedule.WeeklyScheduleFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String SCHEDULE_FRAGMENT_TAG = "schedule_fragment_tag";
+
     @BindView(R.id.activity_main_drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.activity_main_toolbar)
@@ -53,11 +55,17 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
 
-        if (settings.shouldRememberLastOpenedSchedule()) {
-            @IdRes int navDrawerItem = settings.getLastOpenedScheduleId();
-            selectDrawerItem(navDrawerItem);
+        Fragment scheduleFragment = fragmentManager.findFragmentByTag(SCHEDULE_FRAGMENT_TAG);
+
+        if (scheduleFragment != null) {
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, scheduleFragment, SCHEDULE_FRAGMENT_TAG).commit();
         } else {
-            createDefaultFragment();
+            if (settings.shouldRememberLastOpenedSchedule()) {
+                @IdRes int navDrawerItem = settings.getLastOpenedScheduleId();
+                selectDrawerItem(navDrawerItem);
+            } else {
+                createDefaultFragment();
+            }
         }
     }
 
@@ -139,8 +147,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment, SCHEDULE_FRAGMENT_TAG).commit();
     }
 
 

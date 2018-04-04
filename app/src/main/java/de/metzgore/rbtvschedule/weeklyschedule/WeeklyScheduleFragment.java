@@ -1,7 +1,6 @@
 package de.metzgore.rbtvschedule.weeklyschedule;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
@@ -80,6 +79,7 @@ public class WeeklyScheduleFragment extends Fragment {
         });
 
         binding.fragmentWeeklyScheduleViewPager.setAdapter(weeklyScheduleAdapter);
+        binding.fragmentWeeklyScheduleViewPager.setOffscreenPageLimit(3);
 
         binding.fragmentWeeklyScheduleSwipeRefresh.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         binding.fragmentWeeklyScheduleSwipeRefresh.setOnRefreshListener(() -> {
@@ -117,12 +117,6 @@ public class WeeklyScheduleFragment extends Fragment {
         super.onSaveInstanceState(bundle);
         bundle.putInt(VIEW_PAGER_ITEM, mWeeklyScheduleViewPager.getCurrentItem());
     }  */
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        viewModel.loadSchedule(weeklyScheduleAdapter.getCount() == 0);
-    }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
