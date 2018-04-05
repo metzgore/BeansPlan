@@ -36,8 +36,6 @@ public class MainActivity extends AppCompatActivity {
     private SparseArray<Runnable> defaultSchedules = new SparseArray<>(2);
     private AppSettings settings = new AppSettingsImp(this);
     private FragmentManager fragmentManager;
-    @IdRes
-    private int lastSelectedItemId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,12 +65,6 @@ public class MainActivity extends AppCompatActivity {
                 createDefaultFragment();
             }
         }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        settings.saveLastOpenedScheduleId(lastSelectedItemId);
     }
 
     @Override
@@ -123,8 +115,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setMenuItemSelected(@IdRes int menuItemId) {
-        lastSelectedItemId = menuItemId;
         navigationView.setCheckedItem(menuItemId);
+        settings.saveLastOpenedScheduleId(menuItemId);
     }
 
     private void replaceFragmentIfPossible(Class<? extends Fragment> fragmentClass) {

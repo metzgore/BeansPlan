@@ -79,7 +79,9 @@ public class WeeklyScheduleFragment extends Fragment {
         });
 
         binding.fragmentWeeklyScheduleViewPager.setAdapter(weeklyScheduleAdapter);
-        binding.fragmentWeeklyScheduleViewPager.setOffscreenPageLimit(3);
+        
+        //TODO check if there is a better solution
+        binding.fragmentWeeklyScheduleViewPager.setSaveFromParentEnabled(false);
 
         binding.fragmentWeeklyScheduleSwipeRefresh.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         binding.fragmentWeeklyScheduleSwipeRefresh.setOnRefreshListener(() -> {
