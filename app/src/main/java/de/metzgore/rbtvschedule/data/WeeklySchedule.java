@@ -24,10 +24,10 @@ public class WeeklySchedule {
 
     public int getPositionOfCurrentDay() {
         Date today = getCurrentDate();
-        Date[] schedules = getKeysAsDate();
+        Date[] dates = getKeysAsDate();
 
-        for (int i = 0; i < schedules.length; i++) {
-            if (schedules[i].equals(today))
+        for (int i = 0; i < dates.length; i++) {
+            if (dates[i].equals(today))
                 return i;
         }
 
@@ -36,14 +36,22 @@ public class WeeklySchedule {
 
     public boolean containsScheduleForCurrentDay() {
         Date today = getCurrentDate();
-        Date[] schedules = getKeysAsDate();
+        Date[] dates = getKeysAsDate();
 
-        for (Date date : schedules) {
+        for (Date date : dates) {
             if (date.equals(today))
                 return true;
         }
 
         return false;
+    }
+
+    public Date getStartDate() {
+        return schedule.firstKey();
+    }
+
+    public Date getEndDate() {
+        return schedule.lastKey();
     }
 
     @NonNull

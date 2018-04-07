@@ -17,23 +17,25 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import de.metzgore.rbtvschedule.R;
+import de.metzgore.rbtvschedule.baseschedule.BaseScheduleFragment;
 import de.metzgore.rbtvschedule.data.Resource;
 import de.metzgore.rbtvschedule.data.Schedule;
-import de.metzgore.rbtvschedule.databinding.FragmentSingleDayScheduleBinding;
+import de.metzgore.rbtvschedule.databinding.FragmentDailyScheduleBinding;
 import de.metzgore.rbtvschedule.shared.ScheduleRepository;
+import de.metzgore.rbtvschedule.util.DateFormatter;
 import de.metzgore.rbtvschedule.util.di.ScheduleViewModelFactory;
 
-public class ScheduleFragment extends Fragment {
+public class DailyScheduleFragment extends BaseScheduleFragment {
 
-    private final String TAG = ScheduleFragment.class.getSimpleName();
+    private final String TAG = DailyScheduleFragment.class.getSimpleName();
 
-    private ScheduleAdapter scheduleAdapter;
-    private FragmentSingleDayScheduleBinding binding;
-    private ScheduleViewModel viewModel;
+    private DailyScheduleAdapter dailyScheduleAdapter;
+    private FragmentDailyScheduleBinding binding;
+    private DailyScheduleViewModel viewModel;
     private Snackbar snackbar;
 
     public static Fragment newInstance() {
-        return new ScheduleFragment();
+        return new DailyScheduleFragment();
     }
 
     @Override
@@ -41,10 +43,10 @@ public class ScheduleFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        scheduleAdapter = new ScheduleAdapter();
+        dailyScheduleAdapter = new DailyScheduleAdapter();
 
         //TODO dagger
-        viewModel = ViewModelProviders.of(this, new ScheduleViewModelFactory(new ScheduleRepository())).get(ScheduleViewModel.class);
+        viewModel = ViewModelProviders.of(this, new ScheduleViewModelFactory(new ScheduleRepository())).get(DailyScheduleViewModel.class);
         subscribeUi(viewModel);
     }
 
@@ -52,7 +54,7 @@ public class ScheduleFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_single_day_schedule, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_daily_schedule, container, false);
 
         binding.singleDayIncluded.showsList.addItemDecoration(new DividerItemDecoration(getActivity(),
                 DividerItemDecoration.VERTICAL));
@@ -64,7 +66,7 @@ public class ScheduleFragment extends Fragment {
         });
         binding.swipeRefresh.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
 
-        binding.singleDayIncluded.showsList.setAdapter(scheduleAdapter);
+        binding.singleDayIncluded.showsList.setAdapter(dailyScheduleAdapter);
 
         return binding.getRoot();
     }
@@ -80,7 +82,7 @@ public class ScheduleFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        viewModel.loadSchedule(scheduleAdapter.getItemCount() == 0);
+        viewModel.loadSchedule(dailyScheduleAdapter.getItemCount() == 0);
     }
 
     @Override
@@ -100,7 +102,7 @@ public class ScheduleFragment extends Fragment {
         }
     }
 
-    private void subscribeUi(ScheduleViewModel viewModel) {
+    private void subscribeUi(DailyScheduleViewModel viewModel) {
         viewModel.getSchedule().observe(this, schedule -> {
             handleState(schedule);
             handleData(schedule);
@@ -110,7 +112,8 @@ public class ScheduleFragment extends Fragment {
     private void handleData(Resource<Schedule> schedule) {
         if (schedule.data != null) {
             binding.singleDayIncluded.setIsEmpty(false);
-            scheduleAdapter.setShowList(schedule.data.getShows());
+            dailyScheduleAdapter.setShowList(schedule.data.getShows());
+            getCallback().onScheduleUpdated(getString(R.string.fragment_daily_schedule_subtitle, DateFormatter.formatDate(getContext(), schedule.data.getDate())));
         } else {
             binding.singleDayIncluded.setIsEmpty(true);
         }

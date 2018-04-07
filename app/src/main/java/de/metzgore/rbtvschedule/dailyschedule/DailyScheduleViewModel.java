@@ -12,13 +12,13 @@ import de.metzgore.rbtvschedule.data.Schedule;
 import de.metzgore.rbtvschedule.shared.IScheduleViewModel;
 import de.metzgore.rbtvschedule.shared.ScheduleRepository;
 
-public class ScheduleViewModel extends ViewModel implements IScheduleViewModel<Schedule> {
+public class DailyScheduleViewModel extends ViewModel implements IScheduleViewModel<Schedule> {
 
     private final MutableLiveData<Boolean> refresh = new MutableLiveData<>();
     private final LiveData<Resource<Schedule>> schedule;
 
     @Inject
-    public ScheduleViewModel(ScheduleRepository scheduleRepo) {
+    public DailyScheduleViewModel(ScheduleRepository scheduleRepo) {
         schedule = Transformations.switchMap(refresh, forceFromNetwork -> {
             //TODO lambda
             return scheduleRepo.loadScheduleOfToday(forceFromNetwork);

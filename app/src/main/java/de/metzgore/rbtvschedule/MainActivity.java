@@ -16,13 +16,14 @@ import android.view.MenuItem;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.metzgore.rbtvschedule.dailyschedule.ScheduleFragment;
+import de.metzgore.rbtvschedule.baseschedule.BaseScheduleFragment;
+import de.metzgore.rbtvschedule.dailyschedule.DailyScheduleFragment;
 import de.metzgore.rbtvschedule.settings.SettingsActivity;
 import de.metzgore.rbtvschedule.settings.repository.AppSettings;
 import de.metzgore.rbtvschedule.settings.repository.AppSettingsImp;
 import de.metzgore.rbtvschedule.weeklyschedule.WeeklyScheduleFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BaseScheduleFragment.OnScheduleUpdatedListener {
 
     private static final String SCHEDULE_FRAGMENT_TAG = "schedule_fragment_tag";
 
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         switch (menuItemId) {
             case R.id.nav_today_schedule:
                 setMenuItemSelected(menuItemId);
-                replaceFragmentIfPossible(ScheduleFragment.class);
+                replaceFragmentIfPossible(DailyScheduleFragment.class);
                 return true;
             case R.id.nav_weekly_schedule:
                 setMenuItemSelected(menuItemId);
@@ -158,5 +159,10 @@ public class MainActivity extends AppCompatActivity {
         Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragment_container);
         return currentFragment != null && currentFragment.getClass() == fragmentClass && currentFragment.isVisible();
 
+    }
+
+    @Override
+    public void onScheduleUpdated(String subtitle) {
+        toolbar.setSubtitle(subtitle);
     }
 }
