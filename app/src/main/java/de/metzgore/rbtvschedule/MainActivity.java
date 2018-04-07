@@ -24,6 +24,8 @@ import de.metzgore.rbtvschedule.weeklyschedule.WeeklyScheduleFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String SCHEDULE_FRAGMENT_TAG = "schedule_fragment_tag";
+
     @BindView(R.id.activity_main_drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.activity_main_toolbar)
@@ -34,8 +36,6 @@ public class MainActivity extends AppCompatActivity {
     private SparseArray<Runnable> defaultSchedules = new SparseArray<>(2);
     private AppSettings settings = new AppSettingsImp(this);
     private FragmentManager fragmentManager;
-    @IdRes
-    private int lastSelectedItemId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,18 +53,18 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
 
-        if (settings.shouldRememberLastOpenedSchedule()) {
-            @IdRes int navDrawerItem = settings.getLastOpenedScheduleId();
-            selectDrawerItem(navDrawerItem);
-        } else {
-            createDefaultFragment();
-        }
-    }
+        Fragment scheduleFragment = fragmentManager.findFragmentByTag(SCHEDULE_FRAGMENT_TAG);
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        settings.saveLastOpenedScheduleId(lastSelectedItemId);
+        if (scheduleFragment != null) {
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, scheduleFragment, SCHEDULE_FRAGMENT_TAG).commit();
+        } else {
+            if (settings.shouldRememberLastOpenedSchedule()) {
+                @IdRes int navDrawerItem = settings.getLastOpenedScheduleId();
+                selectDrawerItem(navDrawerItem);
+            } else {
+                createDefaultFragment();
+            }
+        }
     }
 
     @Override
@@ -115,8 +115,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setMenuItemSelected(@IdRes int menuItemId) {
-        lastSelectedItemId = menuItemId;
         navigationView.setCheckedItem(menuItemId);
+        settings.saveLastOpenedScheduleId(menuItemId);
     }
 
     private void replaceFragmentIfPossible(Class<? extends Fragment> fragmentClass) {
@@ -139,8 +139,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment, SCHEDULE_FRAGMENT_TAG).commit();
     }
 
 

@@ -1,6 +1,7 @@
 package de.metzgore.rbtvschedule.weeklyschedule;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -44,7 +45,7 @@ class WeeklyScheduleAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override
-    public int getItemPosition(Object object) {
+    public int getItemPosition(@NonNull Object object) {
         if (object instanceof UpdatableScheduleFragment) {
             ((UpdatableScheduleFragment) object).update(weeklySchedule);
         }
@@ -52,10 +53,8 @@ class WeeklyScheduleAdapter extends FragmentStatePagerAdapter {
     }
 
     public void setSchedule(WeeklySchedule weeklySchedule) {
-        if (!this.weeklySchedule.equals(weeklySchedule)) {
-            this.weeklySchedule = weeklySchedule;
-            notifyDataSetChanged();
-        }
+        this.weeklySchedule = weeklySchedule;
+        notifyDataSetChanged();
     }
 
     public int getPositionOfCurrentDay() {
