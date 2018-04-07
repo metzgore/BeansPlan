@@ -13,7 +13,7 @@ import de.metzgore.rbtvschedule.R;
 import de.metzgore.rbtvschedule.data.Show;
 import de.metzgore.rbtvschedule.databinding.ListItemShowBinding;
 
-public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ShowViewHolder> {
+public class DailyScheduleAdapter extends RecyclerView.Adapter<DailyScheduleAdapter.ShowViewHolder> {
 
     private List<Show> shows;
 

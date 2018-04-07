@@ -1,7 +1,9 @@
-package de.metzgore.rbtvschedule.singledayschedule;
+package de.metzgore.rbtvschedule.baseschedule;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -14,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 import de.metzgore.rbtvschedule.R;
-import de.metzgore.rbtvschedule.dailyschedule.ScheduleAdapter;
+import de.metzgore.rbtvschedule.dailyschedule.DailyScheduleAdapter;
 import de.metzgore.rbtvschedule.data.Show;
 import de.metzgore.rbtvschedule.data.WeeklySchedule;
 import de.metzgore.rbtvschedule.databinding.LayoutScheduleBaseBinding;
@@ -27,9 +29,11 @@ public class BaseScheduleFragment extends Fragment implements UpdatableScheduleF
     private static final String ARG_SCHEDULE = "arg_schedule";
     private static final String ARG_DATE = "arg_date";
 
+    public OnScheduleUpdatedListener callback;
+
     private Date dateKey;
     private List<Show> showList;
-    private ScheduleAdapter scheduleAdapter;
+    private DailyScheduleAdapter dailyScheduleAdapter;
 
     public static Fragment newInstance(Date date, List<Show> shows) {
         BaseScheduleFragment fragment = new BaseScheduleFragment();
@@ -44,10 +48,24 @@ public class BaseScheduleFragment extends Fragment implements UpdatableScheduleF
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            callback = (OnScheduleUpdatedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        scheduleAdapter = new ScheduleAdapter();
+        dailyScheduleAdapter = new DailyScheduleAdapter();
 
         Bundle args = getArguments();
 
@@ -62,7 +80,7 @@ public class BaseScheduleFragment extends Fragment implements UpdatableScheduleF
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         LayoutScheduleBaseBinding binding = DataBindingUtil.inflate(inflater, R.layout.layout_schedule_base, container, false);
 
@@ -70,23 +88,25 @@ public class BaseScheduleFragment extends Fragment implements UpdatableScheduleF
                 DividerItemDecoration.VERTICAL));
         binding.showsList.setItemAnimator(null);
         binding.showsList.setHasFixedSize(true);
-        binding.showsList.setAdapter(scheduleAdapter);
+        binding.showsList.setAdapter(dailyScheduleAdapter);
+        dailyScheduleAdapter.setShowList(showList);
 
         return binding.getRoot();
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        scheduleAdapter.setShowList(showList);
+    public void update(WeeklySchedule weeklySchedule) {
+        List<Show> shows = weeklySchedule.getSchedule().get(dateKey);
+        if (shows != null)
+            dailyScheduleAdapter.setShowList(shows);
     }
 
-    @Override
-    public void update(WeeklySchedule weeklySchedule) {
-        for (Date key : weeklySchedule.getSchedule().keySet()) {
-            if (key.equals(dateKey)) {
-                scheduleAdapter.setShowList(weeklySchedule.getSchedule().get(key));
-            }
-        }
+    @NonNull
+    public OnScheduleUpdatedListener getCallback() {
+        return callback;
+    }
+
+    public interface OnScheduleUpdatedListener {
+        void onScheduleUpdated(String subtitle);
     }
 }

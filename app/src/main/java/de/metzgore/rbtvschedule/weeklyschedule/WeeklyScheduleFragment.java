@@ -20,13 +20,15 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import de.metzgore.rbtvschedule.R;
+import de.metzgore.rbtvschedule.baseschedule.BaseScheduleFragment;
 import de.metzgore.rbtvschedule.data.Resource;
 import de.metzgore.rbtvschedule.data.WeeklySchedule;
 import de.metzgore.rbtvschedule.databinding.FragmentWeeklyScheduleBinding;
 import de.metzgore.rbtvschedule.shared.ScheduleRepository;
+import de.metzgore.rbtvschedule.util.DateFormatter;
 import de.metzgore.rbtvschedule.util.di.WeeklyScheduleViewModelFactory;
 
-public class WeeklyScheduleFragment extends Fragment {
+public class WeeklyScheduleFragment extends BaseScheduleFragment {
 
     private static final String TAG = WeeklyScheduleFragment.class.getSimpleName();
 
@@ -79,7 +81,7 @@ public class WeeklyScheduleFragment extends Fragment {
         });
 
         binding.fragmentWeeklyScheduleViewPager.setAdapter(weeklyScheduleAdapter);
-        
+
         //TODO check if there is a better solution
         binding.fragmentWeeklyScheduleViewPager.setSaveFromParentEnabled(false);
 
@@ -168,6 +170,10 @@ public class WeeklyScheduleFragment extends Fragment {
         if (schedule.data != null) {
             binding.setIsEmpty(false);
             weeklyScheduleAdapter.setSchedule(schedule.data);
+            getCallback().onScheduleUpdated(getString(R.string.fragment_weekly_schedule_subtitle,
+                    DateFormatter.formatDate(getContext(), schedule.data.getStartDate()),
+                    DateFormatter.formatDate(getContext(), schedule.data.getEndDate())));
+
             boolean containsCurrentDay = weeklyScheduleAdapter.containsScheduleForCurrentDay();
 
             if (getActivity() != null && containsCurrentDay != scheduleContainsCurrentDay) {

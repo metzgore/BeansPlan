@@ -31,4 +31,6 @@
 
     <string name="pref_remember_last_opened_schedule_summary">Öffnet bei jedem Start der App den zuletzt geöffneten Plan</string>
     <string name="pref_remember_last_opened_schedule_title">Merke den zuletzt geöffneten Plan</string>
+    <string name="fragment_daily_schedule_subtitle">%s</string>
+    <string name="fragment_weekly_schedule_subtitle">%s - %s</string>
 </resources>

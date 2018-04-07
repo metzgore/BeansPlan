@@ -9,9 +9,9 @@ import android.text.format.DateUtils;
 
 import java.util.Date;
 
+import de.metzgore.rbtvschedule.baseschedule.BaseScheduleFragment;
 import de.metzgore.rbtvschedule.data.WeeklySchedule;
 import de.metzgore.rbtvschedule.shared.UpdatableScheduleFragment;
-import de.metzgore.rbtvschedule.singledayschedule.BaseScheduleFragment;
 
 import static android.text.format.DateUtils.FORMAT_SHOW_DATE;
 import static android.text.format.DateUtils.FORMAT_SHOW_WEEKDAY;
@@ -53,8 +53,10 @@ class WeeklyScheduleAdapter extends FragmentStatePagerAdapter {
     }
 
     public void setSchedule(WeeklySchedule weeklySchedule) {
-        this.weeklySchedule = weeklySchedule;
-        notifyDataSetChanged();
+        if (!this.weeklySchedule.equals(weeklySchedule)) {
+            this.weeklySchedule = weeklySchedule;
+            notifyDataSetChanged();
+        }
     }
 
     public int getPositionOfCurrentDay() {

@@ -1,9 +1,12 @@
 package de.metzgore.rbtvschedule.data;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Schedule {
@@ -25,6 +28,14 @@ public class Schedule {
         }
 
         return showsBuilder.toString();
+    }
+
+    @NonNull
+    public Date getDate() {
+        if (shows.size() > 0)
+            return shows.get(0).getTimeStart();
+        else
+            return new Date();
     }
 
     @Override
