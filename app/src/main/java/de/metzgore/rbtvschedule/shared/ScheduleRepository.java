@@ -79,7 +79,7 @@ public class ScheduleRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable Schedule data) {
-                return forceRefresh;
+                return forceRefresh || data == null || data.getShows().isEmpty();
             }
 
             @NonNull
@@ -108,7 +108,7 @@ public class ScheduleRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable WeeklySchedule data) {
-                return forceRefresh;
+                return forceRefresh || data == null || data.getSchedule().isEmpty();
             }
 
             @NonNull

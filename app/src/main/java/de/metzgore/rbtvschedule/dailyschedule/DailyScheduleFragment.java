@@ -82,7 +82,7 @@ public class DailyScheduleFragment extends BaseScheduleFragment {
     @Override
     public void onStart() {
         super.onStart();
-        viewModel.loadSchedule(dailyScheduleAdapter.getItemCount() == 0);
+        viewModel.loadSchedule(false);
     }
 
     @Override

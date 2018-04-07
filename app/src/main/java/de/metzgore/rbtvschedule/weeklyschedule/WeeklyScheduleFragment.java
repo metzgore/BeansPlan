@@ -113,7 +113,7 @@ public class WeeklyScheduleFragment extends BaseScheduleFragment {
     @Override
     public void onStart() {
         super.onStart();
-        viewModel.loadSchedule(weeklyScheduleAdapter.getCount() == 0);
+        viewModel.loadSchedule(false);
     }
 
     /*@Override
