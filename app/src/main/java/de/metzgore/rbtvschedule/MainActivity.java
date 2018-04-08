@@ -1,23 +1,21 @@
 package de.metzgore.rbtvschedule;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.SparseArray;
 import android.view.MenuItem;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import de.metzgore.rbtvschedule.baseschedule.BaseScheduleFragment;
 import de.metzgore.rbtvschedule.dailyschedule.DailyScheduleFragment;
+import de.metzgore.rbtvschedule.databinding.ActivityMainBinding;
 import de.metzgore.rbtvschedule.settings.SettingsActivity;
 import de.metzgore.rbtvschedule.settings.repository.AppSettings;
 import de.metzgore.rbtvschedule.settings.repository.AppSettingsImp;
@@ -27,31 +25,24 @@ public class MainActivity extends AppCompatActivity implements BaseScheduleFragm
 
     private static final String SCHEDULE_FRAGMENT_TAG = "schedule_fragment_tag";
 
-    @BindView(R.id.activity_main_drawer_layout)
-    DrawerLayout drawer;
-    @BindView(R.id.activity_main_toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.activity_main_navigation_view)
-    NavigationView navigationView;
-
     private SparseArray<Runnable> defaultSchedules = new SparseArray<>(2);
     private AppSettings settings = new AppSettingsImp(this);
     private FragmentManager fragmentManager;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        ButterKnife.bind(this);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.activityMainToolbar);
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
-        setupDrawerContent(navigationView);
+        setupDrawerContent(binding.activityMainNavigationView);
 
         fragmentManager = getSupportFragmentManager();
 
@@ -73,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements BaseScheduleFragm
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                drawer.openDrawer(GravityCompat.START);
+                binding.activityMainDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -81,8 +72,8 @@ public class MainActivity extends AppCompatActivity implements BaseScheduleFragm
 
     @Override
     public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START))
-            drawer.closeDrawer(GravityCompat.START);
+        if (binding.activityMainDrawerLayout.isDrawerOpen(GravityCompat.START))
+            binding.activityMainDrawerLayout.closeDrawer(GravityCompat.START);
         else
             super.onBackPressed();
     }
@@ -97,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements BaseScheduleFragm
     }
 
     private boolean selectDrawerItem(@IdRes int menuItemId) {
-        drawer.closeDrawer(GravityCompat.START);
+        binding.activityMainDrawerLayout.closeDrawer(GravityCompat.START);
 
         switch (menuItemId) {
             case R.id.nav_today_schedule:
@@ -117,14 +108,14 @@ public class MainActivity extends AppCompatActivity implements BaseScheduleFragm
     }
 
     private void setMenuItemSelected(@IdRes int menuItemId) {
-        navigationView.setCheckedItem(menuItemId);
+        binding.activityMainNavigationView.setCheckedItem(menuItemId);
         settings.saveLastOpenedScheduleId(menuItemId);
     }
 
     private void replaceFragmentIfPossible(Class<? extends Fragment> fragmentClass) {
         if (!isFragmentAlreadyVisible(fragmentClass)) {
             replaceFragment(fragmentClass);
-            toolbar.setSubtitle(null);
+            binding.activityMainToolbar.setSubtitle(null);
         }
     }
 
@@ -166,6 +157,6 @@ public class MainActivity extends AppCompatActivity implements BaseScheduleFragm
 
     @Override
     public void onScheduleUpdated(String subtitle) {
-        toolbar.setSubtitle(subtitle);
+        binding.activityMainToolbar.setSubtitle(subtitle);
     }
 }

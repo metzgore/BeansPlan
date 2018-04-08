@@ -8,7 +8,6 @@ The schedule data is used from <http://api.rbtv.rodney.io>.
 
 ## Used patterns and libraries
 The app uses MVP pattern and various libraries, including:
-* [Butter Knife](http://jakewharton.github.io/butterknife/)
 * [Retrofit](https://square.github.io/retrofit/)
 * [Gson](https://github.com/google/gson)
 

@@ -42,9 +42,6 @@ dependencies {
     implementation 'com.android.support:design:27.1.0'
     testImplementation 'junit:junit:4.12'
 
-    implementation 'com.jakewharton:butterknife:8.4.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
-
     implementation 'com.google.code.gson:gson:2.8.1'
 
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
