@@ -12,8 +12,10 @@ import java.util.List;
 import de.metzgore.rbtvschedule.R;
 import de.metzgore.rbtvschedule.data.Show;
 import de.metzgore.rbtvschedule.databinding.ListItemShowBinding;
+import de.metzgore.rbtvschedule.shared.ShowViewHolder;
+import de.metzgore.rbtvschedule.shared.ShowViewModel;
 
-public class DailyScheduleAdapter extends RecyclerView.Adapter<DailyScheduleAdapter.ShowViewHolder> {
+public class DailyScheduleAdapter extends RecyclerView.Adapter<ShowViewHolder> {
 
     private List<Show> shows;
 
@@ -51,7 +53,7 @@ public class DailyScheduleAdapter extends RecyclerView.Adapter<DailyScheduleAdap
     }
 
     @Override
-    public ShowViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ShowViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ListItemShowBinding binding = DataBindingUtil
                 .inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_show,
                         parent, false);
@@ -59,23 +61,12 @@ public class DailyScheduleAdapter extends RecyclerView.Adapter<DailyScheduleAdap
     }
 
     @Override
-    public void onBindViewHolder(ShowViewHolder holder, int position) {
-        holder.binding.setShow(shows.get(position));
-        holder.binding.executePendingBindings();
+    public void onBindViewHolder(@NonNull ShowViewHolder holder, int position) {
+        holder.bind(new ShowViewModel(shows.get(position)));
     }
 
     @Override
     public int getItemCount() {
         return shows == null ? 0 : shows.size();
-    }
-
-    class ShowViewHolder extends RecyclerView.ViewHolder {
-
-        final ListItemShowBinding binding;
-
-        ShowViewHolder(ListItemShowBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-        }
     }
 }
