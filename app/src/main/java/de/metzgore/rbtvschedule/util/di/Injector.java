@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import de.metzgore.rbtvschedule.api.RBTVScheduleApi;
 import de.metzgore.rbtvschedule.data.Show;
+import de.metzgore.rbtvschedule.data.WeeklySchedule;
 import de.metzgore.rbtvschedule.util.LiveDataCallAdapterFactory;
 import io.gsonfire.GsonFireBuilder;
 import retrofit2.Retrofit;
@@ -30,6 +31,7 @@ public class Injector {
     public static Gson provideGson() {
         return new GsonFireBuilder()
                 .enableHooks(Show.class)
+                .enableHooks(WeeklySchedule.class)
                 .createGsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                 .setDateFormat("dd.MM.yyyy")

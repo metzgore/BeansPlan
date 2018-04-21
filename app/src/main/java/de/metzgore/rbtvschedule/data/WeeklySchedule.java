@@ -10,16 +10,29 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
+
+import io.gsonfire.annotations.PostDeserialize;
 
 public class WeeklySchedule {
 
     @SerializedName("schedule")
     @Expose
-    private TreeMap<Date, List<Show>> schedule = new TreeMap<>();
+    private TreeMap<Date, List<Show>> scheduleJson = new TreeMap<>();
 
-    public TreeMap<Date, List<Show>> getSchedule() {
-        return schedule;
+    private TreeMap<Date, DailySchedule> weeklySchedule = new TreeMap<>();
+
+    public TreeMap<Date, DailySchedule> getSchedule() {
+        return weeklySchedule;
+    }
+
+    @PostDeserialize
+    @SuppressWarnings("unused")
+    public void postDeserializeLogic() {
+        for (Map.Entry<Date, List<Show>> entry : scheduleJson.entrySet()) {
+            weeklySchedule.put(entry.getKey(), new DailySchedule(entry.getValue()));
+        }
     }
 
     public int getPositionOfCurrentDay() {
@@ -47,11 +60,17 @@ public class WeeklySchedule {
     }
 
     public Date getStartDate() {
-        return schedule.firstKey();
+        if (!weeklySchedule.isEmpty())
+            return weeklySchedule.firstKey();
+        else
+            return new Date();
     }
 
     public Date getEndDate() {
-        return schedule.lastKey();
+        if (!weeklySchedule.isEmpty())
+            return weeklySchedule.lastKey();
+        else
+            return new Date();
     }
 
     @NonNull
@@ -74,7 +93,7 @@ public class WeeklySchedule {
 
         for (Date date : schedules) {
             if (date.equals(today)) {
-                List<Show> showsOfToday = schedule.get(date);
+                List<Show> showsOfToday = weeklySchedule.get(date).getShows();
                 Iterator<Show> iterator = showsOfToday.iterator();
                 while (iterator.hasNext()) {
                     Show show = iterator.next();
@@ -91,21 +110,21 @@ public class WeeklySchedule {
 
         for (Date date : schedules) {
             if (date.before(today))
-                schedule.remove(date);
+                weeklySchedule.remove(date);
         }
     }
 
     private Date[] getKeysAsDate() {
-        return schedule.keySet().toArray(new Date[schedule.size()]);
+        return weeklySchedule.keySet().toArray(new Date[weeklySchedule.size()]);
     }
 
     @Override
     public String toString() {
         StringBuilder shows = new StringBuilder();
 
-        for (Date key : schedule.keySet()) {
+        for (Date key : weeklySchedule.keySet()) {
             shows.append(key).append("\n");
-            for (Show show : schedule.get(key)) {
+            for (Show show : weeklySchedule.get(key).getShows()) {
                 shows.append(show.toString()).append("\n");
             }
         }
@@ -120,11 +139,18 @@ public class WeeklySchedule {
 
         WeeklySchedule that = (WeeklySchedule) o;
 
-        return schedule != null ? schedule.equals(that.schedule) : that.schedule == null;
+        return weeklySchedule != null ? weeklySchedule.equals(that.weeklySchedule) : that.weeklySchedule == null;
     }
 
     @Override
     public int hashCode() {
-        return schedule != null ? schedule.hashCode() : 0;
+        return weeklySchedule != null ? weeklySchedule.hashCode() : 0;
+    }
+
+    public DailySchedule getDailySchedule(Date date) {
+        if (weeklySchedule.containsKey(date))
+            return weeklySchedule.get(date);
+        else
+            return new DailySchedule();
     }
 }

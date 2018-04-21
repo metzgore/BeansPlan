@@ -18,8 +18,8 @@ import de.metzgore.rbtvschedule.AppExecutors;
 import de.metzgore.rbtvschedule.RBTVScheduleApp;
 import de.metzgore.rbtvschedule.api.ApiResponse;
 import de.metzgore.rbtvschedule.api.RBTVScheduleApi;
+import de.metzgore.rbtvschedule.data.DailySchedule;
 import de.metzgore.rbtvschedule.data.Resource;
-import de.metzgore.rbtvschedule.data.Schedule;
 import de.metzgore.rbtvschedule.data.WeeklySchedule;
 import de.metzgore.rbtvschedule.util.GsonSerializer;
 import de.metzgore.rbtvschedule.util.NetworkBoundResource;
@@ -31,9 +31,9 @@ public class ScheduleRepository {
     private final String TAG = ScheduleRepository.class.getSimpleName();
     private final RBTVScheduleApi api;
     private final AppExecutors appExecutors;
-    private DualCache<Schedule> scheduleCache;
+    private DualCache<DailySchedule> scheduleCache;
     private DualCache<WeeklySchedule> weeklyScheduleCache;
-    private MutableLiveData<Schedule> scheduleCacheData = new MutableLiveData<>();
+    private MutableLiveData<DailySchedule> scheduleCacheData = new MutableLiveData<>();
     private MutableLiveData<WeeklySchedule> weeklyScheduleCacheData = new MutableLiveData<>();
 
     //TODO dagger
@@ -42,10 +42,10 @@ public class ScheduleRepository {
         api = Injector.provideRBTVScheduleApi();
         this.appExecutors = new AppExecutors();
         //TODO name
-        scheduleCache = new Builder<Schedule>("test", 1)
+        scheduleCache = new Builder<DailySchedule>("test", 1)
                 .enableLog()
-                .useSerializerInRam(1000000, new GsonSerializer<>(Schedule.class))
-                .useSerializerInDisk(1000000, true, new GsonSerializer<>(Schedule.class), RBTVScheduleApp.getAppContext())
+                .useSerializerInRam(1000000, new GsonSerializer<>(DailySchedule.class))
+                .useSerializerInDisk(1000000, true, new GsonSerializer<>(DailySchedule.class), RBTVScheduleApp.getAppContext())
                 .build();
 
         weeklyScheduleCache = new Builder<WeeklySchedule>("test1", 1)
@@ -55,7 +55,7 @@ public class ScheduleRepository {
                 .build();
     }
 
-    public LiveData<Resource<Schedule>> loadScheduleOfToday(boolean forceRefresh) {
+    public LiveData<Resource<DailySchedule>> loadScheduleOfToday(boolean forceRefresh) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(new Date());
 
@@ -66,25 +66,25 @@ public class ScheduleRepository {
         return loadScheduleOfDay(forceRefresh, year, month, day);
     }
 
-    public LiveData<Resource<Schedule>> loadScheduleOfDay(boolean forceRefresh, int year, int month, int day) {
+    private LiveData<Resource<DailySchedule>> loadScheduleOfDay(boolean forceRefresh, int year, int month, int day) {
         String formattedDay = String.format("%02d", day);
         String formattedMonth = String.format("%02d", month);
 
-        return new NetworkBoundResource<Schedule, Schedule>(appExecutors, forceRefresh) {
+        return new NetworkBoundResource<DailySchedule, DailySchedule>(appExecutors, forceRefresh) {
             @Override
-            protected void saveCallResult(@NonNull Schedule item) {
+            protected void saveCallResult(@NonNull DailySchedule item) {
                 //TODO key
                 scheduleCache.put("schedule", item);
             }
 
             @Override
-            protected boolean shouldFetch(@Nullable Schedule data) {
+            protected boolean shouldFetch(@Nullable DailySchedule data) {
                 return forceRefresh || data == null || data.getShows().isEmpty();
             }
 
             @NonNull
             @Override
-            protected LiveData<Schedule> loadFromDb() {
+            protected LiveData<DailySchedule> loadFromDb() {
                 //TODO key
                 scheduleCacheData.setValue(scheduleCache.get("schedule"));
                 return scheduleCacheData;
@@ -92,7 +92,7 @@ public class ScheduleRepository {
 
             @NonNull
             @Override
-            protected LiveData<ApiResponse<Schedule>> createCall() {
+            protected LiveData<ApiResponse<DailySchedule>> createCall() {
                 return api.scheduleOfDay(year, formattedMonth, formattedDay);
             }
         }.asLiveData();

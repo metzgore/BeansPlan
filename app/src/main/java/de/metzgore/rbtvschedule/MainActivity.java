@@ -13,15 +13,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
 import android.view.MenuItem;
 
-import de.metzgore.rbtvschedule.baseschedule.BaseScheduleFragment;
-import de.metzgore.rbtvschedule.dailyschedule.DailyScheduleFragment;
+import de.metzgore.rbtvschedule.baseschedule.RefreshableScheduleFragment;
+import de.metzgore.rbtvschedule.dailyschedule.RefreshableDailyScheduleFragment;
 import de.metzgore.rbtvschedule.databinding.ActivityMainBinding;
 import de.metzgore.rbtvschedule.settings.SettingsActivity;
 import de.metzgore.rbtvschedule.settings.repository.AppSettings;
 import de.metzgore.rbtvschedule.settings.repository.AppSettingsImp;
 import de.metzgore.rbtvschedule.weeklyschedule.WeeklyScheduleFragment;
 
-public class MainActivity extends AppCompatActivity implements BaseScheduleFragment.OnScheduleUpdatedListener {
+public class MainActivity extends AppCompatActivity implements RefreshableScheduleFragment.OnScheduleRefreshedListener {
 
     private static final String SCHEDULE_FRAGMENT_TAG = "schedule_fragment_tag";
 
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements BaseScheduleFragm
         switch (menuItemId) {
             case R.id.nav_today_schedule:
                 setMenuItemSelected(menuItemId);
-                replaceFragmentIfPossible(DailyScheduleFragment.class);
+                replaceFragmentIfPossible(RefreshableDailyScheduleFragment.class);
                 return true;
             case R.id.nav_weekly_schedule:
                 setMenuItemSelected(menuItemId);
@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements BaseScheduleFragm
     }
 
     @Override
-    public void onScheduleUpdated(String subtitle) {
+    public void onScheduleRefreshed(String subtitle) {
         binding.activityMainToolbar.setSubtitle(subtitle);
     }
 }

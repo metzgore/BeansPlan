@@ -2,22 +2,15 @@ package de.metzgore.rbtvschedule.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import org.apache.commons.lang3.time.DurationFormatUtils;
-
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import io.gsonfire.annotations.PostDeserialize;
 
 public class Show implements Parcelable {
-
-    private static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
     @SerializedName("id")
     @Expose
@@ -103,10 +96,6 @@ public class Show implements Parcelable {
         return youtubeId;
     }
 
-    public boolean isOnYoutube() {
-        return youtubeId != null && !TextUtils.isEmpty(youtubeId);
-    }
-
     public boolean isRunning() {
         return isRunning;
     }
@@ -121,34 +110,6 @@ public class Show implements Parcelable {
         Date now = new Date();
         isRunning = !now.before(timeStart) && !now.after(timeEnd);
         isOver = timeEnd.before(now);
-    }
-
-    @NonNull
-    public String getTimeStartFormatted() {
-        return timeFormat.format(timeStart);
-    }
-
-    @NonNull
-    public String getTimeEndFormatted() {
-        return timeFormat.format(timeEnd);
-    }
-
-    @NonNull
-    public String getLengthFormatted() {
-        return DurationFormatUtils.formatDuration(length * 1000,
-                length > 3600 ? "H 'h' mm 'min'" : "m 'min'");
-    }
-
-    @NonNull
-    public String getTypeFormatted() {
-        switch (type) {
-            case LIVE:
-            case PREMIERE:
-                return type.toString();
-            case NONE:
-            default:
-                return "";
-        }
     }
 
     @Override

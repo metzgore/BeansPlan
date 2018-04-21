@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import de.metzgore.rbtvschedule.R;
-import de.metzgore.rbtvschedule.baseschedule.BaseScheduleFragment;
+import de.metzgore.rbtvschedule.baseschedule.RefreshableScheduleFragment;
 import de.metzgore.rbtvschedule.data.Resource;
 import de.metzgore.rbtvschedule.data.WeeklySchedule;
 import de.metzgore.rbtvschedule.databinding.FragmentWeeklyScheduleBinding;
@@ -28,7 +28,7 @@ import de.metzgore.rbtvschedule.shared.ScheduleRepository;
 import de.metzgore.rbtvschedule.util.DateFormatter;
 import de.metzgore.rbtvschedule.util.di.WeeklyScheduleViewModelFactory;
 
-public class WeeklyScheduleFragment extends BaseScheduleFragment {
+public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
 
     private static final String TAG = WeeklyScheduleFragment.class.getSimpleName();
 
@@ -53,7 +53,8 @@ public class WeeklyScheduleFragment extends BaseScheduleFragment {
         weeklyScheduleAdapter = new WeeklyScheduleAdapter(getContext(), getChildFragmentManager());
 
         //TODO dagger
-        viewModel = ViewModelProviders.of(this, new WeeklyScheduleViewModelFactory(new ScheduleRepository())).get(WeeklyScheduleViewModel.class);
+        viewModel = ViewModelProviders.of(this,
+                new WeeklyScheduleViewModelFactory(new ScheduleRepository(), savedInstanceState == null)).get(WeeklyScheduleViewModel.class);
         subscribeUi(viewModel);
     }
 
@@ -61,6 +62,9 @@ public class WeeklyScheduleFragment extends BaseScheduleFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_weekly_schedule, container, false);
+
+        binding.setLifecycleOwner(this);
+        binding.setViewModel(viewModel);
 
         binding.fragmentWeeklyScheduleViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         binding.fragmentWeeklyScheduleViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(binding.fragmentWeeklyScheduleTabs) {
@@ -168,9 +172,9 @@ public class WeeklyScheduleFragment extends BaseScheduleFragment {
 
     private void handleData(Resource<WeeklySchedule> schedule) {
         if (schedule.data != null) {
-            binding.setIsEmpty(false);
             weeklyScheduleAdapter.setSchedule(schedule.data);
-            getCallback().onScheduleUpdated(getString(R.string.fragment_weekly_schedule_subtitle,
+
+            getCallback().onScheduleRefreshed(getString(R.string.fragment_weekly_schedule_subtitle,
                     DateFormatter.formatDate(getContext(), schedule.data.getStartDate()),
                     DateFormatter.formatDate(getContext(), schedule.data.getEndDate())));
 
@@ -190,8 +194,6 @@ public class WeeklyScheduleFragment extends BaseScheduleFragment {
                     selectedTab.select();
                 }
             }, 100);
-        } else {
-            binding.setIsEmpty(true);
         }
     }
 

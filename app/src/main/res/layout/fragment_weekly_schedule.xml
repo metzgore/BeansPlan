@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="isEmpty"
-            type="boolean"/>
+            name="viewModel"
+            type="de.metzgore.rbtvschedule.weeklyschedule.WeeklyScheduleViewModel"/>
     </data>
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -27,13 +27,13 @@
                 android:drawableTop="@drawable/ic_warning"
                 android:text="@string/alert_message_no_schedule_data"
                 android:textSize="24sp"
-                app:visibleGone="@{isEmpty}"/>
+                app:visibleGone="@{safeUnbox(viewModel.isEmpty)}"/>
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/fragment_weekly_schedule_view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:visibleGone="@{!isEmpty}">
+                app:visibleGone="@{safeUnbox(!viewModel.isEmpty)}">
 
                 <de.metzgore.rbtvschedule.util.RetainableTabLayout
                     android:id="@+id/fragment_weekly_schedule_tabs"

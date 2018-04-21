@@ -16,13 +16,13 @@ public class WeeklyScheduleViewModel extends ViewModel implements IScheduleViewM
 
     private final MutableLiveData<Boolean> refresh = new MutableLiveData<>();
     private final LiveData<Resource<WeeklySchedule>> schedule;
+    public final LiveData<Boolean> isEmpty;
 
     @Inject
-    public WeeklyScheduleViewModel(ScheduleRepository scheduleRepo) {
-        schedule = Transformations.switchMap(refresh, forceFromNetwork -> {
-            //TODO lambda
-            return scheduleRepo.loadWeeklySchedule(forceFromNetwork);
-        });
+    public WeeklyScheduleViewModel(ScheduleRepository scheduleRepo, boolean forceRefresh) {
+        schedule = Transformations.switchMap(refresh, scheduleRepo::loadWeeklySchedule);
+        isEmpty = Transformations.map(schedule, schedule -> schedule == null || schedule.data == null || schedule.data.getSchedule().isEmpty());
+        refresh.setValue(forceRefresh);
     }
 
     @Override

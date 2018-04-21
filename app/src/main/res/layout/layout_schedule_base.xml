@@ -4,8 +4,8 @@
     <data>
 
         <variable
-            name="isEmpty"
-            type="boolean"/>
+            name="viewModel"
+            type="de.metzgore.rbtvschedule.dailyschedule.DailyScheduleViewModel"/>
     </data>
 
     <FrameLayout
@@ -20,14 +20,14 @@
             android:drawableTop="@drawable/ic_warning"
             android:text="@string/alert_message_no_schedule_data"
             android:textSize="24sp"
-            app:visibleGone="@{isEmpty}"/>
+            app:visibleGone="@{safeUnbox(viewModel.isEmpty)}"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/shows_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layoutManager="LinearLayoutManager"
-            app:visibleGone="@{!isEmpty}"/>
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            app:visibleGone="@{safeUnbox(!viewModel.isEmpty)}"/>
 
     </FrameLayout>
 </layout>

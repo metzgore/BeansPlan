@@ -9,7 +9,7 @@ import android.text.format.DateUtils;
 
 import java.util.Date;
 
-import de.metzgore.rbtvschedule.baseschedule.BaseScheduleFragment;
+import de.metzgore.rbtvschedule.dailyschedule.DailyScheduleFragment;
 import de.metzgore.rbtvschedule.data.WeeklySchedule;
 import de.metzgore.rbtvschedule.shared.UpdatableScheduleFragment;
 
@@ -35,7 +35,7 @@ class WeeklyScheduleAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Date selectedDate = (Date) weeklySchedule.getSchedule().keySet().toArray()[position];
-        return BaseScheduleFragment.newInstance(selectedDate, weeklySchedule.getSchedule().get(selectedDate));
+        return DailyScheduleFragment.newInstance(selectedDate, weeklySchedule.getDailySchedule(selectedDate));
     }
 
     @Override
