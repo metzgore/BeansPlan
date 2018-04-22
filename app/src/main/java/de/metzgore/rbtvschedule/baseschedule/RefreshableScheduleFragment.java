@@ -18,6 +18,8 @@ public abstract class RefreshableScheduleFragment extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement OnScheduleRefreshedListener");
         }
+
+        callback.onScheduleRefreshed(null);
     }
 
     @NonNull
