@@ -4,14 +4,17 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
 import android.view.MenuItem;
+import android.view.View;
 
 import de.metzgore.rbtvschedule.baseschedule.RefreshableScheduleFragment;
 import de.metzgore.rbtvschedule.dailyschedule.RefreshableDailyScheduleFragment;
@@ -28,6 +31,11 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
     private SparseArray<Runnable> defaultSchedules = new SparseArray<>(2);
     private AppSettings settings = new AppSettingsImp(this);
     private FragmentManager fragmentManager;
+    @IdRes
+    private int lastSelectedItemId;
+    @IdRes
+    private int selectedItemId;
+    private boolean itemSelected = false;
     private ActivityMainBinding binding;
 
     @Override
@@ -43,6 +51,31 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
         setupDrawerContent(binding.activityMainNavigationView);
+
+        binding.activityMainDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                if (itemSelected) {
+                    itemSelected = false;
+                    selectDrawerItem(selectedItemId);
+                }
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
 
         fragmentManager = getSupportFragmentManager();
 
@@ -84,26 +117,29 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(menuItem -> selectDrawerItem(menuItem.getItemId()));
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
+            selectedItemId = menuItem.getItemId();
+            itemSelected = true;
+            binding.activityMainDrawerLayout.closeDrawer(GravityCompat.START);
+            return false;
+        });
     }
 
-    private boolean selectDrawerItem(@IdRes int menuItemId) {
+    private void selectDrawerItem(@IdRes int menuItemId) {
         binding.activityMainDrawerLayout.closeDrawer(GravityCompat.START);
 
         switch (menuItemId) {
             case R.id.nav_today_schedule:
                 setMenuItemSelected(menuItemId);
                 replaceFragmentIfPossible(RefreshableDailyScheduleFragment.class);
-                return true;
+                break;
             case R.id.nav_weekly_schedule:
                 setMenuItemSelected(menuItemId);
                 replaceFragmentIfPossible(WeeklyScheduleFragment.class);
-                return true;
+                break;
             case R.id.nav_settings:
                 openActivity(SettingsActivity.class);
-                return false;
-            default:
-                return false;
+                break;
         }
     }
 
@@ -115,7 +151,6 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
     private void replaceFragmentIfPossible(Class<? extends Fragment> fragmentClass) {
         if (!isFragmentAlreadyVisible(fragmentClass)) {
             replaceFragment(fragmentClass);
-            binding.activityMainToolbar.setSubtitle(null);
         }
     }
 
