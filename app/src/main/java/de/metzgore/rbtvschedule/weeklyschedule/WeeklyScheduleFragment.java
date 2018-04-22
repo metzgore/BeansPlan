@@ -3,7 +3,6 @@ package de.metzgore.rbtvschedule.weeklyschedule;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -32,12 +31,12 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
 
     private static final String TAG = WeeklyScheduleFragment.class.getSimpleName();
 
-    //private static final String VIEW_PAGER_ITEM = "view_pager_item";
+    private static final String VIEW_PAGER_ITEM = "view_pager_item";
 
     private WeeklyScheduleAdapter weeklyScheduleAdapter;
     private FragmentWeeklyScheduleBinding binding;
     private Snackbar snackbar;
-    private int mCurrentViewPagerItem;
+    private int currentViewPagerItem;
     private WeeklyScheduleViewModel viewModel;
     private boolean scheduleContainsCurrentDay;
 
@@ -48,6 +47,11 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            currentViewPagerItem = savedInstanceState.getInt(VIEW_PAGER_ITEM, 0);
+        }
+
         setHasOptionsMenu(true);
 
         weeklyScheduleAdapter = new WeeklyScheduleAdapter(getContext(), getChildFragmentManager());
@@ -75,7 +79,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
 
             @Override
             public void onPageSelected(int position) {
-                mCurrentViewPagerItem = position;
+                currentViewPagerItem = position;
             }
 
             @Override
@@ -90,9 +94,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
         binding.fragmentWeeklyScheduleViewPager.setSaveFromParentEnabled(false);
 
         binding.fragmentWeeklyScheduleSwipeRefresh.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-        binding.fragmentWeeklyScheduleSwipeRefresh.setOnRefreshListener(() -> {
-            viewModel.loadSchedule(true);
-        });
+        binding.fragmentWeeklyScheduleSwipeRefresh.setOnRefreshListener(() -> viewModel.loadSchedule(true));
 
         return binding.getRoot();
     }
@@ -105,14 +107,10 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
             getActivity().setTitle(R.string.drawer_item_weekly_schedule);
     }
 
-   /*@Override
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        if (savedInstanceState != null) {
-            mCurrentViewPagerItem = savedInstanceState.getInt(VIEW_PAGER_ITEM, 0);
-        }
-    }    */
+    }
 
     @Override
     public void onStart() {
@@ -120,11 +118,11 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
         viewModel.loadSchedule(false);
     }
 
-    /*@Override
+    @Override
     public void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
-        bundle.putInt(VIEW_PAGER_ITEM, mWeeklyScheduleViewPager.getCurrentItem());
-    }  */
+        bundle.putInt(VIEW_PAGER_ITEM, binding.fragmentWeeklyScheduleViewPager.getCurrentItem());
+    }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
@@ -173,6 +171,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
     private void handleData(Resource<WeeklySchedule> schedule) {
         if (schedule.data != null) {
             weeklyScheduleAdapter.setSchedule(schedule.data);
+            binding.fragmentWeeklyScheduleViewPager.setCurrentItem(currentViewPagerItem);
 
             getCallback().onScheduleRefreshed(getString(R.string.fragment_weekly_schedule_subtitle,
                     DateFormatter.formatDate(getContext(), schedule.data.getStartDate()),
@@ -184,16 +183,6 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
                 scheduleContainsCurrentDay = containsCurrentDay;
                 getActivity().invalidateOptionsMenu();
             }
-
-            //workaround for weird tab updating
-            //see https://stackoverflow.com/a/43436472/5925185
-            new Handler().postDelayed(() -> {
-                final TabLayout.Tab selectedTab = binding.fragmentWeeklyScheduleTabs.getTabAt(
-                        binding.fragmentWeeklyScheduleTabs.getSelectedTabPosition());
-                if (selectedTab != null) {
-                    selectedTab.select();
-                }
-            }, 100);
         }
     }
 
