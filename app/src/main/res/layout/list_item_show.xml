@@ -113,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="textEnd"
                 app:srcCompat="@drawable/ic_youtube"
-                app:visibleGone="@{viewModel.onYoutube}"/>
+                app:visibleInvisible="@{viewModel.onYoutube}"/>
 
         </LinearLayout>
 
