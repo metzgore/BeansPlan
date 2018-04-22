@@ -216,19 +216,13 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
 
     public void showRefreshIndicator(final boolean isRefreshing) {
         if (binding != null) {
-            binding.fragmentWeeklyScheduleSwipeRefresh.post(() -> {
-                //TODO lambda
-                binding.fragmentWeeklyScheduleSwipeRefresh.setRefreshing(isRefreshing);
-            });
+            binding.fragmentWeeklyScheduleSwipeRefresh.post(() -> binding.fragmentWeeklyScheduleSwipeRefresh.setRefreshing(isRefreshing));
         }
     }
 
     public void showRetrySnackbar() {
         snackbar = Snackbar.make(getView(), R.string.error_message_schedule_general, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.action_retry, view -> {
-                    //TODO lambda
-                    viewModel.loadSchedule(true);
-                });
+                .setAction(R.string.action_retry, view -> viewModel.loadSchedule(true));
         snackbar.show();
     }
 

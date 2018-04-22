@@ -11,6 +11,7 @@ import com.vincentbrison.openlibraries.android.dualcache.DualCache;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import javax.inject.Singleton;
 
@@ -29,6 +30,9 @@ import de.metzgore.rbtvschedule.util.di.Injector;
 public class ScheduleRepository {
 
     private final String TAG = ScheduleRepository.class.getSimpleName();
+    private static final String DAILY_SCHEDULE_KEY = "daily_schedule_key";
+    private static final String WEEKLY_SCHEDULE_KEY = "weekly_schedule_key";
+
     private final RBTVScheduleApi api;
     private final AppExecutors appExecutors;
     private DualCache<DailySchedule> scheduleCache;
@@ -41,14 +45,14 @@ public class ScheduleRepository {
     public ScheduleRepository(/*RBTVScheduleApi api, AppExecutors appExecutors*/) {
         api = Injector.provideRBTVScheduleApi();
         this.appExecutors = new AppExecutors();
-        //TODO name
-        scheduleCache = new Builder<DailySchedule>("test", 1)
+
+        scheduleCache = new Builder<DailySchedule>(DAILY_SCHEDULE_KEY, 1)
                 .enableLog()
                 .useSerializerInRam(1000000, new GsonSerializer<>(DailySchedule.class))
                 .useSerializerInDisk(1000000, true, new GsonSerializer<>(DailySchedule.class), RBTVScheduleApp.getAppContext())
                 .build();
 
-        weeklyScheduleCache = new Builder<WeeklySchedule>("test1", 1)
+        weeklyScheduleCache = new Builder<WeeklySchedule>(WEEKLY_SCHEDULE_KEY, 1)
                 .enableLog()
                 .useSerializerInRam(1000000, new GsonSerializer<>(WeeklySchedule.class))
                 .useSerializerInDisk(1000000, true, new GsonSerializer<>(WeeklySchedule.class), RBTVScheduleApp.getAppContext())
@@ -67,14 +71,13 @@ public class ScheduleRepository {
     }
 
     private LiveData<Resource<DailySchedule>> loadScheduleOfDay(boolean forceRefresh, int year, int month, int day) {
-        String formattedDay = String.format("%02d", day);
-        String formattedMonth = String.format("%02d", month);
+        String formattedDay = formatDoubleDigit(day);
+        String formattedMonth = formatDoubleDigit(month);
 
         return new NetworkBoundResource<DailySchedule, DailySchedule>(appExecutors, forceRefresh) {
             @Override
             protected void saveCallResult(@NonNull DailySchedule item) {
-                //TODO key
-                scheduleCache.put("schedule", item);
+                scheduleCache.put(DAILY_SCHEDULE_KEY, item);
             }
 
             @Override
@@ -85,8 +88,7 @@ public class ScheduleRepository {
             @NonNull
             @Override
             protected LiveData<DailySchedule> loadFromDb() {
-                //TODO key
-                scheduleCacheData.setValue(scheduleCache.get("schedule"));
+                scheduleCacheData.setValue(scheduleCache.get(DAILY_SCHEDULE_KEY));
                 return scheduleCacheData;
             }
 
@@ -102,8 +104,7 @@ public class ScheduleRepository {
         return new NetworkBoundResource<WeeklySchedule, WeeklySchedule>(appExecutors, forceRefresh) {
             @Override
             protected void saveCallResult(@NonNull WeeklySchedule item) {
-                //TODO key
-                weeklyScheduleCache.put("weeklyschedule", item);
+                weeklyScheduleCache.put(WEEKLY_SCHEDULE_KEY, item);
             }
 
             @Override
@@ -114,8 +115,7 @@ public class ScheduleRepository {
             @NonNull
             @Override
             protected LiveData<WeeklySchedule> loadFromDb() {
-                //TODO key
-                weeklyScheduleCacheData.setValue(weeklyScheduleCache.get("weeklyschedule"));
+                weeklyScheduleCacheData.setValue(weeklyScheduleCache.get(WEEKLY_SCHEDULE_KEY));
                 return weeklyScheduleCacheData;
             }
 
@@ -125,5 +125,9 @@ public class ScheduleRepository {
                 return api.scheduleOfCurrentWeek();
             }
         }.asLiveData();
+    }
+
+    private String formatDoubleDigit(int digit) {
+        return String.format(Locale.GERMANY, "%02d", digit);
     }
 }
