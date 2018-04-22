@@ -1,8 +1,11 @@
 package de.metzgore.rbtvschedule.baseschedule;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.View;
 
 public abstract class RefreshableScheduleFragment extends Fragment {
 
@@ -18,7 +21,11 @@ public abstract class RefreshableScheduleFragment extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement OnScheduleRefreshedListener");
         }
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         callback.onScheduleRefreshed(null);
     }
 
