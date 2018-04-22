@@ -16,7 +16,6 @@ import java.util.Date;
 import de.metzgore.rbtvschedule.R;
 import de.metzgore.rbtvschedule.data.DailySchedule;
 import de.metzgore.rbtvschedule.data.Resource;
-import de.metzgore.rbtvschedule.data.WeeklySchedule;
 import de.metzgore.rbtvschedule.databinding.LayoutScheduleBaseBinding;
 import de.metzgore.rbtvschedule.shared.UpdatableScheduleFragment;
 import de.metzgore.rbtvschedule.util.di.ScheduleViewModelFactory;
@@ -89,9 +88,13 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
     }
 
     @Override
-    public void update(WeeklySchedule weeklySchedule) {
-        DailySchedule dailySchedule = weeklySchedule.getDailySchedule(dateKey);
+    public void update(DailySchedule dailySchedule) {
         if (dailySchedule != null)
             viewModel.setSchedule(Resource.success(dailySchedule, false));
+    }
+
+    @Override
+    public Date getDateKey() {
+        return dateKey;
     }
 }

@@ -1,8 +1,12 @@
 package de.metzgore.rbtvschedule.shared;
 
-import de.metzgore.rbtvschedule.data.WeeklySchedule;
+import java.util.Date;
+
+import de.metzgore.rbtvschedule.data.DailySchedule;
 
 public interface UpdatableScheduleFragment {
 
-    void update(WeeklySchedule weeklySchedule);
+    void update(DailySchedule dailySchedule);
+
+    Date getDateKey();
 }

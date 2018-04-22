@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.text.format.DateUtils;
 
 import java.util.Date;
@@ -20,6 +21,7 @@ class WeeklyScheduleAdapter extends FragmentStatePagerAdapter {
 
     private Context context;
     private WeeklySchedule weeklySchedule;
+    private Date selectedDate;
 
     WeeklyScheduleAdapter(Context context, FragmentManager mgr) {
         super(mgr);
@@ -34,7 +36,7 @@ class WeeklyScheduleAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Date selectedDate = (Date) weeklySchedule.getSchedule().keySet().toArray()[position];
+        selectedDate = (Date) weeklySchedule.getSchedule().keySet().toArray()[position];
         return DailyScheduleFragment.newInstance(selectedDate, weeklySchedule.getDailySchedule(selectedDate));
     }
 
@@ -47,7 +49,13 @@ class WeeklyScheduleAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getItemPosition(@NonNull Object object) {
         if (object instanceof UpdatableScheduleFragment) {
-            ((UpdatableScheduleFragment) object).update(weeklySchedule);
+            UpdatableScheduleFragment fragment = (UpdatableScheduleFragment) object;
+            if (weeklySchedule.getSchedule().containsKey(fragment.getDateKey())) {
+                fragment.update(weeklySchedule.getSchedule().get(selectedDate));
+                return super.getItemPosition(object);
+            } else {
+                return PagerAdapter.POSITION_NONE;
+            }
         }
         return super.getItemPosition(object);
     }
