@@ -35,6 +35,6 @@ public abstract class RefreshableScheduleFragment extends Fragment {
     }
 
     public interface OnScheduleRefreshedListener {
-        void onScheduleRefreshed(String subtitle);
+        void onScheduleRefreshed(@Nullable String subtitle);
     }
 }

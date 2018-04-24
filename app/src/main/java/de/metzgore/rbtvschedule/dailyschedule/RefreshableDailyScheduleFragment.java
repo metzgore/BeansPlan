@@ -114,7 +114,13 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
     private void handleData(Resource<DailySchedule> schedule) {
         if (schedule.data != null) {
             dailyScheduleAdapter.setShowList(schedule.data.getShows());
-            getCallback().onScheduleRefreshed(getString(R.string.fragment_daily_schedule_subtitle, DateFormatter.formatDate(getContext(), schedule.data.getDate())));
+
+            String subTitle = null;
+            
+            if (schedule.data.getDate() != null)
+                subTitle = getString(R.string.fragment_daily_schedule_subtitle, DateFormatter.formatDate(getContext(), schedule.data.getDate()));
+
+            getCallback().onScheduleRefreshed(subTitle);
         }
     }
 

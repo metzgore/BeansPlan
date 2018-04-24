@@ -1,6 +1,7 @@
 package de.metzgore.rbtvschedule.data;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -59,18 +60,20 @@ public class WeeklySchedule {
         return false;
     }
 
+    @Nullable
     public Date getStartDate() {
         if (!weeklySchedule.isEmpty())
             return weeklySchedule.firstKey();
         else
-            return new Date();
+            return null;
     }
 
+    @Nullable
     public Date getEndDate() {
         if (!weeklySchedule.isEmpty())
             return weeklySchedule.lastKey();
         else
-            return new Date();
+            return null;
     }
 
     @NonNull

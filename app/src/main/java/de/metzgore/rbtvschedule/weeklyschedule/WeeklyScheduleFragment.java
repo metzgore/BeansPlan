@@ -173,9 +173,14 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
             weeklyScheduleAdapter.setSchedule(schedule.data);
             binding.fragmentWeeklyScheduleViewPager.setCurrentItem(currentViewPagerItem);
 
-            getCallback().onScheduleRefreshed(getString(R.string.fragment_weekly_schedule_subtitle,
-                    DateFormatter.formatDate(getContext(), schedule.data.getStartDate()),
-                    DateFormatter.formatDate(getContext(), schedule.data.getEndDate())));
+            String subTitle = null;
+
+            if (schedule.data.getStartDate() != null && schedule.data.getEndDate() != null)
+                subTitle = getString(R.string.fragment_weekly_schedule_subtitle,
+                        DateFormatter.formatDate(getContext(), schedule.data.getStartDate()),
+                        DateFormatter.formatDate(getContext(), schedule.data.getEndDate()));
+
+            getCallback().onScheduleRefreshed(subTitle);
 
             boolean containsCurrentDay = weeklyScheduleAdapter.containsScheduleForCurrentDay();
 

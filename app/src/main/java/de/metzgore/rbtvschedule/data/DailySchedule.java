@@ -2,7 +2,7 @@ package de.metzgore.rbtvschedule.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -40,12 +40,12 @@ public class DailySchedule implements Parcelable {
         return showsBuilder.toString();
     }
 
-    @NonNull
+    @Nullable
     public Date getDate() {
         if (shows.size() > 0)
             return shows.get(0).getTimeStart();
         else
-            return new Date();
+            return null;
     }
 
     @Override
