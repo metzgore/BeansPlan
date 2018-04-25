@@ -33,7 +33,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
 
     private static final String VIEW_PAGER_ITEM = "view_pager_item";
 
-    private WeeklyScheduleAdapter weeklyScheduleAdapter;
+    private WeeklySchedulePagerAdapter weeklyScheduleAdapter;
     private FragmentWeeklyScheduleBinding binding;
     private Snackbar snackbar;
     private int currentViewPagerItem;
@@ -54,7 +54,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
 
         setHasOptionsMenu(true);
 
-        weeklyScheduleAdapter = new WeeklyScheduleAdapter(getContext(), getChildFragmentManager());
+        weeklyScheduleAdapter = new WeeklySchedulePagerAdapter(getContext(), getChildFragmentManager());
 
         //TODO dagger
         viewModel = ViewModelProviders.of(this,
