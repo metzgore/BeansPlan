@@ -3,6 +3,7 @@ package de.metzgore.rbtvschedule.weeklyschedule;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -18,6 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.util.Date;
+
 import de.metzgore.rbtvschedule.R;
 import de.metzgore.rbtvschedule.baseschedule.RefreshableScheduleFragment;
 import de.metzgore.rbtvschedule.data.Resource;
@@ -31,12 +34,12 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
 
     private static final String TAG = WeeklyScheduleFragment.class.getSimpleName();
 
-    private static final String VIEW_PAGER_ITEM = "view_pager_item";
+    private static final String SELECTED_DATE_TIMESTAMP = "selected_date_timestamp";
 
     private WeeklySchedulePagerAdapter weeklyScheduleAdapter;
     private FragmentWeeklyScheduleBinding binding;
     private Snackbar snackbar;
-    private int currentViewPagerItem;
+    private Date selectedDate;
     private WeeklyScheduleViewModel viewModel;
     private boolean scheduleContainsCurrentDay;
 
@@ -49,7 +52,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
-            currentViewPagerItem = savedInstanceState.getInt(VIEW_PAGER_ITEM, 0);
+            selectedDate = new Date(savedInstanceState.getLong(SELECTED_DATE_TIMESTAMP));
         }
 
         setHasOptionsMenu(true);
@@ -77,7 +80,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
         binding.fragmentWeeklyScheduleViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(binding.fragmentWeeklyScheduleTabs) {
             @Override
             public void onPageSelected(int position) {
-                currentViewPagerItem = position;
+                selectedDate = weeklyScheduleAdapter.getDayFromPosition(position);
             }
         });
 
@@ -104,7 +107,8 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
     @Override
     public void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
-        bundle.putInt(VIEW_PAGER_ITEM, binding.fragmentWeeklyScheduleViewPager.getCurrentItem());
+        if (selectedDate != null)
+            bundle.putLong(SELECTED_DATE_TIMESTAMP, selectedDate.getTime());
     }
 
     @Override
@@ -154,7 +158,15 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
     private void handleData(Resource<WeeklySchedule> schedule) {
         if (schedule.data != null) {
             weeklyScheduleAdapter.setSchedule(schedule.data);
-            binding.fragmentWeeklyScheduleViewPager.setCurrentItem(currentViewPagerItem);
+            binding.fragmentWeeklyScheduleViewPager.setCurrentItem(weeklyScheduleAdapter.getPositionFromDate(selectedDate));
+
+            new Handler().postDelayed(() -> {
+                final TabLayout.Tab selectedTab = binding.fragmentWeeklyScheduleTabs.getTabAt(
+                        binding.fragmentWeeklyScheduleTabs.getSelectedTabPosition());
+                if (selectedTab != null) {
+                    selectedTab.select();
+                }
+            }, 100);
 
             String subTitle = null;
 
@@ -207,14 +219,6 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
         if (snackbar != null && snackbar.isShown())
             snackbar.dismiss();
     }
-
-    /*@Override
-    public void showCurrentDay(int idxOfCurrentDay) {
-        if (idxOfCurrentDay != mCurrentViewPagerItem)
-            mCurrentViewPagerItem = idxOfCurrentDay;
-
-        mWeeklyScheduleViewPager.setCurrentItem(mCurrentViewPagerItem);
-    }  */
 
     private class ZoomOutPageTransformer implements ViewPager.PageTransformer {
         private static final float MIN_SCALE = 0.85f;

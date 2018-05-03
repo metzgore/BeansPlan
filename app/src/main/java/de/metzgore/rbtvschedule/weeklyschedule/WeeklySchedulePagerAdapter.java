@@ -30,6 +30,7 @@ class WeeklySchedulePagerAdapter extends PagerAdapter {
     private List<Date> dateKeys;
     private FragmentTransaction curTransaction = null;
     private Fragment currentPrimaryItem = null;
+    private Date selectedDate;
 
     WeeklySchedulePagerAdapter(Context context, FragmentManager mgr) {
         this.context = context;
@@ -163,6 +164,14 @@ class WeeklySchedulePagerAdapter extends PagerAdapter {
 
     public int getPositionOfCurrentDay() {
         return weeklySchedule.getPositionOfCurrentDay();
+    }
+
+    public Date getDayFromPosition(int pos) {
+        return weeklySchedule.getDateKeys().get(pos);
+    }
+
+    public int getPositionFromDate(Date date) {
+        return weeklySchedule.getDateKeys().indexOf(date);
     }
 
     public boolean containsScheduleForCurrentDay() {
