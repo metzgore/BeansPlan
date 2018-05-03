@@ -40,7 +40,7 @@ class WeeklySchedulePagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return weeklySchedule.getSchedule().size();
+        return weeklySchedule.getSize();
     }
 
     @Override
@@ -54,8 +54,8 @@ class WeeklySchedulePagerAdapter extends PagerAdapter {
         if (object instanceof UpdatableScheduleFragment) {
             UpdatableScheduleFragment fragment = (UpdatableScheduleFragment) object;
             Date dateKey = fragment.getDateKey();
-            if (weeklySchedule.getSchedule().containsKey(dateKey)) {
-                fragment.update(weeklySchedule.getSchedule().get(dateKey));
+            if (weeklySchedule.hasSchedule(dateKey)) {
+                fragment.update(weeklySchedule.getDailySchedule(dateKey));
                 return dateKeys.indexOf(dateKey);
             } else {
                 return PagerAdapter.POSITION_NONE;
@@ -156,7 +156,7 @@ class WeeklySchedulePagerAdapter extends PagerAdapter {
     public void setSchedule(WeeklySchedule weeklySchedule) {
         if (!this.weeklySchedule.equals(weeklySchedule)) {
             this.weeklySchedule = weeklySchedule;
-            dateKeys = new ArrayList<>(this.weeklySchedule.getSchedule().keySet());
+            dateKeys = this.weeklySchedule.getDateKeys();
             notifyDataSetChanged();
         }
     }

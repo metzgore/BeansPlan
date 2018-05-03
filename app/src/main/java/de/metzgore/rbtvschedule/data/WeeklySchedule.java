@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -26,6 +27,22 @@ public class WeeklySchedule {
 
     public TreeMap<Date, DailySchedule> getSchedule() {
         return weeklySchedule;
+    }
+
+    public boolean hasSchedule(Date key) {
+        return weeklySchedule.containsKey(key);
+    }
+
+    public int getSize() {
+        return weeklySchedule.size();
+    }
+
+    public boolean isEmpty() {
+        return weeklySchedule.isEmpty();
+    }
+
+    public List<Date> getDateKeys() {
+        return new ArrayList<>(getSchedule().keySet());
     }
 
     @PostDeserialize

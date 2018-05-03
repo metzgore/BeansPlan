@@ -109,7 +109,7 @@ public class ScheduleRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable WeeklySchedule data) {
-                return forceRefresh || data == null || data.getSchedule().isEmpty();
+                return forceRefresh || data == null || data.isEmpty();
             }
 
             @NonNull
