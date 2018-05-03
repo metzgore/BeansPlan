@@ -81,6 +81,11 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
         binding.fragmentWeeklyScheduleViewPager.setSaveFromParentEnabled(false);
         binding.fragmentWeeklyScheduleViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(binding.fragmentWeeklyScheduleTabs) {
             @Override
+            public void onPageScrollStateChanged(int state) {
+                enableDisableSwipeRefresh(binding.fragmentWeeklyScheduleSwipeRefresh.isRefreshing() || state == ViewPager.SCROLL_STATE_IDLE);
+            }
+
+            @Override
             public void onPageSelected(int position) {
                 selectedDate = weeklyScheduleAdapter.getDayFromPosition(position);
             }
