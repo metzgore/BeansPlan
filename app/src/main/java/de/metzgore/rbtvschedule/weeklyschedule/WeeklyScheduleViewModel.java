@@ -19,10 +19,9 @@ public class WeeklyScheduleViewModel extends ViewModel implements IScheduleViewM
     public final LiveData<Boolean> isEmpty;
 
     @Inject
-    public WeeklyScheduleViewModel(ScheduleRepository scheduleRepo, boolean forceRefresh) {
+    public WeeklyScheduleViewModel(ScheduleRepository scheduleRepo) {
         schedule = Transformations.switchMap(refresh, scheduleRepo::loadWeeklySchedule);
         isEmpty = Transformations.map(schedule, schedule -> schedule == null || schedule.data == null || schedule.data.isEmpty());
-        refresh.setValue(forceRefresh);
     }
 
     @Override

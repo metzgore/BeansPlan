@@ -33,6 +33,7 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
     private FragmentDailyScheduleBinding binding;
     private DailyScheduleViewModel viewModel;
     private Snackbar snackbar;
+    private boolean forceRefresh;
 
     public static Fragment newInstance() {
         return new RefreshableDailyScheduleFragment();
@@ -46,8 +47,9 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
         dailyScheduleAdapter = new DailyScheduleAdapter();
 
         //TODO dagger
+        forceRefresh = savedInstanceState == null;
         viewModel = ViewModelProviders.of(this,
-                new ScheduleViewModelFactory(new ScheduleRepository(), savedInstanceState == null)).get(DailyScheduleViewModel.class);
+                new ScheduleViewModelFactory(new ScheduleRepository())).get(DailyScheduleViewModel.class);
         subscribeUi(viewModel);
     }
 
@@ -84,7 +86,7 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
     @Override
     public void onStart() {
         super.onStart();
-        viewModel.loadSchedule(false);
+        viewModel.loadSchedule(forceRefresh);
     }
 
     @Override
@@ -104,6 +106,12 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        hideSnackbar();
+    }
+
     private void subscribeUi(DailyScheduleViewModel viewModel) {
         viewModel.getSchedule().observe(this, schedule -> {
             handleState(schedule);
@@ -116,7 +124,7 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
             dailyScheduleAdapter.setShowList(schedule.data.getShows());
 
             String subTitle = null;
-            
+
             if (schedule.data.getDate() != null)
                 subTitle = getString(R.string.fragment_daily_schedule_subtitle, DateFormatter.formatDate(getContext(), schedule.data.getDate()));
 

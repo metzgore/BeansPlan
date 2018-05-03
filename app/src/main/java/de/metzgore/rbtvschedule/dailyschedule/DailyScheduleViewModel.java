@@ -21,10 +21,9 @@ public class DailyScheduleViewModel extends ViewModel implements IScheduleViewMo
     public LiveData<Boolean> isEmpty = Transformations.map(scheduleMerger, schedule -> schedule == null || schedule.data == null || schedule.data.getShows().isEmpty());
 
     @Inject
-    public DailyScheduleViewModel(ScheduleRepository scheduleRepo, boolean forceRefresh) {
+    public DailyScheduleViewModel(ScheduleRepository scheduleRepo) {
         LiveData<Resource<DailySchedule>> scheduleFromRepo = Transformations.switchMap(refresh, scheduleRepo::loadScheduleOfToday);
         scheduleMerger.addSource(scheduleFromRepo, scheduleMerger::setValue);
-        loadSchedule(forceRefresh);
     }
 
     public DailyScheduleViewModel(Resource<DailySchedule> scheduleResource) {

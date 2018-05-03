@@ -42,6 +42,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
     private Date selectedDate;
     private WeeklyScheduleViewModel viewModel;
     private boolean scheduleContainsCurrentDay;
+    private boolean forceRefresh;
 
     public static Fragment newInstance() {
         return new WeeklyScheduleFragment();
@@ -60,8 +61,9 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
         weeklyScheduleAdapter = new WeeklySchedulePagerAdapter(getContext(), getChildFragmentManager());
 
         //TODO dagger
+        forceRefresh = savedInstanceState == null;
         viewModel = ViewModelProviders.of(this,
-                new WeeklyScheduleViewModelFactory(new ScheduleRepository(), savedInstanceState == null)).get(WeeklyScheduleViewModel.class);
+                new WeeklyScheduleViewModelFactory(new ScheduleRepository())).get(WeeklyScheduleViewModel.class);
         subscribeUi(viewModel);
     }
 
@@ -101,7 +103,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
     @Override
     public void onStart() {
         super.onStart();
-        viewModel.loadSchedule(false);
+        viewModel.loadSchedule(forceRefresh);
     }
 
     @Override
@@ -137,6 +139,12 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        hideSnackbar();
     }
 
     private void goToCurrentDay() {

@@ -15,13 +15,11 @@ import de.metzgore.rbtvschedule.shared.ScheduleRepository;
 public class ScheduleViewModelFactory implements ViewModelProvider.Factory {
 
     private ScheduleRepository repo;
-    private boolean forceRefresh;
     private DailySchedule dailySchedule;
 
     @Inject
-    public ScheduleViewModelFactory(ScheduleRepository repo, boolean forceRefresh) {
+    public ScheduleViewModelFactory(ScheduleRepository repo) {
         this.repo = repo;
-        this.forceRefresh = forceRefresh;
     }
 
     public ScheduleViewModelFactory(DailySchedule dailySchedule) {
@@ -34,6 +32,6 @@ public class ScheduleViewModelFactory implements ViewModelProvider.Factory {
         if (dailySchedule != null)
             return new DailyScheduleViewModel(Resource.success(dailySchedule, false));
         else
-            return new DailyScheduleViewModel(repo, forceRefresh);
+            return new DailyScheduleViewModel(repo);
     }
 }
