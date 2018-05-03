@@ -71,27 +71,15 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
         binding.setViewModel(viewModel);
 
         binding.fragmentWeeklyScheduleViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
+        binding.fragmentWeeklyScheduleViewPager.setAdapter(weeklyScheduleAdapter);
+        //TODO check if there is a better solution
+        binding.fragmentWeeklyScheduleViewPager.setSaveFromParentEnabled(false);
         binding.fragmentWeeklyScheduleViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(binding.fragmentWeeklyScheduleTabs) {
-            @Override
-            public void onPageScrolled(int position, float v, int i1) {
-                //NOOP
-            }
-
             @Override
             public void onPageSelected(int position) {
                 currentViewPagerItem = position;
             }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                enableDisableSwipeRefresh(state == ViewPager.SCROLL_STATE_IDLE);
-            }
         });
-
-        binding.fragmentWeeklyScheduleViewPager.setAdapter(weeklyScheduleAdapter);
-
-        //TODO check if there is a better solution
-        binding.fragmentWeeklyScheduleViewPager.setSaveFromParentEnabled(false);
 
         binding.fragmentWeeklyScheduleSwipeRefresh.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         binding.fragmentWeeklyScheduleSwipeRefresh.setOnRefreshListener(() -> viewModel.loadSchedule(true));
@@ -105,11 +93,6 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
 
         if (getActivity() != null)
             getActivity().setTitle(R.string.drawer_item_weekly_schedule);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
