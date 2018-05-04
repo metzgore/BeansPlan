@@ -38,7 +38,7 @@ public class WeeklySchedule {
     }
 
     public boolean isEmpty() {
-        return weeklySchedule.isEmpty();
+        return weeklySchedule == null || weeklySchedule.isEmpty();
     }
 
     public List<Date> getDateKeys() {

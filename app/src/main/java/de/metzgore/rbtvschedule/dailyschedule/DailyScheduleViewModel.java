@@ -18,7 +18,7 @@ public class DailyScheduleViewModel extends ViewModel implements IScheduleViewMo
     private final MutableLiveData<Boolean> refresh = new MutableLiveData<>();
     private final MutableLiveData<Resource<DailySchedule>> schedule = new MutableLiveData<>();
     private final MediatorLiveData<Resource<DailySchedule>> scheduleMerger = new MediatorLiveData<>();
-    public LiveData<Boolean> isEmpty = Transformations.map(scheduleMerger, schedule -> schedule == null || schedule.data == null || schedule.data.getShows().isEmpty());
+    public LiveData<Boolean> isEmpty = Transformations.map(scheduleMerger, schedule -> schedule == null || schedule.data == null || schedule.data.isEmpty());
 
     @Inject
     public DailyScheduleViewModel(ScheduleRepository scheduleRepo) {
@@ -36,8 +36,13 @@ public class DailyScheduleViewModel extends ViewModel implements IScheduleViewMo
     }
 
     @Override
-    public void loadSchedule(boolean forceFromNetwork) {
-        refresh.setValue(forceFromNetwork);
+    public void loadScheduleFromNetwork() {
+        refresh.setValue(true);
+    }
+
+    @Override
+    public void loadSchedule() {
+        refresh.setValue(isEmpty.getValue() == null || isEmpty.getValue());
     }
 
     public void setSchedule(Resource<DailySchedule> scheduleResource) {

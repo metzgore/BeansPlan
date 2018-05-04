@@ -42,7 +42,6 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
     private Date selectedDate;
     private WeeklyScheduleViewModel viewModel;
     private boolean scheduleContainsCurrentDay;
-    private boolean forceRefresh;
 
     public static Fragment newInstance() {
         return new WeeklyScheduleFragment();
@@ -61,7 +60,6 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
         weeklyScheduleAdapter = new WeeklySchedulePagerAdapter(getContext(), getChildFragmentManager());
 
         //TODO dagger
-        forceRefresh = savedInstanceState == null;
         viewModel = ViewModelProviders.of(this,
                 new WeeklyScheduleViewModelFactory(new ScheduleRepository())).get(WeeklyScheduleViewModel.class);
         subscribeUi(viewModel);
@@ -92,7 +90,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
         });
 
         binding.fragmentWeeklyScheduleSwipeRefresh.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-        binding.fragmentWeeklyScheduleSwipeRefresh.setOnRefreshListener(() -> viewModel.loadSchedule(true));
+        binding.fragmentWeeklyScheduleSwipeRefresh.setOnRefreshListener(() -> viewModel.loadScheduleFromNetwork());
 
         return binding.getRoot();
     }
@@ -108,7 +106,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
     @Override
     public void onStart() {
         super.onStart();
-        viewModel.loadSchedule(forceRefresh);
+        viewModel.loadSchedule();
     }
 
     @Override
@@ -136,7 +134,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                viewModel.loadSchedule(true);
+                viewModel.loadScheduleFromNetwork();
                 return true;
             case R.id.action_today:
                 goToCurrentDay();
@@ -224,7 +222,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
 
     public void showRetrySnackbar() {
         snackbar = Snackbar.make(getView(), R.string.error_message_schedule_general, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.action_retry, view -> viewModel.loadSchedule(true));
+                .setAction(R.string.action_retry, view -> viewModel.loadScheduleFromNetwork());
         snackbar.show();
     }
 

@@ -30,7 +30,12 @@ public class WeeklyScheduleViewModel extends ViewModel implements IScheduleViewM
     }
 
     @Override
-    public void loadSchedule(boolean forceFromNetwork) {
-        refresh.setValue(forceFromNetwork);
+    public void loadScheduleFromNetwork() {
+        refresh.setValue(true);
+    }
+
+    @Override
+    public void loadSchedule() {
+        refresh.setValue(isEmpty.getValue() == null || isEmpty.getValue());
     }
 }

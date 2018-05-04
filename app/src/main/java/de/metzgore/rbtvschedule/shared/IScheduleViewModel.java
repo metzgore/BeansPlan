@@ -8,5 +8,7 @@ public interface IScheduleViewModel<T> {
 
     LiveData<Resource<T>> getSchedule();
 
-    void loadSchedule(boolean forceFromNetwork);
+    void loadScheduleFromNetwork();
+
+    void loadSchedule();
 }

@@ -29,6 +29,10 @@ public class DailySchedule implements Parcelable {
         return shows;
     }
 
+    public boolean isEmpty() {
+        return shows == null || shows.isEmpty();
+    }
+
     @Override
     public String toString() {
         StringBuilder showsBuilder = new StringBuilder();

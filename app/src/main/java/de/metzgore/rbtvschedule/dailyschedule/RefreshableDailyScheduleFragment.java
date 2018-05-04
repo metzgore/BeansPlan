@@ -33,7 +33,6 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
     private FragmentDailyScheduleBinding binding;
     private DailyScheduleViewModel viewModel;
     private Snackbar snackbar;
-    private boolean forceRefresh;
 
     public static Fragment newInstance() {
         return new RefreshableDailyScheduleFragment();
@@ -47,7 +46,6 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
         dailyScheduleAdapter = new DailyScheduleAdapter();
 
         //TODO dagger
-        forceRefresh = savedInstanceState == null;
         viewModel = ViewModelProviders.of(this,
                 new ScheduleViewModelFactory(new ScheduleRepository())).get(DailyScheduleViewModel.class);
         subscribeUi(viewModel);
@@ -67,7 +65,7 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
         binding.singleDayIncluded.showsList.setItemAnimator(null);
         binding.singleDayIncluded.showsList.setHasFixedSize(true);
 
-        binding.swipeRefresh.setOnRefreshListener(() -> viewModel.loadSchedule(true));
+        binding.swipeRefresh.setOnRefreshListener(() -> viewModel.loadScheduleFromNetwork());
         binding.swipeRefresh.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
 
         binding.singleDayIncluded.showsList.setAdapter(dailyScheduleAdapter);
@@ -86,7 +84,7 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
     @Override
     public void onStart() {
         super.onStart();
-        viewModel.loadSchedule(forceRefresh);
+        viewModel.loadSchedule();
     }
 
     @Override
@@ -99,7 +97,7 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                viewModel.loadSchedule(true);
+                viewModel.loadScheduleFromNetwork();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -160,7 +158,7 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
     public void showRetrySnackbar() {
         snackbar = Snackbar.make(getView(), R.string.error_message_schedule_general, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.action_retry, view -> {
-                    viewModel.loadSchedule(true);
+                    viewModel.loadScheduleFromNetwork();
                 });
         snackbar.show();
     }
