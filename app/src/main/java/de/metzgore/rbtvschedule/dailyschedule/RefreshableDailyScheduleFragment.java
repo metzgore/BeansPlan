@@ -156,7 +156,7 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
     }
 
     public void showRetrySnackbar() {
-        snackbar = Snackbar.make(getView(), R.string.error_message_schedule_general, Snackbar.LENGTH_INDEFINITE)
+        snackbar = Snackbar.make(getView(), R.string.error_message_daily_schedule_loading_failed, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.action_retry, view -> {
                     viewModel.loadScheduleFromNetwork();
                 });

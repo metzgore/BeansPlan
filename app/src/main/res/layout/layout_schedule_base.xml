@@ -13,14 +13,36 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/fragment_weekly_schedule_empty_view"
+            android:id="@+id/fragment_base_schedule_empty_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:drawableTop="@drawable/ic_warning"
-            android:text="@string/alert_message_no_schedule_data"
+            android:drawableTop="@drawable/ic_schedule_not_available"
+            android:text="@string/alert_message_no_daily_schedule"
             android:textSize="24sp"
-            app:visibleGone="@{safeUnbox(viewModel.isEmpty)}"/>
+            app:visibleGone="@{!safeUnbox(viewModel.isLoading) &amp;&amp; safeUnbox(viewModel.isEmpty)}"/>
+
+        <LinearLayout
+            android:id="@+id/fragment_base_schedule_loading_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:visibleGone="@{safeUnbox(viewModel.isLoading) &amp;&amp; safeUnbox(viewModel.isEmpty)}">
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/alert_message_load_daily_schedule"
+                android:textSize="24sp"/>
+
+        </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/shows_list"

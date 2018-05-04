@@ -221,7 +221,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
     }
 
     public void showRetrySnackbar() {
-        snackbar = Snackbar.make(getView(), R.string.error_message_schedule_general, Snackbar.LENGTH_INDEFINITE)
+        snackbar = Snackbar.make(getView(), R.string.error_message_weekly_schedule_loading_failed, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.action_retry, view -> viewModel.loadScheduleFromNetwork());
         snackbar.show();
     }

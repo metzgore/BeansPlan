@@ -8,6 +8,7 @@ import android.arch.lifecycle.ViewModel;
 import javax.inject.Inject;
 
 import de.metzgore.rbtvschedule.data.Resource;
+import de.metzgore.rbtvschedule.data.Status;
 import de.metzgore.rbtvschedule.data.WeeklySchedule;
 import de.metzgore.rbtvschedule.shared.IScheduleViewModel;
 import de.metzgore.rbtvschedule.shared.ScheduleRepository;
@@ -17,11 +18,15 @@ public class WeeklyScheduleViewModel extends ViewModel implements IScheduleViewM
     private final MutableLiveData<Boolean> refresh = new MutableLiveData<>();
     private final LiveData<Resource<WeeklySchedule>> schedule;
     public final LiveData<Boolean> isEmpty;
+    public final LiveData<Boolean> isLoading;
+    public final LiveData<Boolean> hasError;
 
     @Inject
     public WeeklyScheduleViewModel(ScheduleRepository scheduleRepo) {
         schedule = Transformations.switchMap(refresh, scheduleRepo::loadWeeklySchedule);
         isEmpty = Transformations.map(schedule, schedule -> schedule == null || schedule.data == null || schedule.data.isEmpty());
+        isLoading = Transformations.map(schedule, schedule -> schedule.status == Status.LOADING);
+        hasError = Transformations.map(schedule, schedule -> schedule.status == Status.ERROR);
     }
 
     @Override

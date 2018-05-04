@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 import de.metzgore.rbtvschedule.data.DailySchedule;
 import de.metzgore.rbtvschedule.data.Resource;
+import de.metzgore.rbtvschedule.data.Status;
 import de.metzgore.rbtvschedule.shared.IScheduleViewModel;
 import de.metzgore.rbtvschedule.shared.ScheduleRepository;
 
@@ -19,6 +20,8 @@ public class DailyScheduleViewModel extends ViewModel implements IScheduleViewMo
     private final MutableLiveData<Resource<DailySchedule>> schedule = new MutableLiveData<>();
     private final MediatorLiveData<Resource<DailySchedule>> scheduleMerger = new MediatorLiveData<>();
     public LiveData<Boolean> isEmpty = Transformations.map(scheduleMerger, schedule -> schedule == null || schedule.data == null || schedule.data.isEmpty());
+    public LiveData<Boolean> isLoading = Transformations.map(scheduleMerger, schedule -> schedule.status == Status.LOADING);
+    public LiveData<Boolean> hasError = Transformations.map(scheduleMerger, schedule -> schedule.status == Status.ERROR);
 
     @Inject
     public DailyScheduleViewModel(ScheduleRepository scheduleRepo) {
