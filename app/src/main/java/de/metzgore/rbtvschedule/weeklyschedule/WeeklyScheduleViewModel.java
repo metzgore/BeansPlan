@@ -19,14 +19,12 @@ public class WeeklyScheduleViewModel extends ViewModel implements IScheduleViewM
     private final LiveData<Resource<WeeklySchedule>> schedule;
     public final LiveData<Boolean> isEmpty;
     public final LiveData<Boolean> isLoading;
-    public final LiveData<Boolean> hasError;
 
     @Inject
     public WeeklyScheduleViewModel(ScheduleRepository scheduleRepo) {
         schedule = Transformations.switchMap(refresh, scheduleRepo::loadWeeklySchedule);
         isEmpty = Transformations.map(schedule, schedule -> schedule == null || schedule.data == null || schedule.data.isEmpty());
         isLoading = Transformations.map(schedule, schedule -> schedule.status == Status.LOADING);
-        hasError = Transformations.map(schedule, schedule -> schedule.status == Status.ERROR);
     }
 
     @Override

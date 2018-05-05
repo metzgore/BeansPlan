@@ -53,6 +53,7 @@ public class DailyScheduleAdapter extends RecyclerView.Adapter<ShowViewHolder> {
     }
 
     @Override
+    @NonNull
     public ShowViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ListItemShowBinding binding = DataBindingUtil
                 .inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_show,

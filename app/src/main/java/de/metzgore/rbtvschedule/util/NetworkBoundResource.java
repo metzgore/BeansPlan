@@ -17,7 +17,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
 
     private final MediatorLiveData<Resource<ResultType>> result = new MediatorLiveData<>();
 
-    private boolean forceRefresh = false;
+    private boolean forceRefresh;
 
     @MainThread
     public NetworkBoundResource(AppExecutors appExecutors, boolean forceRefresh) {
@@ -67,6 +67,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
     }
 
     protected void onFetchFailed() {
+        //NOOP
     }
 
     public LiveData<Resource<ResultType>> asLiveData() {

@@ -110,7 +110,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle bundle) {
+    public void onSaveInstanceState(@NonNull Bundle bundle) {
         super.onSaveInstanceState(bundle);
         if (selectedDate != null)
             bundle.putLong(SELECTED_DATE_TIMESTAMP, selectedDate.getTime());
@@ -235,7 +235,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
         private static final float MIN_SCALE = 0.85f;
         private static final float MIN_ALPHA = 0.5f;
 
-        public void transformPage(View view, float position) {
+        public void transformPage(@NonNull View view, float position) {
             int pageWidth = view.getWidth();
             int pageHeight = view.getHeight();
 

@@ -149,17 +149,13 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
 
     public void showRefreshIndicator(final boolean isRefreshing) {
         if (binding != null) {
-            binding.swipeRefresh.post(() -> {
-                binding.swipeRefresh.setRefreshing(isRefreshing);
-            });
+            binding.swipeRefresh.post(() -> binding.swipeRefresh.setRefreshing(isRefreshing));
         }
     }
 
     public void showRetrySnackbar() {
         snackbar = Snackbar.make(getView(), R.string.error_message_daily_schedule_loading_failed, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.action_retry, view -> {
-                    viewModel.loadScheduleFromNetwork();
-                });
+                .setAction(R.string.action_retry, view -> viewModel.loadScheduleFromNetwork());
         snackbar.show();
     }
 
