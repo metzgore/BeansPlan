@@ -36,6 +36,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -58,6 +59,7 @@ dependencies {
 
     implementation 'com.vincentbrison.openlibraries.android:dualcache:3.1.1'
 
-    implementation 'io.gsonfire:gson-fire:1.8.1'
+    implementation 'io.gsonfire:gson-fire:1.8.3'
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

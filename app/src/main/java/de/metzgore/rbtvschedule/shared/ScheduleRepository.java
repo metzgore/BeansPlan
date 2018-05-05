@@ -77,6 +77,8 @@ public class ScheduleRepository {
         return new NetworkBoundResource<DailySchedule, DailySchedule>(appExecutors, forceRefresh) {
             @Override
             protected void saveCallResult(@NonNull DailySchedule item) {
+                //TODO check preSerialize
+                item.updateTimestamp();
                 scheduleCache.put(DAILY_SCHEDULE_KEY, item);
             }
 
@@ -104,6 +106,8 @@ public class ScheduleRepository {
         return new NetworkBoundResource<WeeklySchedule, WeeklySchedule>(appExecutors, forceRefresh) {
             @Override
             protected void saveCallResult(@NonNull WeeklySchedule item) {
+                //TODO check preSerialize
+                item.updateTimestamp();
                 weeklyScheduleCache.put(WEEKLY_SCHEDULE_KEY, item);
             }
 

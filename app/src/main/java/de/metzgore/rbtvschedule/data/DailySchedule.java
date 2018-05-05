@@ -11,13 +11,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DailySchedule implements Parcelable {
+public class DailySchedule extends BaseSchedule implements Parcelable {
 
     @SerializedName("schedule")
     @Expose
     private List<Show> shows;
 
-    public DailySchedule(List<Show> shows) {
+    DailySchedule(List<Show> shows) {
         this.shows = shows;
     }
 

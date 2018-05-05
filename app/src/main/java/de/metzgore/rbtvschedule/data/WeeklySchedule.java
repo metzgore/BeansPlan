@@ -17,7 +17,7 @@ import java.util.TreeMap;
 
 import io.gsonfire.annotations.PostDeserialize;
 
-public class WeeklySchedule {
+public class WeeklySchedule extends BaseSchedule {
 
     @SerializedName("schedule")
     @Expose

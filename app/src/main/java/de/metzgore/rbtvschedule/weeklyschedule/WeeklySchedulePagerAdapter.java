@@ -30,7 +30,6 @@ class WeeklySchedulePagerAdapter extends PagerAdapter {
     private List<Date> dateKeys;
     private FragmentTransaction curTransaction = null;
     private Fragment currentPrimaryItem = null;
-    private Date selectedDate;
 
     WeeklySchedulePagerAdapter(Context context, FragmentManager mgr) {
         this.context = context;
