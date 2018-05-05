@@ -15,7 +15,7 @@
         android:summary="@string/pref_hide_past_days_summary"
         android:title="@string/pref_hide_past_days_title"/>-->
 
-    <CheckBoxPreference
+    <SwitchPreference
         android:disableDependentsState="true"
         android:key="@string/pref_key_remember_last_opened_schedule"
         android:summary="@string/pref_remember_last_opened_schedule_summary"
