@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">RBTV Plan</string>
 
-    <string name="error_message_weekly_schedule_loading_failed">Fehler beim Laden des Wochenplans</string>
+    <string name="error_message_weekly_schedule_loading_failed">Wochenplan konnte nicht abgerufen werden</string>
     <string name="alert_message_no_weekly_schedule">Wochenplan nicht vorhanden</string>
     <string name="alert_message_load_weekly_schedule">Wochenplan wird geladen</string>
 
-    <string name="error_message_daily_schedule_loading_failed">Fehler beim Laden des Tagesplans</string>
+    <string name="error_message_daily_schedule_loading_failed">Tagesplan konnte nicht abgerufen werden</string>
     <string name="alert_message_no_daily_schedule">Tagesplan nicht vorhanden</string>
     <string name="alert_message_load_daily_schedule">Tagesplan wird geladen</string>
 
