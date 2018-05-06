@@ -3,15 +3,19 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_today_schedule"
-            android:title="@string/drawer_item_todays_schedule"
-            android:icon="@drawable/ic_today"/>
+            android:icon="@drawable/ic_today"
+            android:title="@string/drawer_item_todays_schedule"/>
         <item
             android:id="@+id/nav_weekly_schedule"
-            android:title="@string/drawer_item_weekly_schedule"
-            android:icon="@drawable/ic_today"/>
+            android:icon="@drawable/ic_today"
+            android:title="@string/drawer_item_weekly_schedule"/>
         <item
             android:id="@+id/nav_settings"
-            android:title="@string/drawer_item_setting"
-            android:icon="@drawable/ic_settings"/>
+            android:icon="@drawable/ic_settings"
+            android:title="@string/drawer_item_setting"/>
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_info"
+            android:title="@string/drawer_item_about"/>
     </group>
 </menu>

@@ -16,6 +16,7 @@ import android.util.SparseArray;
 import android.view.MenuItem;
 import android.view.View;
 
+import de.metzgore.rbtvschedule.about.AboutActivity;
 import de.metzgore.rbtvschedule.baseschedule.RefreshableScheduleFragment;
 import de.metzgore.rbtvschedule.dailyschedule.RefreshableDailyScheduleFragment;
 import de.metzgore.rbtvschedule.databinding.ActivityMainBinding;
@@ -31,8 +32,6 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
     private SparseArray<Runnable> defaultSchedules = new SparseArray<>(2);
     private AppSettings settings = new AppSettingsImp(this);
     private FragmentManager fragmentManager;
-    @IdRes
-    private int lastSelectedItemId;
     @IdRes
     private int selectedItemId;
     private boolean itemSelected = false;
@@ -139,6 +138,9 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
                 break;
             case R.id.nav_settings:
                 openActivity(SettingsActivity.class);
+                break;
+            case R.id.nav_about:
+                openActivity(AboutActivity.class);
                 break;
         }
     }

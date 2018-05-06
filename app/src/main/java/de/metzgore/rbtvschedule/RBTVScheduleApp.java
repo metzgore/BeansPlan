@@ -3,6 +3,8 @@ package de.metzgore.rbtvschedule;
 import android.app.Application;
 import android.content.Context;
 
+import com.squareup.leakcanary.LeakCanary;
+
 public class RBTVScheduleApp extends Application {
 
     private static RBTVScheduleApp mAppContext;
@@ -11,6 +13,11 @@ public class RBTVScheduleApp extends Application {
     public void onCreate() {
         super.onCreate();
         mAppContext = this;
+
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
+        LeakCanary.install(this);
     }
 
     //TODO dagger

@@ -1,5 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE resources [
+    <!ENTITY appname "Beans Plan">
+    <!ENTITY rbtv "Rocket Beans TV">
+    ]>
+
 <resources>
-    <string name="app_name">RBTV Plan</string>
+    <string name="app_name">&appname;</string>
 
     <string name="error_message_weekly_schedule_loading_failed">Wochenplan konnte nicht abgerufen werden</string>
     <string name="alert_message_no_weekly_schedule">Wochenplan nicht vorhanden</string>
@@ -20,8 +26,30 @@
     <string name="drawer_item_weekly_schedule">Wochenplan</string>
     <string name="drawer_item_todays_schedule">Tagesplan</string>
     <string name="drawer_item_setting">Einstellungen</string>
+    <string name="drawer_item_about">Über</string>
 
     <string name="activity_settings_title">Einstellungen</string>
+
+    <string name="activity_about_title">Über &appname;</string>
+    <string name="activity_about_version">Version %s (%d)</string>
+    <string name="activity_about_description">&appname; ist ein Fan-Projekt von einem Bohnenfan für Bohnenfans.\nDie App zeigt den aktuellen Tages- und Wochenplan für den Internetsender Rocket Beans TV."</string>
+    <string name="activity_about_open_source_licenses_title">Open-Source-Lizenzen</string>
+    <string name="about_activity_me_title">Tritt mit mir in Verbindung</string>
+    <string name="about_activity_me_mail">Kontaktiere mich</string>
+    <string name="about_activity_me_twitter">Folge mir auf Twitter</string>
+    <string name="about_activity_me_github">Meine Projekte auf GitHub</string>
+    <string name="about_activity_me_playstore">Bewerte Beans Plan im Google Play Store</string>
+    <string name="about_activity_rbtv_title">&rbtv; im Internet</string>
+    <string name="about_activity_rbtv_website">rocketbeans.tv</string>
+    <string name="about_activity_rbtv_facebook">&rbtv; auf Facebook</string>
+    <string name="about_activity_rbtv_twitter">&rbtv; auf Twitter</string>
+    <string name="about_activity_rbtv_instagram">&rbtv; auf Instagram</string>
+    <string name="about_activity_rbtv_youtube">&rbtv; auf YouTube</string>
+    <string name="about_activity_rbtv_gaming_youtube">&rbtv; Gaming auf YouTube</string>
+    <string name="about_activity_rbtv_haengi_youtube">&rbtv; Hängi auf YouTube</string>
+    <string name="about_activity_rbtv_twitch">&rbtv; auf Twitch</string>
+    <string name="about_activity_rbtv_playstore">Offizielle Pocket Beans App für Android</string>
+    <string name="about_activity_misc_data_url">Sendeplandaten von api.rbtv.rodney.io</string>
 
     <string name="pref_hide_past_shows_title">Vergangene Sendungen ausblenden</string>
     <string name="pref_hide_past_shows_summary">Blende vergangene Sendungen im Tages- und Wochenplan aus</string>
@@ -34,7 +62,7 @@
     <string name="pref_select_default_schedule_default">0</string>
 
     <string name="pref_remember_last_opened_schedule_summary">Öffnet bei jedem Start der App den zuletzt geöffneten Plan</string>
-    <string name="pref_remember_last_opened_schedule_title">Merke den zuletzt geöffneten Plan</string>
+    <string name="pref_remember_last_opened_schedule_title">Starte mit zuletzt ausgewähltem Plan</string>
 
     <string name="fragment_daily_schedule_subtitle">%s</string>
     <string name="fragment_weekly_schedule_subtitle">%s - %s</string>
