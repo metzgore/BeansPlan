@@ -27,7 +27,10 @@ import de.metzgore.rbtvschedule.weeklyschedule.WeeklyScheduleFragment;
 
 public class MainActivity extends AppCompatActivity implements RefreshableScheduleFragment.OnScheduleRefreshedListener {
 
-    private static final String SCHEDULE_FRAGMENT_TAG = "schedule_fragment_tag";
+    private static final String CURRENT_FRAGMENT_TAG = "current_fragment_tag";
+
+    private String dailyScheduleId;
+    private String weeklyScheduleId;
 
     private SparseArray<Runnable> defaultSchedules = new SparseArray<>(2);
     private AppSettings settings = new AppSettingsImp(this);
@@ -41,6 +44,9 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
+
+        dailyScheduleId = getString(R.string.fragment_daily_schedule_id);
+        weeklyScheduleId = getString(R.string.fragment_weekly_schedule_id);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
@@ -78,18 +84,30 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
 
         fragmentManager = getSupportFragmentManager();
 
-        Fragment scheduleFragment = fragmentManager.findFragmentByTag(SCHEDULE_FRAGMENT_TAG);
+        Fragment scheduleFragment = fragmentManager.findFragmentByTag(CURRENT_FRAGMENT_TAG);
 
         if (scheduleFragment != null) {
-            fragmentManager.beginTransaction().replace(R.id.fragment_container, scheduleFragment, SCHEDULE_FRAGMENT_TAG).commit();
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, scheduleFragment, CURRENT_FRAGMENT_TAG).commit();
         } else {
             if (settings.shouldRememberLastOpenedSchedule()) {
-                @IdRes int navDrawerItem = settings.getLastOpenedScheduleId();
-                selectDrawerItem(navDrawerItem);
+                restoreLastFragment();
             } else {
                 createDefaultFragment();
             }
         }
+    }
+
+    private void restoreLastFragment() {
+        String fragmentId = settings.getLastOpenedScheduleId();
+        @IdRes int navDrawerItem;
+
+        if (fragmentId.equals(weeklyScheduleId)) {
+            navDrawerItem = R.id.nav_weekly_schedule;
+        } else {
+            navDrawerItem = R.id.nav_daily_schedule;
+        }
+
+        selectDrawerItem(navDrawerItem);
     }
 
     @Override
@@ -111,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
     }
 
     private void createDefaultSchedules() {
-        defaultSchedules.put(0, () -> selectDrawerItem(R.id.nav_today_schedule));
+        defaultSchedules.put(0, () -> selectDrawerItem(R.id.nav_daily_schedule));
         defaultSchedules.put(1, () -> selectDrawerItem(R.id.nav_weekly_schedule));
     }
 
@@ -128,12 +146,12 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
         binding.activityMainDrawerLayout.closeDrawer(GravityCompat.START);
 
         switch (menuItemId) {
-            case R.id.nav_today_schedule:
-                setMenuItemSelected(menuItemId);
+            case R.id.nav_daily_schedule:
+                setMenuItemSelected(menuItemId, dailyScheduleId);
                 replaceFragmentIfPossible(RefreshableDailyScheduleFragment.class);
                 break;
             case R.id.nav_weekly_schedule:
-                setMenuItemSelected(menuItemId);
+                setMenuItemSelected(menuItemId, weeklyScheduleId);
                 replaceFragmentIfPossible(WeeklyScheduleFragment.class);
                 break;
             case R.id.nav_settings:
@@ -145,9 +163,9 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
         }
     }
 
-    private void setMenuItemSelected(@IdRes int menuItemId) {
+    private void setMenuItemSelected(@IdRes int menuItemId, final String fragmentId) {
         binding.activityMainNavigationView.setCheckedItem(menuItemId);
-        settings.saveLastOpenedScheduleId(menuItemId);
+        settings.setLastOpenedFragmentId(fragmentId);
     }
 
     private void replaceFragmentIfPossible(Class<? extends Fragment> fragmentClass) {
@@ -171,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
             e.printStackTrace();
         }
 
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment, SCHEDULE_FRAGMENT_TAG).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment, CURRENT_FRAGMENT_TAG).commit();
     }
 
 
@@ -182,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
 
         int defaultScheduleValue = settings.getDefaultScheduleValue();
 
-        Runnable createScheduleFragment = defaultSchedules.get(defaultScheduleValue, () -> selectDrawerItem(R.id.nav_today_schedule));
+        Runnable createScheduleFragment = defaultSchedules.get(defaultScheduleValue, () -> selectDrawerItem(R.id.nav_daily_schedule));
         createScheduleFragment.run();
     }
 

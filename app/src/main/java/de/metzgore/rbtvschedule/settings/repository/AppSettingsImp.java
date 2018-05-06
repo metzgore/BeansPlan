@@ -10,7 +10,7 @@ public class AppSettingsImp implements AppSettings {
 
     private Context context;
 
-    public AppSettingsImp(Context context) {
+    public AppSettingsImp(final Context context) {
         this.context = context;
     }
 
@@ -35,16 +35,16 @@ public class AppSettingsImp implements AppSettings {
     }
 
     @Override
-    public int getLastOpenedScheduleId() {
-        return getIntPreference(R.string.pref_key_last_opened_schedule_id, 0);
+    public String getLastOpenedScheduleId() {
+        return getStringPreference(R.string.pref_key_last_opened_schedule_id, context.getString(R.string.fragment_daily_schedule_id));
     }
 
     @Override
-    public void saveLastOpenedScheduleId(int id) {
-        putIntPreference(R.string.pref_key_last_opened_schedule_id, id);
+    public void setLastOpenedFragmentId(final String id) {
+        putStringPreference(R.string.pref_key_last_opened_schedule_id, id);
     }
 
-    private boolean getBooleanPreference(int keyResourceId, boolean defaultValue) {
+    private boolean getBooleanPreference(final int keyResourceId, final boolean defaultValue) {
         boolean value = defaultValue;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (preferences != null) {
@@ -53,7 +53,7 @@ public class AppSettingsImp implements AppSettings {
         return value;
     }
 
-    private String getStringPreference(int keyResourceId, String defaultValue) {
+    private String getStringPreference(final int keyResourceId, final String defaultValue) {
         String value = defaultValue;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (preferences != null) {
@@ -62,7 +62,7 @@ public class AppSettingsImp implements AppSettings {
         return value;
     }
 
-    private int getIntPreference(int keyResourceId, int defaultValue) {
+    private int getIntPreference(final int keyResourceId, final int defaultValue) {
         int value = defaultValue;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (preferences != null) {
@@ -71,10 +71,17 @@ public class AppSettingsImp implements AppSettings {
         return value;
     }
 
-    private void putIntPreference(int keyResourceId, int value) {
+    private void putIntPreference(final int keyResourceId, final int value) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (preferences != null) {
             preferences.edit().putInt(context.getResources().getString(keyResourceId), value).apply();
+        }
+    }
+
+    private void putStringPreference(final int keyResourceId, final String value) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        if (preferences != null) {
+            preferences.edit().putString(context.getResources().getString(keyResourceId), value).apply();
         }
     }
 }

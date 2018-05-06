@@ -1,7 +1,5 @@
 package de.metzgore.rbtvschedule.settings.repository;
 
-import android.support.annotation.IdRes;
-
 public interface AppSettings {
 
     boolean shouldHidePastShows();
@@ -12,7 +10,7 @@ public interface AppSettings {
 
     boolean shouldRememberLastOpenedSchedule();
 
-    int getLastOpenedScheduleId();
+    String getLastOpenedScheduleId();
 
-    void saveLastOpenedScheduleId(@IdRes int id);
+    void setLastOpenedFragmentId(String id);
 }
