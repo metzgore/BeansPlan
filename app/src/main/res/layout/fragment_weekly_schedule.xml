@@ -6,14 +6,14 @@
 
         <variable
             name="viewModel"
-            type="de.metzgore.rbtvschedule.weeklyschedule.WeeklyScheduleViewModel"/>
+            type="de.metzgore.beansplan.weeklyschedule.WeeklyScheduleViewModel"/>
     </data>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/fragment_weekly_schedule_swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="de.metzgore.rbtvschedule.MainActivity">
+        tools:context="de.metzgore.beansplan.MainActivity">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -57,7 +57,7 @@
                 android:layout_height="match_parent"
                 app:visibleGone="@{safeUnbox(!viewModel.isEmpty)}">
 
-                <de.metzgore.rbtvschedule.util.RetainableTabLayout
+                <de.metzgore.beansplan.util.RetainableTabLayout
                     android:id="@+id/fragment_weekly_schedule_tabs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="de.metzgore.rbtvschedule">
+          package="de.metzgore.beansplan">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:name=".RBTVScheduleApp"
@@ -27,7 +26,7 @@
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.metzgore.rbtvschedule.MainActivity"/>
+                android:value="de.metzgore.beansplan.MainActivity"/>
         </activity>
         <activity
             android:name=".about.AboutActivity"
@@ -36,7 +35,7 @@
             android:theme="@style/AppThemeMaterialActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.metzgore.rbtvschedule.MainActivity"/>
+                android:value="de.metzgore.beansplan.MainActivity"/>
         </activity>
     </application>
 

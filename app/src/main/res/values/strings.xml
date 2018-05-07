@@ -38,7 +38,7 @@
     <string name="activity_about_open_source_licenses_title">Open-Source-Lizenzen</string>
     <string name="activity_about_me_title">Entwickler</string>
     <string name="activity_about_me_mail_title">Schicke mir eine E-Mail</string>
-    <string name="activity_about_me_mail">nicoriemer+&appname;@gmail.com</string>
+    <string name="activity_about_me_mail">nicoriemer+beansplan@gmail.com</string>
     <string name="activity_about_me_mail_subject">Feedback zu &appname;</string>
     <string name="activity_about_me_twitter">Folge mir auf Twitter</string>
     <string name="activity_about_me_github">Fork auf GitHub</string>
