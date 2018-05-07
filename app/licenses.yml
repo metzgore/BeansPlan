@@ -1,18 +1,18 @@
-# Libraries not listed in licenses.yml:
-- artifact: com.github.medyo:android-about-page:+
-  name: Android About Page
-  copyrightHolder: Mehdi Sakout
-  license: The MIT License
-  licenseUrl: http://opensource.org/licenses/MIT
-  url: https://github.com/medyo/android-about-page
-  year: 2016
-
 - artifact: org.apache.commons:commons-lang3:+
   name: Apache Commons Lang
   copyrightHolder: The Apache Software Foundation
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: http://commons.apache.org/proper/commons-lang/
+  year: 2001-2017
+
+- artifact: com.mikepenz:community-material-typeface:+
+  name: community-material-typeface
+  copyrightHolder: Mike Penz
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/mikepenz/Android-Iconics
+  year: 2018
 
 - artifact: com.google.dagger:dagger:+
   name: Dagger
@@ -46,6 +46,22 @@
   url: http://gsonfire.io
   year: 2015
 
+- artifact: com.mikepenz:iconics-core:+
+  name: iconics-core
+  copyrightHolder: Mike Penz
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/mikepenz/Android-Iconics
+  year: 2018
+
+- artifact: com.github.daniel-stoneuk:material-about-library:+
+  name: material-about-library
+  copyrightHolder: Daniel Stone
+  license: Apache License 2.0
+  licenseUrl: https://api.github.com/licenses/apache-2.0
+  url: https://github.com/daniel-stoneuk/material-about-library
+  year: 2016-2018
+
 - artifact: com.squareup.retrofit2:retrofit:+
   name: Retrofit
   copyrightHolder: Square, Inc
@@ -54,7 +70,19 @@
   year: 2013
   url: http://square.github.io/retrofit/
 
+
+
+
+
+
 #skip licenses
+- artifact: com.android.support:cardview-v7:+
+  name: Android Support CardView v7
+  copyrightHolder: Google, Inc
+  skip: true
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
 - artifact: com.vincentbrison.openlibraries.android:dualcache-serializerinterface:+
   name: Android Dual Cache
   skip: true

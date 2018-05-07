@@ -33,16 +33,18 @@
     <string name="activity_settings_title">Einstellungen</string>
 
     <string name="activity_about_title">Über &appname;</string>
-    <string name="activity_about_version">Version %s (%d)</string>
-    <string name="activity_about_description">&appname; ist ein Fan-Projekt von einem Bohnenfan für Bohnenfans.\nDie App zeigt den aktuellen Tages- und Wochenplan für den Internetsender Rocket Beans TV."</string>
+    <string name="activity_about_version">Version</string>
+    <string name="activity_about_description">&appname; ist ein Fan-Projekt von einem Bohnenfan für Bohnenfans.\nDie App zeigt den aktuellen Tages- und Wochenplan für den Internetsender &rbtv;."</string>
     <string name="activity_about_open_source_licenses_title">Open-Source-Lizenzen</string>
-    <string name="activity_about_me_title">Tritt mit mir in Verbindung</string>
-    <string name="activity_about_me_mail">Kontaktiere mich</string>
+    <string name="activity_about_me_title">Entwickler</string>
+    <string name="activity_about_me_mail_title">Schicke mir eine E-Mail</string>
+    <string name="activity_about_me_mail">nicoriemer+&appname;@gmail.com</string>
+    <string name="activity_about_me_mail_subject">Feedback zu &appname;</string>
     <string name="activity_about_me_twitter">Folge mir auf Twitter</string>
-    <string name="activity_about_me_github">Meine Projekte auf GitHub</string>
-    <string name="activity_about_me_playstore">Bewerte Beans Plan im Google Play Store</string>
+    <string name="activity_about_me_github">Fork auf GitHub</string>
+    <string name="activity_about_me_playstore">Bewerte diese App</string>
     <string name="activity_about_rbtv_title">&rbtv; im Internet</string>
-    <string name="activity_about_rbtv_website">rocketbeans.tv</string>
+    <string name="activity_about_rbtv_website">Besuche die Website</string>
     <string name="activity_about_rbtv_facebook">&rbtv; auf Facebook</string>
     <string name="activity_about_rbtv_twitter">&rbtv; auf Twitter</string>
     <string name="activity_about_rbtv_instagram">&rbtv; auf Instagram</string>
@@ -51,7 +53,7 @@
     <string name="activity_about_rbtv_haengi_youtube">&rbtv; Hängi auf YouTube</string>
     <string name="activity_about_rbtv_twitch">&rbtv; auf Twitch</string>
     <string name="activity_about_rbtv_playstore">Offizielle Pocket Beans App für Android</string>
-    <string name="activity_about_misc_data_url">Sendeplandaten von api.rbtv.rodney.io</string>
+    <string name="activity_about_misc_data_url">Sendeplandaten</string>
 
     <string name="pref_hide_past_shows_title">Vergangene Sendungen ausblenden</string>
     <string name="pref_hide_past_shows_summary">Blende vergangene Sendungen im Tages- und Wochenplan aus</string>
