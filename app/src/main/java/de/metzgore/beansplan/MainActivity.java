@@ -12,9 +12,11 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.SparseArray;
 import android.view.MenuItem;
 import android.view.View;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import de.metzgore.beansplan.about.AboutActivity;
 import de.metzgore.beansplan.baseschedule.RefreshableScheduleFragment;
@@ -29,10 +31,7 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
 
     private static final String CURRENT_FRAGMENT_TAG = "current_fragment_tag";
 
-    private String dailyScheduleId;
-    private String weeklyScheduleId;
-
-    private SparseArray<Runnable> defaultSchedules = new SparseArray<>(2);
+    private Map<String, Runnable> defaultSchedules = new HashMap<>(2);
     private AppSettings settings = new AppSettingsImp(this);
     private FragmentManager fragmentManager;
     @IdRes
@@ -44,9 +43,6 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-
-        dailyScheduleId = getString(R.string.fragment_daily_schedule_id);
-        weeklyScheduleId = getString(R.string.fragment_weekly_schedule_id);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
@@ -101,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
         String fragmentId = settings.getLastOpenedScheduleId();
         @IdRes int navDrawerItem;
 
-        if (fragmentId.equals(weeklyScheduleId)) {
+        if (fragmentId.equals(settings.getWeeklyScheduleFragmentId())) {
             navDrawerItem = R.id.nav_weekly_schedule;
         } else {
             navDrawerItem = R.id.nav_daily_schedule;
@@ -129,8 +125,8 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
     }
 
     private void createDefaultSchedules() {
-        defaultSchedules.put(0, () -> selectDrawerItem(R.id.nav_daily_schedule));
-        defaultSchedules.put(1, () -> selectDrawerItem(R.id.nav_weekly_schedule));
+        defaultSchedules.put(settings.getDailyScheduleFragmentId(), selectDailyScheduleRunnable());
+        defaultSchedules.put(settings.getWeeklyScheduleFragmentId(), selectWeeklyScheduleRunnable());
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -147,11 +143,11 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
 
         switch (menuItemId) {
             case R.id.nav_daily_schedule:
-                setMenuItemSelected(menuItemId, dailyScheduleId);
+                selectMenuItemAndSaveFragment(menuItemId, settings.getDailyScheduleFragmentId());
                 replaceFragmentIfPossible(RefreshableDailyScheduleFragment.class);
                 break;
             case R.id.nav_weekly_schedule:
-                setMenuItemSelected(menuItemId, weeklyScheduleId);
+                selectMenuItemAndSaveFragment(menuItemId, settings.getWeeklyScheduleFragmentId());
                 replaceFragmentIfPossible(WeeklyScheduleFragment.class);
                 break;
             case R.id.nav_settings:
@@ -163,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
         }
     }
 
-    private void setMenuItemSelected(@IdRes int menuItemId, final String fragmentId) {
+    private void selectMenuItemAndSaveFragment(@IdRes int menuItemId, final String fragmentId) {
         binding.activityMainNavigationView.setCheckedItem(menuItemId);
         settings.setLastOpenedFragmentId(fragmentId);
     }
@@ -198,9 +194,13 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
             createDefaultSchedules();
         }
 
-        int defaultScheduleValue = settings.getDefaultScheduleValue();
+        final String defaultScheduleValue = settings.getDefaultScheduleValue();
 
-        Runnable createScheduleFragment = defaultSchedules.get(defaultScheduleValue, () -> selectDrawerItem(R.id.nav_daily_schedule));
+        Runnable createScheduleFragment = defaultSchedules.get(defaultScheduleValue);
+
+        if (createScheduleFragment == null)
+            createScheduleFragment = selectDailyScheduleRunnable();
+
         createScheduleFragment.run();
     }
 
@@ -208,6 +208,14 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
         Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragment_container);
         return currentFragment != null && currentFragment.getClass() == fragmentClass && currentFragment.isVisible();
 
+    }
+
+    private Runnable selectDailyScheduleRunnable() {
+        return () -> selectDrawerItem(R.id.nav_daily_schedule);
+    }
+
+    private Runnable selectWeeklyScheduleRunnable() {
+        return () -> selectDrawerItem(R.id.nav_weekly_schedule);
     }
 
     @Override
