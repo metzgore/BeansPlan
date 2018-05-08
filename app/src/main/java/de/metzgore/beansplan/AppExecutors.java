@@ -7,10 +7,6 @@ import android.support.annotation.NonNull;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
-@Singleton
 public class AppExecutors {
 
     private final Executor diskIO;
@@ -25,7 +21,6 @@ public class AppExecutors {
         this.mainThread = mainThread;
     }
 
-    @Inject
     public AppExecutors() {
         this(Executors.newSingleThreadExecutor(), Executors.newFixedThreadPool(3),
                 new MainThreadExecutor());

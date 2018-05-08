@@ -5,8 +5,6 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 
-import javax.inject.Inject;
-
 import de.metzgore.beansplan.data.Resource;
 import de.metzgore.beansplan.data.Status;
 import de.metzgore.beansplan.data.WeeklySchedule;
@@ -20,7 +18,6 @@ public class WeeklyScheduleViewModel extends ViewModel implements IScheduleViewM
     public final LiveData<Boolean> isEmpty;
     public final LiveData<Boolean> isLoading;
 
-    @Inject
     public WeeklyScheduleViewModel(ScheduleRepository scheduleRepo) {
         schedule = Transformations.switchMap(refresh, scheduleRepo::loadWeeklySchedule);
         isEmpty = Transformations.map(schedule, schedule -> schedule == null || schedule.data == null || schedule.data.isEmpty());

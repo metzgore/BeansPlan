@@ -14,14 +14,6 @@
   url: https://github.com/mikepenz/Android-Iconics
   year: 2018
 
-- artifact: com.google.dagger:dagger:+
-  name: Dagger
-  copyrightHolder: Square, Inc
-  license: The Apache Software License, Version 2.0
-  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
-  url: https://github.com/google/dagger
-  year: 2016
-
 - artifact: com.vincentbrison.openlibraries.android:dualcache:+
   name: Dual Cache
   copyrightHolder: Vincent Brison

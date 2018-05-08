@@ -17,7 +17,7 @@ import de.metzgore.beansplan.baseschedule.RefreshableScheduleFragment;
 import de.metzgore.beansplan.data.Resource;
 import de.metzgore.beansplan.data.WeeklySchedule;
 import de.metzgore.beansplan.databinding.FragmentWeeklyScheduleBinding;
-import de.metzgore.beansplan.shared.ScheduleRepository;
+import de.metzgore.beansplan.shared.ScheduleRepositoryImpl;
 import de.metzgore.beansplan.util.DateFormatter;
 import de.metzgore.beansplan.util.di.WeeklyScheduleViewModelFactory;
 
@@ -52,9 +52,8 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
 
         weeklyScheduleAdapter = new WeeklySchedulePagerAdapter(getContext(), getChildFragmentManager());
 
-        //TODO dagger
         viewModel = ViewModelProviders.of(this,
-                new WeeklyScheduleViewModelFactory(new ScheduleRepository())).get(WeeklyScheduleViewModel.class);
+                new WeeklyScheduleViewModelFactory(new ScheduleRepositoryImpl())).get(WeeklyScheduleViewModel.class);
         subscribeUi(viewModel);
     }
 

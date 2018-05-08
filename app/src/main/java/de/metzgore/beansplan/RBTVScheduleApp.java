@@ -20,7 +20,6 @@ public class RBTVScheduleApp extends Application {
         LeakCanary.install(this);
     }
 
-    //TODO dagger
     public static Context getAppContext() {
         return mAppContext.getApplicationContext();
     }
