@@ -25,7 +25,7 @@ public class ScheduleViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     public DailyScheduleViewModel create(@NonNull Class modelClass) {
         if (dailySchedule != null)
-            return new DailyScheduleViewModel(Resource.success(dailySchedule, false));
+            return new DailyScheduleViewModel(Resource.Companion.success(dailySchedule, false));
         else
             return new DailyScheduleViewModel(repo);
     }

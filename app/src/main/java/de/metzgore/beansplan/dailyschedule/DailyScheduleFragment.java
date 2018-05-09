@@ -67,7 +67,7 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
     }
 
     private void subscribeUi(DailyScheduleViewModel viewModel) {
-        viewModel.getSchedule().observe(this, schedule -> dailyScheduleAdapter.setShowList(schedule.data.getShows()));
+        viewModel.getSchedule().observe(this, schedule -> dailyScheduleAdapter.setShowList(schedule.getData().getShows()));
     }
 
     @Nullable
@@ -90,7 +90,7 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
     @Override
     public void update(DailySchedule dailySchedule) {
         if (dailySchedule != null)
-            viewModel.setSchedule(Resource.success(dailySchedule, false));
+            viewModel.setSchedule(Resource.Companion.success(dailySchedule, false));
     }
 
     @Override

@@ -17,8 +17,10 @@ import de.metzgore.beansplan.baseschedule.RefreshableScheduleFragment;
 import de.metzgore.beansplan.data.Resource;
 import de.metzgore.beansplan.data.WeeklySchedule;
 import de.metzgore.beansplan.databinding.FragmentWeeklyScheduleBinding;
+import de.metzgore.beansplan.shared.ScheduleCacheImpl;
 import de.metzgore.beansplan.shared.ScheduleRepositoryImpl;
 import de.metzgore.beansplan.util.DateFormatter;
+import de.metzgore.beansplan.util.di.Injector;
 import de.metzgore.beansplan.util.di.WeeklyScheduleViewModelFactory;
 
 import java.util.Date;
@@ -50,32 +52,37 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
 
         setHasOptionsMenu(true);
 
-        weeklyScheduleAdapter = new WeeklySchedulePagerAdapter(getContext(), getChildFragmentManager());
+        weeklyScheduleAdapter = new WeeklySchedulePagerAdapter(getContext(),
+                getChildFragmentManager());
 
-        viewModel = ViewModelProviders.of(this,
-                new WeeklyScheduleViewModelFactory(new ScheduleRepositoryImpl())).get(WeeklyScheduleViewModel.class);
+        viewModel = ViewModelProviders.of(this, new WeeklyScheduleViewModelFactory(new
+                ScheduleRepositoryImpl(Injector.provideRBTVScheduleApi(), new ScheduleCacheImpl
+                (getContext()), Injector.provideAppExecutors()))).get(WeeklyScheduleViewModel
+                .class);
         subscribeUi(viewModel);
     }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle
-            savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_weekly_schedule, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_weekly_schedule, container,
+                false);
 
         binding.setLifecycleOwner(this);
         binding.setViewModel(viewModel);
 
-        binding.fragmentWeeklyScheduleViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
+        binding.fragmentWeeklyScheduleViewPager.setPageTransformer(true, new
+                ZoomOutPageTransformer());
         binding.fragmentWeeklyScheduleViewPager.setAdapter(weeklyScheduleAdapter);
         //TODO check if there is a better solution
         binding.fragmentWeeklyScheduleViewPager.setSaveFromParentEnabled(false);
-        binding.fragmentWeeklyScheduleViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener
-                (binding.fragmentWeeklyScheduleTabs) {
+        binding.fragmentWeeklyScheduleViewPager.addOnPageChangeListener(new TabLayout
+                .TabLayoutOnPageChangeListener(binding.fragmentWeeklyScheduleTabs) {
             @Override
             public void onPageScrollStateChanged(int state) {
-                enableDisableSwipeRefresh(binding.fragmentWeeklyScheduleSwipeRefresh.isRefreshing() || state ==
-                        ViewPager.SCROLL_STATE_IDLE);
+                enableDisableSwipeRefresh(binding.fragmentWeeklyScheduleSwipeRefresh.isRefreshing
+                        () || state == ViewPager.SCROLL_STATE_IDLE);
             }
 
             @Override
@@ -84,9 +91,10 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
             }
         });
 
-        binding.fragmentWeeklyScheduleSwipeRefresh.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color
-                .colorPrimary));
-        binding.fragmentWeeklyScheduleSwipeRefresh.setOnRefreshListener(() -> viewModel.loadScheduleFromNetwork());
+        binding.fragmentWeeklyScheduleSwipeRefresh.setColorSchemeColors(ContextCompat.getColor
+                (getContext(), R.color.colorPrimary));
+        binding.fragmentWeeklyScheduleSwipeRefresh.setOnRefreshListener(() -> viewModel
+                .loadScheduleFromNetwork());
 
         return binding.getRoot();
     }
@@ -151,7 +159,8 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
         if (positionOfCurrentDay >= 0 && positionOfCurrentDay < weeklyScheduleAdapter.getCount()) {
             binding.fragmentWeeklyScheduleViewPager.setCurrentItem(positionOfCurrentDay);
         } else {
-            Toast.makeText(getContext(), R.string.error_message_no_day_found, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.error_message_no_day_found, Toast.LENGTH_LONG)
+                    .show();
         }
     }
 
@@ -172,10 +181,11 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
 
             String subTitle = null;
 
-            if (schedule.data.getStartDate() != null && schedule.data.getEndDate() != null)
-                subTitle = getString(R.string.fragment_weekly_schedule_subtitle,
-                        DateFormatter.formatDate(getContext(), schedule.data.getStartDate()),
-                        DateFormatter.formatDate(getContext(), schedule.data.getEndDate()));
+            if (schedule.getData().getStartDate() != null && schedule.getData().getEndDate() !=
+                    null)
+                subTitle = getString(R.string.fragment_weekly_schedule_subtitle, DateFormatter
+                        .formatDate(getContext(), schedule.getData().getStartDate()),
+                        DateFormatter.formatDate(getContext(), schedule.getData().getEndDate()));
 
             getCallback().onSubTitleUpdated(subTitle);
 
@@ -189,7 +199,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
     }
 
     private void handleState(Resource<WeeklySchedule> schedule) {
-        switch (schedule.status) {
+        switch (schedule.getStatus()) {
             case LOADING:
                 showRefreshIndicator(true);
                 hideSnackbar();
@@ -207,14 +217,14 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
 
     public void showRefreshIndicator(final boolean isRefreshing) {
         if (binding != null) {
-            binding.fragmentWeeklyScheduleSwipeRefresh.post(() -> binding.fragmentWeeklyScheduleSwipeRefresh
-                    .setRefreshing(isRefreshing));
+            binding.fragmentWeeklyScheduleSwipeRefresh.post(() -> binding
+                    .fragmentWeeklyScheduleSwipeRefresh.setRefreshing(isRefreshing));
         }
     }
 
     public void showRetrySnackbar() {
-        snackbar = Snackbar.make(getView(), R.string.error_message_weekly_schedule_loading_failed, Snackbar
-                .LENGTH_INDEFINITE)
+        snackbar = Snackbar.make(getView(), R.string
+                .error_message_weekly_schedule_loading_failed, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.action_retry, view -> viewModel.loadScheduleFromNetwork());
         snackbar.show();
     }
@@ -252,9 +262,8 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
                 view.setScaleY(scaleFactor);
 
                 // Fade the page relative to its size.
-                view.setAlpha(MIN_ALPHA +
-                        (scaleFactor - MIN_SCALE) /
-                                (1 - MIN_SCALE) * (1 - MIN_ALPHA));
+                view.setAlpha(MIN_ALPHA + (scaleFactor - MIN_SCALE) / (1 - MIN_SCALE) * (1 -
+                        MIN_ALPHA));
 
             } else { // (1,+Infinity]
                 // This page is way off-screen to the right.

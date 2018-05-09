@@ -21,8 +21,10 @@ import de.metzgore.beansplan.baseschedule.RefreshableScheduleFragment;
 import de.metzgore.beansplan.data.DailySchedule;
 import de.metzgore.beansplan.data.Resource;
 import de.metzgore.beansplan.databinding.FragmentDailyScheduleBinding;
+import de.metzgore.beansplan.shared.ScheduleCacheImpl;
 import de.metzgore.beansplan.shared.ScheduleRepositoryImpl;
 import de.metzgore.beansplan.util.DateFormatter;
+import de.metzgore.beansplan.util.di.Injector;
 import de.metzgore.beansplan.util.di.ScheduleViewModelFactory;
 
 public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragment {
@@ -45,8 +47,9 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
 
         dailyScheduleAdapter = new DailyScheduleAdapter();
 
-        viewModel = ViewModelProviders.of(this,
-                new ScheduleViewModelFactory(new ScheduleRepositoryImpl())).get(DailyScheduleViewModel.class);
+        viewModel = ViewModelProviders.of(this, new ScheduleViewModelFactory(new
+                ScheduleRepositoryImpl(Injector.provideRBTVScheduleApi(), new ScheduleCacheImpl
+                (getContext()), Injector.provideAppExecutors()))).get(DailyScheduleViewModel.class);
         subscribeUi(viewModel);
     }
 
@@ -54,18 +57,20 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_daily_schedule, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_daily_schedule, container,
+                false);
 
         binding.setLifecycleOwner(this);
         binding.setViewModel(viewModel);
 
-        binding.singleDayIncluded.showsList.addItemDecoration(new DividerItemDecoration(getActivity(),
-                DividerItemDecoration.VERTICAL));
+        binding.singleDayIncluded.showsList.addItemDecoration(new DividerItemDecoration
+                (getActivity(), DividerItemDecoration.VERTICAL));
         binding.singleDayIncluded.showsList.setItemAnimator(null);
         binding.singleDayIncluded.showsList.setHasFixedSize(true);
 
         binding.swipeRefresh.setOnRefreshListener(() -> viewModel.loadScheduleFromNetwork());
-        binding.swipeRefresh.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        binding.swipeRefresh.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color
+                .colorPrimary));
 
         binding.singleDayIncluded.showsList.setAdapter(dailyScheduleAdapter);
 
@@ -117,20 +122,21 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
     }
 
     private void handleData(Resource<DailySchedule> schedule) {
-        if (schedule.data != null) {
-            dailyScheduleAdapter.setShowList(schedule.data.getShows());
+        if (schedule.getData() != null) {
+            dailyScheduleAdapter.setShowList(schedule.getData().getShows());
 
             String subTitle = null;
 
-            if (schedule.data.getDate() != null)
-                subTitle = getString(R.string.fragment_daily_schedule_subtitle, DateFormatter.formatDate(getContext(), schedule.data.getDate()));
+            if (schedule.getData().getDate() != null)
+                subTitle = getString(R.string.fragment_daily_schedule_subtitle, DateFormatter
+                        .formatDate(getContext(), schedule.getData().getDate()));
 
             getCallback().onSubTitleUpdated(subTitle);
         }
     }
 
     private void handleState(Resource<DailySchedule> schedule) {
-        switch (schedule.status) {
+        switch (schedule.getStatus()) {
             case LOADING:
                 showRefreshIndicator(true);
                 hideSnackbar();
@@ -153,8 +159,9 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
     }
 
     public void showRetrySnackbar() {
-        snackbar = Snackbar.make(getView(), R.string.error_message_daily_schedule_loading_failed, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.action_retry, view -> viewModel.loadScheduleFromNetwork());
+        snackbar = Snackbar.make(getView(), R.string.error_message_daily_schedule_loading_failed,
+                Snackbar.LENGTH_INDEFINITE).setAction(R.string.action_retry, view -> viewModel
+                .loadScheduleFromNetwork());
         snackbar.show();
     }
 

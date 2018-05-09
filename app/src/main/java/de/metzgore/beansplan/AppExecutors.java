@@ -9,6 +9,8 @@ import java.util.concurrent.Executors;
 
 public class AppExecutors {
 
+    private static final int THREAD_COUNT = 3;
+
     private final Executor diskIO;
 
     private final Executor networkIO;
@@ -22,8 +24,8 @@ public class AppExecutors {
     }
 
     public AppExecutors() {
-        this(Executors.newSingleThreadExecutor(), Executors.newFixedThreadPool(3),
-                new MainThreadExecutor());
+        this(Executors.newSingleThreadExecutor(), Executors.newFixedThreadPool(THREAD_COUNT), new
+                MainThreadExecutor());
     }
 
     public Executor diskIO() {
@@ -39,7 +41,7 @@ public class AppExecutors {
     }
 
     private static class MainThreadExecutor implements Executor {
-        private Handler mainThreadHandler = new Handler(Looper.getMainLooper());
+        private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
 
         @Override
         public void execute(@NonNull Runnable command) {

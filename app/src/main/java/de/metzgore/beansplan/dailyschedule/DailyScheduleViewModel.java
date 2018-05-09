@@ -17,8 +17,9 @@ public class DailyScheduleViewModel extends ViewModel implements IScheduleViewMo
     private final MutableLiveData<Boolean> refresh = new MutableLiveData<>();
     private final MutableLiveData<Resource<DailySchedule>> schedule = new MutableLiveData<>();
     private final MediatorLiveData<Resource<DailySchedule>> scheduleMerger = new MediatorLiveData<>();
-    public LiveData<Boolean> isEmpty = Transformations.map(scheduleMerger, schedule -> schedule == null || schedule.data == null || schedule.data.isEmpty());
-    public LiveData<Boolean> isLoading = Transformations.map(scheduleMerger, schedule -> schedule.status == Status.LOADING);
+    public LiveData<Boolean> isEmpty = Transformations.map(scheduleMerger, schedule -> schedule == null || schedule.getData() == null || schedule.getData().isEmpty());
+    public LiveData<Boolean> isLoading = Transformations.map(scheduleMerger, schedule -> schedule
+            .getStatus() == Status.LOADING);
 
     public DailyScheduleViewModel(ScheduleRepository scheduleRepo) {
         LiveData<Resource<DailySchedule>> scheduleFromRepo = Transformations.switchMap(refresh, scheduleRepo::loadScheduleOfToday);

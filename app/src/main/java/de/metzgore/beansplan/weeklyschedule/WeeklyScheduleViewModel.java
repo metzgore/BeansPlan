@@ -20,8 +20,8 @@ public class WeeklyScheduleViewModel extends ViewModel implements IScheduleViewM
 
     public WeeklyScheduleViewModel(ScheduleRepository scheduleRepo) {
         schedule = Transformations.switchMap(refresh, scheduleRepo::loadWeeklySchedule);
-        isEmpty = Transformations.map(schedule, schedule -> schedule == null || schedule.data == null || schedule.data.isEmpty());
-        isLoading = Transformations.map(schedule, schedule -> schedule.status == Status.LOADING);
+        isEmpty = Transformations.map(schedule, schedule -> schedule == null || schedule.getData() == null || schedule.getData().isEmpty());
+        isLoading = Transformations.map(schedule, schedule -> schedule.getStatus() == Status.LOADING);
     }
 
     @Override

@@ -5,53 +5,34 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.vincentbrison.openlibraries.android.dualcache.Builder;
-import com.vincentbrison.openlibraries.android.dualcache.DualCache;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import de.metzgore.beansplan.AppExecutors;
-import de.metzgore.beansplan.RBTVScheduleApp;
 import de.metzgore.beansplan.api.ApiResponse;
 import de.metzgore.beansplan.api.RBTVScheduleApi;
 import de.metzgore.beansplan.data.DailySchedule;
 import de.metzgore.beansplan.data.Resource;
 import de.metzgore.beansplan.data.WeeklySchedule;
-import de.metzgore.beansplan.util.GsonSerializer;
 import de.metzgore.beansplan.util.NetworkBoundResource;
-import de.metzgore.beansplan.util.di.Injector;
 
 public class ScheduleRepositoryImpl implements ScheduleRepository {
 
     private final String TAG = ScheduleRepositoryImpl.class.getSimpleName();
-    private static final String DAILY_SCHEDULE_KEY = "daily_schedule_key";
-    private static final String WEEKLY_SCHEDULE_KEY = "weekly_schedule_key";
 
     private final RBTVScheduleApi api;
+    private final ScheduleCache cache;
     private final AppExecutors appExecutors;
-    private DualCache<DailySchedule> scheduleCache;
-    private DualCache<WeeklySchedule> weeklyScheduleCache;
     private MutableLiveData<DailySchedule> scheduleCacheData = new MutableLiveData<>();
     private MutableLiveData<WeeklySchedule> weeklyScheduleCacheData = new MutableLiveData<>();
 
-    public ScheduleRepositoryImpl(/*RBTVScheduleApi api, AppExecutors appExecutors*/) {
-        api = Injector.provideRBTVScheduleApi();
-        this.appExecutors = new AppExecutors();
-
-        scheduleCache = new Builder<DailySchedule>(DAILY_SCHEDULE_KEY, 1)
-                .enableLog()
-                .useSerializerInRam(1000000, new GsonSerializer<>(DailySchedule.class))
-                .useSerializerInDisk(1000000, true, new GsonSerializer<>(DailySchedule.class), RBTVScheduleApp.getAppContext())
-                .build();
-
-        weeklyScheduleCache = new Builder<WeeklySchedule>(WEEKLY_SCHEDULE_KEY, 1)
-                .enableLog()
-                .useSerializerInRam(1000000, new GsonSerializer<>(WeeklySchedule.class))
-                .useSerializerInDisk(1000000, true, new GsonSerializer<>(WeeklySchedule.class), RBTVScheduleApp.getAppContext())
-                .build();
+    public ScheduleRepositoryImpl(final RBTVScheduleApi api, final ScheduleCache cache, final
+    AppExecutors appExecutors) {
+        this.api = api;
+        this.cache = cache;
+        this.appExecutors = appExecutors;
     }
 
     @Override
@@ -66,7 +47,8 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         return loadScheduleOfDay(forceRefresh, year, month, day);
     }
 
-    private LiveData<Resource<DailySchedule>> loadScheduleOfDay(boolean forceRefresh, int year, int month, int day) {
+    private LiveData<Resource<DailySchedule>> loadScheduleOfDay(boolean forceRefresh, int year,
+                                                                int month, int day) {
         String formattedDay = formatDoubleDigit(day);
         String formattedMonth = formatDoubleDigit(month);
 
@@ -75,7 +57,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
             protected void saveCallResult(@NonNull DailySchedule item) {
                 //TODO check preSerialize
                 item.updateTimestamp();
-                scheduleCache.put(DAILY_SCHEDULE_KEY, item);
+                cache.saveDailySchedule(item);
             }
 
             @Override
@@ -86,7 +68,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
             @NonNull
             @Override
             protected LiveData<DailySchedule> loadFromDb() {
-                scheduleCacheData.setValue(scheduleCache.get(DAILY_SCHEDULE_KEY));
+                scheduleCacheData.setValue(cache.getDailySchedule());
                 return scheduleCacheData;
             }
 
@@ -100,12 +82,13 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 
     @Override
     public LiveData<Resource<WeeklySchedule>> loadWeeklySchedule(boolean forceRefresh) {
-        return new NetworkBoundResource<WeeklySchedule, WeeklySchedule>(appExecutors, forceRefresh) {
+        return new NetworkBoundResource<WeeklySchedule, WeeklySchedule>(appExecutors,
+                forceRefresh) {
             @Override
             protected void saveCallResult(@NonNull WeeklySchedule item) {
                 //TODO check preSerialize
                 item.updateTimestamp();
-                weeklyScheduleCache.put(WEEKLY_SCHEDULE_KEY, item);
+                cache.saveWeeklySchedule(item);
             }
 
             @Override
@@ -116,7 +99,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
             @NonNull
             @Override
             protected LiveData<WeeklySchedule> loadFromDb() {
-                weeklyScheduleCacheData.setValue(weeklyScheduleCache.get(WEEKLY_SCHEDULE_KEY));
+                weeklyScheduleCacheData.setValue(cache.getWeeklySchedule());
                 return weeklyScheduleCacheData;
             }
 
