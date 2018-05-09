@@ -3,7 +3,7 @@ package de.metzgore.beansplan.util.di;
 import com.google.gson.Gson;
 
 import de.metzgore.beansplan.AppExecutors;
-import de.metzgore.beansplan.api.RBTVScheduleApi;
+import de.metzgore.beansplan.api.RbtvScheduleApi;
 import de.metzgore.beansplan.data.DailySchedule;
 import de.metzgore.beansplan.data.Show;
 import de.metzgore.beansplan.data.WeeklySchedule;
@@ -18,8 +18,8 @@ public class Injector {
         return new AppExecutors();
     }
 
-    public static RBTVScheduleApi provideRBTVScheduleApi() {
-        return provideRetrofit().create(RBTVScheduleApi.class);
+    public static RbtvScheduleApi provideRbtvScheduleApi() {
+        return provideRetrofit().create(RbtvScheduleApi.class);
     }
 
     private static Retrofit provideRetrofit() {

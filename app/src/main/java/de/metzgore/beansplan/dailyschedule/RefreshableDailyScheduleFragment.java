@@ -48,7 +48,7 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
         dailyScheduleAdapter = new DailyScheduleAdapter();
 
         viewModel = ViewModelProviders.of(this, new ScheduleViewModelFactory(new
-                ScheduleRepositoryImpl(Injector.provideRBTVScheduleApi(), new ScheduleCacheImpl
+                ScheduleRepositoryImpl(Injector.provideRbtvScheduleApi(), new ScheduleCacheImpl
                 (getContext()), Injector.provideAppExecutors()))).get(DailyScheduleViewModel.class);
         subscribeUi(viewModel);
     }

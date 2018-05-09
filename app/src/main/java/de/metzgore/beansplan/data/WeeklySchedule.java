@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -29,7 +28,7 @@ public class WeeklySchedule extends BaseSchedule {
         return weeklySchedule;
     }
 
-    public boolean hasSchedule(Date key) {
+    public boolean hasDailySchedule(Date key) {
         return weeklySchedule.containsKey(key);
     }
 
@@ -54,20 +53,12 @@ public class WeeklySchedule extends BaseSchedule {
     }
 
     public int getPositionOfCurrentDay() {
-        Date today = getCurrentDate();
-        Date[] dates = getKeysAsDate();
-
-        for (int i = 0; i < dates.length; i++) {
-            if (dates[i].equals(today))
-                return i;
-        }
-
-        return -1;
+        return getDateKeys().indexOf(getCurrentDate());
     }
 
     public boolean containsScheduleForCurrentDay() {
         Date today = getCurrentDate();
-        Date[] dates = getKeysAsDate();
+        List<Date> dates = getDateKeys();
 
         for (Date date : dates) {
             if (date.equals(today))
@@ -105,7 +96,7 @@ public class WeeklySchedule extends BaseSchedule {
         return calendar.getTime();
     }
 
-    public void removePastShows() {
+    /*public void removePastShows() {
         removePastDays();
 
         Date today = getCurrentDate();
@@ -132,11 +123,7 @@ public class WeeklySchedule extends BaseSchedule {
             if (date.before(today))
                 weeklySchedule.remove(date);
         }
-    }
-
-    private Date[] getKeysAsDate() {
-        return weeklySchedule.keySet().toArray(new Date[weeklySchedule.size()]);
-    }
+    }*/
 
     @Override
     public String toString() {
@@ -154,12 +141,15 @@ public class WeeklySchedule extends BaseSchedule {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof WeeklySchedule)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof WeeklySchedule))
+            return false;
 
         WeeklySchedule that = (WeeklySchedule) o;
 
-        return weeklySchedule != null ? weeklySchedule.equals(that.weeklySchedule) : that.weeklySchedule == null;
+        return weeklySchedule != null ? weeklySchedule.equals(that.weeklySchedule) : that
+                .weeklySchedule == null;
     }
 
     @Override

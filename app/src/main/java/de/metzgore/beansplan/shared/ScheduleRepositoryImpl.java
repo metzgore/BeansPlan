@@ -12,7 +12,7 @@ import java.util.Locale;
 
 import de.metzgore.beansplan.AppExecutors;
 import de.metzgore.beansplan.api.ApiResponse;
-import de.metzgore.beansplan.api.RBTVScheduleApi;
+import de.metzgore.beansplan.api.RbtvScheduleApi;
 import de.metzgore.beansplan.data.DailySchedule;
 import de.metzgore.beansplan.data.Resource;
 import de.metzgore.beansplan.data.WeeklySchedule;
@@ -22,13 +22,13 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 
     private final String TAG = ScheduleRepositoryImpl.class.getSimpleName();
 
-    private final RBTVScheduleApi api;
+    private final RbtvScheduleApi api;
     private final ScheduleCache cache;
     private final AppExecutors appExecutors;
     private MutableLiveData<DailySchedule> scheduleCacheData = new MutableLiveData<>();
     private MutableLiveData<WeeklySchedule> weeklyScheduleCacheData = new MutableLiveData<>();
 
-    public ScheduleRepositoryImpl(final RBTVScheduleApi api, final ScheduleCache cache, final
+    public ScheduleRepositoryImpl(final RbtvScheduleApi api, final ScheduleCache cache, final
     AppExecutors appExecutors) {
         this.api = api;
         this.cache = cache;

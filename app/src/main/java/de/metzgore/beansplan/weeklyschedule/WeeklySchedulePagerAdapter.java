@@ -54,7 +54,7 @@ class WeeklySchedulePagerAdapter extends PagerAdapter {
         if (object instanceof UpdatableScheduleFragment) {
             UpdatableScheduleFragment fragment = (UpdatableScheduleFragment) object;
             Date dateKey = fragment.getDateKey();
-            if (weeklySchedule.hasSchedule(dateKey)) {
+            if (weeklySchedule.hasDailySchedule(dateKey)) {
                 fragment.update(weeklySchedule.getDailySchedule(dateKey));
                 return dateKeys.indexOf(dateKey);
             } else {

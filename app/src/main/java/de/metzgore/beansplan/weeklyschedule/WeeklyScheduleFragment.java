@@ -56,7 +56,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
                 getChildFragmentManager());
 
         viewModel = ViewModelProviders.of(this, new WeeklyScheduleViewModelFactory(new
-                ScheduleRepositoryImpl(Injector.provideRBTVScheduleApi(), new ScheduleCacheImpl
+                ScheduleRepositoryImpl(Injector.provideRbtvScheduleApi(), new ScheduleCacheImpl
                 (getContext()), Injector.provideAppExecutors()))).get(WeeklyScheduleViewModel
                 .class);
         subscribeUi(viewModel);
