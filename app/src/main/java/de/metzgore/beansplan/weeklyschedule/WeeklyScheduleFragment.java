@@ -55,7 +55,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
 
         viewModel = ViewModelProviders.of(this, new WeeklyScheduleViewModelFactory(new
                 WeeklyScheduleRepository(Injector.provideRbtvScheduleApi(), new
-                WeeklyScheduleDaoImpl(getContext()), Injector.provideAppExecutors()))).get
+                WeeklyScheduleDaoImpl(getContext(), false), Injector.provideAppExecutors()))).get
                 (WeeklyScheduleViewModel.class);
         subscribeUi(viewModel);
     }
@@ -182,7 +182,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
             if (schedule.getData().getStartDate() != null && schedule.getData().getEndDate() !=
                     null)
                 subTitle = getString(R.string.fragment_weekly_schedule_subtitle, DateFormatter
-                        .formatDate(getContext(), schedule.getData().getStartDate()),
+                                .formatDate(getContext(), schedule.getData().getStartDate()),
                         DateFormatter.formatDate(getContext(), schedule.getData().getEndDate()));
 
             getCallback().onSubTitleUpdated(subTitle);

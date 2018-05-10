@@ -16,8 +16,8 @@ import de.metzgore.beansplan.data.DailySchedule;
 import de.metzgore.beansplan.data.Resource;
 import de.metzgore.beansplan.databinding.FragmentDailyScheduleBinding;
 import de.metzgore.beansplan.util.DateFormatter;
-import de.metzgore.beansplan.util.di.Injector;
 import de.metzgore.beansplan.util.di.DailyScheduleViewModelFactory;
+import de.metzgore.beansplan.util.di.Injector;
 
 public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragment {
 
@@ -41,7 +41,7 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
 
         viewModel = ViewModelProviders.of(this, new DailyScheduleViewModelFactory(new
                 DailyScheduleRepository(Injector.provideRbtvScheduleApi(), new
-                DailyScheduleDaoImpl(getContext()), Injector.provideAppExecutors()))).get
+                DailyScheduleDaoImpl(getContext(), false), Injector.provideAppExecutors()))).get
                 (DailyScheduleViewModel.class);
         subscribeUi(viewModel);
     }
