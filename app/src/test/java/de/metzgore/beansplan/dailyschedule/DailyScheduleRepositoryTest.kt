@@ -7,7 +7,7 @@ import de.metzgore.beansplan.data.DailySchedule
 import de.metzgore.beansplan.data.Resource
 import de.metzgore.beansplan.shared.DailyScheduleDao
 import de.metzgore.beansplan.util.ApiUtil
-import de.metzgore.beansplan.util.GsonSerializer
+import de.metzgore.beansplan.util.di.Injector
 import de.metzgore.beansplan.utils.InstantAppExecutors
 import de.metzgore.beansplan.utils.mock
 import okio.Okio
@@ -38,8 +38,8 @@ class DailyScheduleRepositoryTest {
                 .getResourceAsStream("api-response/daily_schedule.json")
         val source = Okio.buffer(Okio.source(inputStream))
 
-        val dbData = GsonSerializer<DailySchedule>(DailySchedule::class.java).fromString(source.readUtf8())
-        `when`(scheduleDao!!.get()).thenReturn(dbData)
+        val cacheData = Injector.provideGson().fromJson(source.readUtf8(), DailySchedule::class.java)
+        `when`(scheduleDao!!.get()).thenReturn(cacheData)
 
         val schedule = DailySchedule()
         val call = ApiUtil.successCall(schedule)
@@ -64,8 +64,8 @@ class DailyScheduleRepositoryTest {
                 .getResourceAsStream("api-response/daily_schedule.json")
         val source = Okio.buffer(Okio.source(inputStream))
 
-        val dbData = GsonSerializer<DailySchedule>(DailySchedule::class.java).fromString(source.readUtf8())
-        `when`(scheduleDao!!.get()).thenReturn(dbData)
+        val cacheData = Injector.provideGson().fromJson(source.readUtf8(), DailySchedule::class.java)
+        `when`(scheduleDao!!.get()).thenReturn(cacheData)
 
         val schedule = DailySchedule()
         val call = ApiUtil.successCall(schedule)
@@ -98,8 +98,8 @@ class DailyScheduleRepositoryTest {
                 .getResourceAsStream("api-response/daily_schedule.json")
         val source = Okio.buffer(Okio.source(inputStream))
 
-        val dbData = GsonSerializer<DailySchedule>(DailySchedule::class.java).fromString(source.readUtf8())
-        `when`(scheduleDao!!.get()).thenReturn(dbData)
+        val cacheData = Injector.provideGson().fromJson(source.readUtf8(), DailySchedule::class.java)
+        `when`(scheduleDao!!.get()).thenReturn(cacheData)
 
         val schedule = DailySchedule()
         val call = ApiUtil.successCall(schedule)
