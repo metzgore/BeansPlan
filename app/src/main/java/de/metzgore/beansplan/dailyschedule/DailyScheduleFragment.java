@@ -18,7 +18,7 @@ import de.metzgore.beansplan.data.DailySchedule;
 import de.metzgore.beansplan.data.Resource;
 import de.metzgore.beansplan.databinding.LayoutScheduleBaseBinding;
 import de.metzgore.beansplan.shared.UpdatableScheduleFragment;
-import de.metzgore.beansplan.util.di.ScheduleViewModelFactory;
+import de.metzgore.beansplan.util.di.DailyScheduleViewModelFactory;
 
 public class DailyScheduleFragment extends Fragment implements UpdatableScheduleFragment {
 
@@ -61,7 +61,7 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
         }
 
         viewModel = ViewModelProviders.of(this,
-                new ScheduleViewModelFactory(dailySchedule)).get(DailyScheduleViewModel.class);
+                new DailyScheduleViewModelFactory(dailySchedule)).get(DailyScheduleViewModel.class);
 
         subscribeUi(viewModel);
     }

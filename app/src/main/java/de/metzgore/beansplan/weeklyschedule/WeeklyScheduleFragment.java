@@ -17,8 +17,6 @@ import de.metzgore.beansplan.baseschedule.RefreshableScheduleFragment;
 import de.metzgore.beansplan.data.Resource;
 import de.metzgore.beansplan.data.WeeklySchedule;
 import de.metzgore.beansplan.databinding.FragmentWeeklyScheduleBinding;
-import de.metzgore.beansplan.shared.ScheduleCacheImpl;
-import de.metzgore.beansplan.shared.ScheduleRepositoryImpl;
 import de.metzgore.beansplan.util.DateFormatter;
 import de.metzgore.beansplan.util.di.Injector;
 import de.metzgore.beansplan.util.di.WeeklyScheduleViewModelFactory;
@@ -56,9 +54,9 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
                 getChildFragmentManager());
 
         viewModel = ViewModelProviders.of(this, new WeeklyScheduleViewModelFactory(new
-                ScheduleRepositoryImpl(Injector.provideRbtvScheduleApi(), new ScheduleCacheImpl
-                (getContext()), Injector.provideAppExecutors()))).get(WeeklyScheduleViewModel
-                .class);
+                WeeklyScheduleRepository(Injector.provideRbtvScheduleApi(), new
+                WeeklyScheduleDaoImpl(getContext()), Injector.provideAppExecutors()))).get
+                (WeeklyScheduleViewModel.class);
         subscribeUi(viewModel);
     }
 

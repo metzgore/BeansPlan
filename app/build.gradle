@@ -1,7 +1,13 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-allopen'
 apply plugin: 'com.cookpad.android.licensetools'
+
+allOpen {
+    // allows mocking for classes w/o directly opening them for release builds
+    annotation 'de.metzgore.beansplan.OpenClass'
+}
 
 android {
     compileSdkVersion 27
@@ -76,4 +82,11 @@ dependencies {
     implementation "com.mikepenz:iconics-core:3.0.3@aar"
 
     implementation 'com.mikepenz:community-material-typeface:2.0.46.1@aar'
+}
+
+// we need all open to run tests which  a we enable only for debug builds.
+project.tasks.whenTaskAdded {
+    if (it.name == "testReleaseUnitTest") {
+        it.enabled = false
+    }
 }

@@ -3,7 +3,6 @@ package de.metzgore.beansplan.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -17,7 +16,7 @@ public class DailySchedule extends BaseSchedule implements Parcelable {
     @Expose
     private List<Show> shows;
 
-    DailySchedule(List<Show> shows) {
+    public DailySchedule(List<Show> shows) {
         this.shows = shows;
     }
 

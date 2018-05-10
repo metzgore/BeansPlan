@@ -11,17 +11,20 @@ import de.metzgore.beansplan.data.WeeklySchedule;
 import de.metzgore.beansplan.shared.IScheduleViewModel;
 import de.metzgore.beansplan.shared.ScheduleRepository;
 
-public class WeeklyScheduleViewModel extends ViewModel implements IScheduleViewModel<WeeklySchedule> {
+public class WeeklyScheduleViewModel extends ViewModel implements
+        IScheduleViewModel<WeeklySchedule> {
 
     private final MutableLiveData<Boolean> refresh = new MutableLiveData<>();
     private final LiveData<Resource<WeeklySchedule>> schedule;
     public final LiveData<Boolean> isEmpty;
     public final LiveData<Boolean> isLoading;
 
-    public WeeklyScheduleViewModel(ScheduleRepository scheduleRepo) {
-        schedule = Transformations.switchMap(refresh, scheduleRepo::loadWeeklySchedule);
-        isEmpty = Transformations.map(schedule, schedule -> schedule == null || schedule.getData() == null || schedule.getData().isEmpty());
-        isLoading = Transformations.map(schedule, schedule -> schedule.getStatus() == Status.LOADING);
+    public WeeklyScheduleViewModel(ScheduleRepository<WeeklySchedule> scheduleRepo) {
+        schedule = Transformations.switchMap(refresh, scheduleRepo::loadSchedule);
+        isEmpty = Transformations.map(schedule, schedule -> schedule == null || schedule.getData
+                () == null || schedule.getData().isEmpty());
+        isLoading = Transformations.map(schedule, schedule -> schedule.getStatus() == Status
+                .LOADING);
     }
 
     @Override

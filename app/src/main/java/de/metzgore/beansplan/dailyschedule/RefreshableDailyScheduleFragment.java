@@ -9,23 +9,15 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
+import android.view.*;
 import de.metzgore.beansplan.R;
 import de.metzgore.beansplan.baseschedule.RefreshableScheduleFragment;
 import de.metzgore.beansplan.data.DailySchedule;
 import de.metzgore.beansplan.data.Resource;
 import de.metzgore.beansplan.databinding.FragmentDailyScheduleBinding;
-import de.metzgore.beansplan.shared.ScheduleCacheImpl;
-import de.metzgore.beansplan.shared.ScheduleRepositoryImpl;
 import de.metzgore.beansplan.util.DateFormatter;
 import de.metzgore.beansplan.util.di.Injector;
-import de.metzgore.beansplan.util.di.ScheduleViewModelFactory;
+import de.metzgore.beansplan.util.di.DailyScheduleViewModelFactory;
 
 public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragment {
 
@@ -47,9 +39,10 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
 
         dailyScheduleAdapter = new DailyScheduleAdapter();
 
-        viewModel = ViewModelProviders.of(this, new ScheduleViewModelFactory(new
-                ScheduleRepositoryImpl(Injector.provideRbtvScheduleApi(), new ScheduleCacheImpl
-                (getContext()), Injector.provideAppExecutors()))).get(DailyScheduleViewModel.class);
+        viewModel = ViewModelProviders.of(this, new DailyScheduleViewModelFactory(new
+                DailyScheduleRepository(Injector.provideRbtvScheduleApi(), new
+                DailyScheduleDaoImpl(getContext()), Injector.provideAppExecutors()))).get
+                (DailyScheduleViewModel.class);
         subscribeUi(viewModel);
     }
 
