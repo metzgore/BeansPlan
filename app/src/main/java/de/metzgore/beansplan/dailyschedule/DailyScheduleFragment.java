@@ -10,15 +10,13 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.Date;
-
 import de.metzgore.beansplan.R;
 import de.metzgore.beansplan.data.DailySchedule;
-import de.metzgore.beansplan.data.Resource;
 import de.metzgore.beansplan.databinding.LayoutScheduleBaseBinding;
 import de.metzgore.beansplan.shared.UpdatableScheduleFragment;
 import de.metzgore.beansplan.util.di.DailyScheduleViewModelFactory;
+
+import java.util.Date;
 
 public class DailyScheduleFragment extends Fragment implements UpdatableScheduleFragment {
 
@@ -67,14 +65,16 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
     }
 
     private void subscribeUi(DailyScheduleViewModel viewModel) {
-        viewModel.getSchedule().observe(this, schedule -> dailyScheduleAdapter.setShowList(schedule.getData().getShows()));
+        viewModel.getSchedule().observe(this, schedule -> dailyScheduleAdapter.setShowList(schedule.getData()
+                .getShows()));
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        LayoutScheduleBaseBinding binding = DataBindingUtil.inflate(inflater, R.layout.layout_schedule_base, container, false);
+        LayoutScheduleBaseBinding binding = DataBindingUtil.inflate(inflater, R.layout.layout_schedule_base,
+                container, false);
 
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
@@ -90,7 +90,7 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
     @Override
     public void update(DailySchedule dailySchedule) {
         if (dailySchedule != null)
-            viewModel.setSchedule(Resource.Companion.success(dailySchedule, false));
+            viewModel.setSchedule(dailySchedule);
     }
 
     @Override

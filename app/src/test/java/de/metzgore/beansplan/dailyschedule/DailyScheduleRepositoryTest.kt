@@ -9,7 +9,7 @@ import de.metzgore.beansplan.data.Resource
 import de.metzgore.beansplan.shared.DailyScheduleDao
 import de.metzgore.beansplan.util.ApiUtil
 import de.metzgore.beansplan.utils.InstantAppExecutors
-import de.metzgore.beansplan.utils.mock
+import de.metzgore.beansplan.mock
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.*

@@ -1,4 +1,4 @@
-package de.metzgore.beansplan.utils
+package de.metzgore.beansplan
 
 import org.mockito.Mockito
 

@@ -5,7 +5,7 @@ import de.metzgore.beansplan.data.DailySchedule
 import de.metzgore.beansplan.data.WeeklySchedule
 import de.metzgore.beansplan.util.LiveDataCallAdapterFactory
 import de.metzgore.beansplan.util.di.Injector
-import de.metzgore.beansplan.utils.LiveDataTestUtil.getValue
+import de.metzgore.beansplan.LiveDataTestUtil.getValue
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okio.Okio

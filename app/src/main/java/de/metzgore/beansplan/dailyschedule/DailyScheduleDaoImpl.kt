@@ -5,10 +5,8 @@ import com.vincentbrison.openlibraries.android.dualcache.Builder
 import com.vincentbrison.openlibraries.android.dualcache.DualCache
 import de.metzgore.beansplan.data.DailySchedule
 import de.metzgore.beansplan.shared.DailyScheduleDao
-import de.metzgore.beansplan.testing.OpenForTesting
 import de.metzgore.beansplan.util.GsonSerializer
 
-@OpenForTesting
 class DailyScheduleDaoImpl(context: Context, cacheOnly: Boolean = false) : DailyScheduleDao {
 
     private var dailyScheduleCache: DualCache<DailySchedule> = if (cacheOnly) {

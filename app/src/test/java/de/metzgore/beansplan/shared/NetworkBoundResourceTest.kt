@@ -10,7 +10,7 @@ import de.metzgore.beansplan.util.ApiUtil
 import de.metzgore.beansplan.util.NetworkBoundResource
 import de.metzgore.beansplan.utils.CountingAppExecutors
 import de.metzgore.beansplan.utils.InstantAppExecutors
-import de.metzgore.beansplan.utils.mock
+import de.metzgore.beansplan.mock
 import okhttp3.MediaType
 import okhttp3.ResponseBody
 import org.hamcrest.CoreMatchers.`is`

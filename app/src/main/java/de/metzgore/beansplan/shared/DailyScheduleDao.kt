@@ -3,7 +3,6 @@ package de.metzgore.beansplan.shared
 import de.metzgore.beansplan.data.DailySchedule
 import de.metzgore.beansplan.testing.OpenForTesting
 
-@OpenForTesting
 interface DailyScheduleDao {
 
     fun save(item: DailySchedule?)

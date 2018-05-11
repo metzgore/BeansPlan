@@ -23,9 +23,10 @@ public class DailyScheduleViewModel extends ViewModel implements IScheduleViewMo
         scheduleMerger.addSource(scheduleFromRepo, scheduleMerger::setValue);
     }
 
-    public DailyScheduleViewModel(Resource<DailySchedule> scheduleResource) {
+    //TODO refactoring?
+    public DailyScheduleViewModel(DailySchedule dailySchedule) {
         scheduleMerger.addSource(schedule, scheduleMerger::setValue);
-        this.schedule.setValue(scheduleResource);
+        setSchedule(dailySchedule);
     }
 
     public LiveData<Resource<DailySchedule>> getSchedule() {
@@ -42,7 +43,7 @@ public class DailyScheduleViewModel extends ViewModel implements IScheduleViewMo
         refresh.setValue(isEmpty.getValue() == null || isEmpty.getValue());
     }
 
-    public void setSchedule(Resource<DailySchedule> scheduleResource) {
-        schedule.setValue(scheduleResource);
+    public void setSchedule(DailySchedule dailySchedule) {
+        schedule.setValue(Resource.Companion.success(dailySchedule, false));
     }
 }
