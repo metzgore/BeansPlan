@@ -7,6 +7,7 @@ import android.arch.lifecycle.Observer
 import de.metzgore.beansplan.data.DailySchedule
 import de.metzgore.beansplan.data.Resource
 import de.metzgore.beansplan.data.Status
+import de.metzgore.beansplan.data.WeeklySchedule
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -38,6 +39,26 @@ object LiveDataTestUtil {
 
     private fun createDailyScheduleLiveData(schedule: DailySchedule, status: Status, forceRefresh: Boolean): LiveData<Resource<DailySchedule>> {
         val liveData = MutableLiveData<Resource<DailySchedule>>()
+
+        liveData.value = when (status) {
+            Status.SUCCESS -> Resource.success(schedule, forceRefresh)
+            Status.ERROR -> Resource.error("foo", schedule, forceRefresh)
+            Status.LOADING -> Resource.loading(schedule, forceRefresh)
+        }
+
+        return liveData
+    }
+
+    fun createFilledWeeklyScheduleLiveData(status: Status, forceRefresh: Boolean): LiveData<Resource<WeeklySchedule>> {
+        return createWeeklyScheduleLiveData(TestUtils.createWeeklySchedule(), status, forceRefresh)
+    }
+
+    fun createEmptyWeeklyScheduleLiveData(status: Status, forceRefresh: Boolean): LiveData<Resource<WeeklySchedule>> {
+        return createWeeklyScheduleLiveData(WeeklySchedule(), status, forceRefresh)
+    }
+
+    private fun createWeeklyScheduleLiveData(schedule: WeeklySchedule, status: Status, forceRefresh: Boolean): LiveData<Resource<WeeklySchedule>> {
+        val liveData = MutableLiveData<Resource<WeeklySchedule>>()
 
         liveData.value = when (status) {
             Status.SUCCESS -> Resource.success(schedule, forceRefresh)

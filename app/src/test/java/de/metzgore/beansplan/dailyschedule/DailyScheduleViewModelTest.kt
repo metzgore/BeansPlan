@@ -123,17 +123,17 @@ class DailyScheduleViewModelTest {
         dailyScheduleViewModel.isLoading.observeForever(mock())
 
         //test loading with state LOADING
-        `when`(dailyScheduleRepository.loadSchedule(anyBoolean())).thenReturn(LiveDataTestUtil.createFilledDailyScheduleLiveData(Status.LOADING, true))
+        `when`(dailyScheduleRepository.loadSchedule(anyBoolean())).thenReturn(LiveDataTestUtil.createEmptyDailyScheduleLiveData(Status.LOADING, true))
         dailyScheduleViewModel.loadSchedule()
         assertThat(dailyScheduleViewModel.isLoading.value, `is`(true))
 
         //test loading with state SUCCESS
-        `when`(dailyScheduleRepository.loadSchedule(anyBoolean())).thenReturn(LiveDataTestUtil.createFilledDailyScheduleLiveData(Status.SUCCESS, true))
+        `when`(dailyScheduleRepository.loadSchedule(anyBoolean())).thenReturn(LiveDataTestUtil.createEmptyDailyScheduleLiveData(Status.SUCCESS, true))
         dailyScheduleViewModel.loadSchedule()
         assertThat(dailyScheduleViewModel.isLoading.value, `is`(false))
 
         //test loading with state ERROR
-        `when`(dailyScheduleRepository.loadSchedule(anyBoolean())).thenReturn(LiveDataTestUtil.createFilledDailyScheduleLiveData(Status.ERROR, true))
+        `when`(dailyScheduleRepository.loadSchedule(anyBoolean())).thenReturn(LiveDataTestUtil.createEmptyDailyScheduleLiveData(Status.ERROR, true))
         dailyScheduleViewModel.loadSchedule()
         assertThat(dailyScheduleViewModel.isLoading.value, `is`(false))
     }

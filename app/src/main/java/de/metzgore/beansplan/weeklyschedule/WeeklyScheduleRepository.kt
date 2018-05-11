@@ -9,8 +9,10 @@ import de.metzgore.beansplan.data.Resource
 import de.metzgore.beansplan.data.WeeklySchedule
 import de.metzgore.beansplan.shared.ScheduleRepository
 import de.metzgore.beansplan.shared.WeeklyScheduleDao
+import de.metzgore.beansplan.testing.OpenForTesting
 import de.metzgore.beansplan.util.NetworkBoundResource
 
+@OpenForTesting
 class WeeklyScheduleRepository(private val api: RbtvScheduleApi, private val dao: WeeklyScheduleDao,
                                private val
                                appExecutors: AppExecutors) : ScheduleRepository<WeeklySchedule> {
