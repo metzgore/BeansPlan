@@ -1,8 +1,8 @@
 package de.metzgore.beansplan.util.di;
 
 import com.google.gson.Gson;
-
 import de.metzgore.beansplan.AppExecutors;
+import de.metzgore.beansplan.BuildConfig;
 import de.metzgore.beansplan.api.RbtvScheduleApi;
 import de.metzgore.beansplan.data.DailySchedule;
 import de.metzgore.beansplan.data.Show;
@@ -23,7 +23,7 @@ public class Injector {
     }
 
     private static Retrofit provideRetrofit() {
-        return new Retrofit.Builder().baseUrl("http://api.rbtv.rodney.io/").addConverterFactory
+        return new Retrofit.Builder().baseUrl(BuildConfig.HOST).addConverterFactory
                 (provideGsonConverterFactory()).addCallAdapterFactory(new
                 LiveDataCallAdapterFactory()).build();
     }

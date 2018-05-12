@@ -1,11 +1,11 @@
 package de.metzgore.beansplan.api
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
+import de.metzgore.beansplan.LiveDataTestUtil.getValue
 import de.metzgore.beansplan.data.DailySchedule
 import de.metzgore.beansplan.data.WeeklySchedule
 import de.metzgore.beansplan.util.LiveDataCallAdapterFactory
 import de.metzgore.beansplan.util.di.Injector
-import de.metzgore.beansplan.LiveDataTestUtil.getValue
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okio.Okio
@@ -52,8 +52,7 @@ class RbtvScheduleApiTest {
     @Test
     fun scheduleOfCurrentWeek() {
         enqueueResponse("weekly_schedule.json")
-        val weeklySchedule = (getValue(service.scheduleOfCurrentWeek()) as ApiSuccessResponse)
-                .body
+        val weeklySchedule = (getValue(service.scheduleOfCurrentWeek()) as ApiSuccessResponse).body
 
         val request = mockWebServer.takeRequest()
         assertThat(request.path, `is`("/api/1.0/schedule/schedule.json"))
@@ -71,23 +70,17 @@ class RbtvScheduleApiTest {
 
         //test startDate
 
-        assertThat(DateUtils.truncatedEquals(weeklySchedule.startDate!!, calendar.time, Calendar
-                .YEAR), `is`(true))
-        assertThat(DateUtils.truncatedEquals(weeklySchedule.startDate!!, calendar.time, Calendar
-                .MONTH), `is`(true))
-        assertThat(DateUtils.truncatedEquals(weeklySchedule.startDate!!, calendar.time, Calendar
-                .DAY_OF_MONTH), `is`(true))
+        assertThat(DateUtils.truncatedEquals(weeklySchedule.startDate!!, calendar.time, Calendar.YEAR), `is`(true))
+        assertThat(DateUtils.truncatedEquals(weeklySchedule.startDate!!, calendar.time, Calendar.MONTH), `is`(true))
+        assertThat(DateUtils.truncatedEquals(weeklySchedule.startDate!!, calendar.time, Calendar.DAY_OF_MONTH), `is`(true))
 
         //test endDate
 
         calendar.set(Calendar.DAY_OF_MONTH, 13)
 
-        assertThat(DateUtils.truncatedEquals(weeklySchedule.endDate!!, calendar.time, Calendar
-                .YEAR), `is`(true))
-        assertThat(DateUtils.truncatedEquals(weeklySchedule.endDate!!, calendar.time, Calendar
-                .MONTH), `is`(true))
-        assertThat(DateUtils.truncatedEquals(weeklySchedule.endDate!!, calendar.time, Calendar
-                .DAY_OF_MONTH), `is`(true))
+        assertThat(DateUtils.truncatedEquals(weeklySchedule.endDate!!, calendar.time, Calendar.YEAR), `is`(true))
+        assertThat(DateUtils.truncatedEquals(weeklySchedule.endDate!!, calendar.time, Calendar.MONTH), `is`(true))
+        assertThat(DateUtils.truncatedEquals(weeklySchedule.endDate!!, calendar.time, Calendar.DAY_OF_MONTH), `is`(true))
 
         // test dateKeys
 
@@ -96,12 +89,9 @@ class RbtvScheduleApiTest {
         calendar.set(Calendar.DAY_OF_MONTH, 7)
 
         dateKeys.forEach {
-            assertThat(DateUtils.truncatedEquals(it, calendar.time, Calendar
-                    .YEAR), `is`(true))
-            assertThat(DateUtils.truncatedEquals(it, calendar.time, Calendar
-                    .MONTH), `is`(true))
-            assertThat(DateUtils.truncatedEquals(it, calendar.time, Calendar
-                    .DAY_OF_MONTH), `is`(true))
+            assertThat(DateUtils.truncatedEquals(it, calendar.time, Calendar.YEAR), `is`(true))
+            assertThat(DateUtils.truncatedEquals(it, calendar.time, Calendar.MONTH), `is`(true))
+            assertThat(DateUtils.truncatedEquals(it, calendar.time, Calendar.DAY_OF_MONTH), `is`(true))
 
             calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1)
         }
@@ -110,9 +100,7 @@ class RbtvScheduleApiTest {
     @Test
     fun scheduleOfDay() {
         enqueueResponse("daily_schedule.json")
-        val dailySchedule = (getValue(service.scheduleOfDay(2018, "05", "09")) as
-                ApiSuccessResponse)
-                .body
+        val dailySchedule = (getValue(service.scheduleOfDay(2018, "05", "09")) as ApiSuccessResponse).body
 
         val request = mockWebServer.takeRequest()
         assertThat(request.path, `is`("/api/1.0/schedule/2018/05/09.json"))
@@ -126,12 +114,9 @@ class RbtvScheduleApiTest {
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
 
-        assertThat(DateUtils.truncatedEquals(dailySchedule.date!!, calendar.time, Calendar
-                .YEAR), `is`(true))
-        assertThat(DateUtils.truncatedEquals(dailySchedule.date!!, calendar.time, Calendar
-                .MONTH), `is`(true))
-        assertThat(DateUtils.truncatedEquals(dailySchedule.date!!, calendar.time, Calendar
-                .DAY_OF_MONTH), `is`(true))
+        assertThat(DateUtils.truncatedEquals(dailySchedule.date!!, calendar.time, Calendar.YEAR), `is`(true))
+        assertThat(DateUtils.truncatedEquals(dailySchedule.date!!, calendar.time, Calendar.MONTH), `is`(true))
+        assertThat(DateUtils.truncatedEquals(dailySchedule.date!!, calendar.time, Calendar.DAY_OF_MONTH), `is`(true))
 
         assertThat(dailySchedule.shows.size, `is`(20))
     }
@@ -144,9 +129,7 @@ class RbtvScheduleApiTest {
         for ((key, value) in headers) {
             mockResponse.addHeader(key, value)
         }
-        mockWebServer.enqueue(
-                mockResponse
-                        .setBody(source.readString(Charsets.UTF_8))
+        mockWebServer.enqueue(mockResponse.setBody(source.readString(Charsets.UTF_8))
         )
     }
 }

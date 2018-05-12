@@ -75,7 +75,7 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
         super.onViewCreated(view, savedInstanceState);
 
         if (getActivity() != null)
-            getActivity().setTitle(R.string.drawer_item_todays_schedule);
+            getActivity().setTitle(R.string.drawer_item_daily_schedule);
     }
 
     @Override
