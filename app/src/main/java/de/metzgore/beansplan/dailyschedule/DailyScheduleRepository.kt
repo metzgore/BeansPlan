@@ -12,9 +12,12 @@ import de.metzgore.beansplan.shared.ScheduleRepository
 import de.metzgore.beansplan.testing.OpenForTesting
 import de.metzgore.beansplan.util.NetworkBoundResource
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @OpenForTesting
-class DailyScheduleRepository(private val api: RbtvScheduleApi, private val dao: DailyScheduleDao, private val
+@Singleton
+class DailyScheduleRepository @Inject constructor(private val api: RbtvScheduleApi, private val dao: DailyScheduleDao, private val
 appExecutors: AppExecutors) : ScheduleRepository<DailySchedule> {
 
     private val scheduleCacheData = MutableLiveData<DailySchedule>()

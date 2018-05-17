@@ -119,6 +119,9 @@ dependencies {
     implementation "com.mikepenz:iconics-core:3.0.3@aar"
 
     implementation 'com.mikepenz:community-material-typeface:2.0.46.1@aar'
+
+    implementation "com.google.dagger:dagger:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
 }
 
 // we need all open to run tests which  a we enable only for debug builds.

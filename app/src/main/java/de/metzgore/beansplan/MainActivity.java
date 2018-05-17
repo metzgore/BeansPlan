@@ -39,10 +39,19 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
     private boolean itemSelected = false;
     private ActivityMainBinding binding;
 
+    //TODO remove
+    //@Inject
+    //ScheduleRepository<DailySchedule> repo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
+
+        //TODO remove
+        //((BeansPlanApp) getApplication()).appComponent().inject(this);
+
+        //Log.d("TEST", "repo is " + (repo == null ? "null" : "not null"));
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
