@@ -67,16 +67,16 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
         binding.setLifecycleOwner(this);
         binding.setViewModel(viewModel);
 
-        binding.singleDayIncluded.showsList.addItemDecoration(new DividerItemDecoration
+        binding.singleDayIncluded.fragmentBaseScheduleShowsList.addItemDecoration(new DividerItemDecoration
                 (getActivity(), DividerItemDecoration.VERTICAL));
-        binding.singleDayIncluded.showsList.setItemAnimator(null);
-        binding.singleDayIncluded.showsList.setHasFixedSize(true);
+        binding.singleDayIncluded.fragmentBaseScheduleShowsList.setItemAnimator(null);
+        binding.singleDayIncluded.fragmentBaseScheduleShowsList.setHasFixedSize(true);
 
         binding.swipeRefresh.setOnRefreshListener(() -> viewModel.loadScheduleFromNetwork());
         binding.swipeRefresh.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color
                 .colorPrimary));
 
-        binding.singleDayIncluded.showsList.setAdapter(dailyScheduleAdapter);
+        binding.singleDayIncluded.fragmentBaseScheduleShowsList.setAdapter(dailyScheduleAdapter);
 
         return binding.getRoot();
     }

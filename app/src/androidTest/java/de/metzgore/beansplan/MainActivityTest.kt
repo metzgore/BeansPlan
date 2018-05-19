@@ -2,9 +2,9 @@ package de.metzgore.beansplan
 
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import android.support.test.InstrumentationRegistry
 import android.support.test.InstrumentationRegistry.getInstrumentation
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.ViewInteraction
@@ -14,10 +14,14 @@ import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import android.support.v7.widget.Toolbar
+import de.metzgore.beansplan.util.di.components.DaggerAppComponent
+import de.metzgore.beansplan.util.di.modules.ContextModule
+import de.metzgore.beansplan.util.di.modules.ScheduleDaoModule
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okio.Okio
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.junit.After
@@ -33,7 +37,6 @@ class MainActivityTest {
 
     private lateinit var preferencesEditor: SharedPreferences.Editor
     private lateinit var context: Context
-    private lateinit var intent: Intent
     private lateinit var mockWebServer: MockWebServer
 
     @Rule
@@ -43,12 +46,24 @@ class MainActivityTest {
 
     @Before
     fun setUp() {
-        intent = Intent()
         context = getInstrumentation().targetContext
         preferencesEditor = PreferenceManager.getDefaultSharedPreferences(context).edit()
 
         mockWebServer = MockWebServer()
         mockWebServer.start(43210)
+
+        val app = InstrumentationRegistry
+                .getInstrumentation()
+                .targetContext
+                .applicationContext as BeansPlanApp
+
+        val mockedComponent = DaggerAppComponent.builder().apply {
+            scheduleDaoModule(ScheduleDaoModule(true))
+            contextModule(ContextModule(context))
+        }.build()
+
+        app.appComponent = mockedComponent
+        mockedComponent.inject(app)
     }
 
     @After
@@ -62,7 +77,7 @@ class MainActivityTest {
         preferencesEditor.putString(context.getString(R.string.pref_key_select_default_schedule), context.getString(R.string.fragment_daily_schedule_id))
         preferencesEditor.commit()
 
-        activityTestRule.launchActivity(intent)
+        activityTestRule.launchActivity(null)
 
         matchToolbarTitle(context.getString(R.string.drawer_item_daily_schedule)).check(matches(isDisplayed()))
     }
@@ -73,7 +88,7 @@ class MainActivityTest {
         preferencesEditor.putString(context.getString(R.string.pref_key_select_default_schedule), context.getString(R.string.fragment_weekly_schedule_id))
         preferencesEditor.commit()
 
-        activityTestRule.launchActivity(intent)
+        activityTestRule.launchActivity(null)
 
         matchToolbarTitle(context.getString(R.string.drawer_item_weekly_schedule)).check(matches(isDisplayed()))
     }
@@ -84,7 +99,7 @@ class MainActivityTest {
         preferencesEditor.putString(context.getString(R.string.pref_key_last_opened_schedule_id), context.getString(R.string.fragment_daily_schedule_id))
         preferencesEditor.commit()
 
-        activityTestRule.launchActivity(intent)
+        activityTestRule.launchActivity(null)
 
         matchToolbarTitle(context.getString(R.string.drawer_item_daily_schedule)).check(matches(isDisplayed()))
 
@@ -93,7 +108,7 @@ class MainActivityTest {
         preferencesEditor.putString(context.getString(R.string.pref_key_last_opened_schedule_id), context.getString(R.string.fragment_weekly_schedule_id))
         preferencesEditor.commit()
 
-        activityTestRule.launchActivity(intent)
+        activityTestRule.launchActivity(null)
 
         matchToolbarTitle(context.getString(R.string.drawer_item_weekly_schedule)).check(matches(isDisplayed()))
     }
@@ -106,11 +121,30 @@ class MainActivityTest {
         preferencesEditor.putString(context.getString(R.string.pref_key_select_default_schedule), context.getString(R.string.fragment_daily_schedule_id))
         preferencesEditor.commit()
 
-        activityTestRule.launchActivity(intent)
+        activityTestRule.launchActivity(null)
 
         onView(withId(R.id.fragment_base_schedule_loading_view)).check(matches(isDisplayed()))
         onView(withId(R.id.fragment_base_schedule_loading_view_progress)).check((matches(isDisplayed())))
         onView(withId(R.id.fragment_base_schedule_loading_view_text)).check((matches(isDisplayed())))
+        onView(withId(R.id.fragment_base_schedule_shows_list)).check((matches(not(isDisplayed()))))
+        onView(withId(R.id.fragment_base_schedule_empty_view)).check((matches(not(isDisplayed()))))
+    }
+
+    @Test
+    fun displayLoadedDailySchedule() {
+        enqueueResponse("daily_schedule.json", delayed = false)
+
+        preferencesEditor.putBoolean(context.getString(R.string.pref_key_remember_last_opened_schedule), false)
+        preferencesEditor.putString(context.getString(R.string.pref_key_select_default_schedule), context.getString(R.string.fragment_daily_schedule_id))
+        preferencesEditor.commit()
+
+        activityTestRule.launchActivity(null)
+
+        onView(withId(R.id.fragment_base_schedule_loading_view)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.fragment_base_schedule_loading_view_progress)).check((matches(not(isDisplayed()))))
+        onView(withId(R.id.fragment_base_schedule_loading_view_text)).check((matches(not(isDisplayed()))))
+        onView(withId(R.id.fragment_base_schedule_shows_list)).check((matches(isDisplayed())))
+        onView(withId(R.id.fragment_base_schedule_empty_view)).check((matches(not(isDisplayed()))))
     }
 
     @Test

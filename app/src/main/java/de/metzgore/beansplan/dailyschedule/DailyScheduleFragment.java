@@ -78,11 +78,11 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
 
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
-        binding.showsList.addItemDecoration(new DividerItemDecoration(getActivity(),
+        binding.fragmentBaseScheduleShowsList.addItemDecoration(new DividerItemDecoration(getActivity(),
                 DividerItemDecoration.VERTICAL));
-        binding.showsList.setItemAnimator(null);
-        binding.showsList.setHasFixedSize(true);
-        binding.showsList.setAdapter(dailyScheduleAdapter);
+        binding.fragmentBaseScheduleShowsList.setItemAnimator(null);
+        binding.fragmentBaseScheduleShowsList.setHasFixedSize(true);
+        binding.fragmentBaseScheduleShowsList.setAdapter(dailyScheduleAdapter);
 
         return binding.getRoot();
     }
