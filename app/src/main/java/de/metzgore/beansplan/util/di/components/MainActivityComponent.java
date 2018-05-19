@@ -1,4 +1,4 @@
-package de.metzgore.beansplan.util.di.modules;
+package de.metzgore.beansplan.util.di.components;
 
 import android.app.Activity;
 import dagger.Binds;

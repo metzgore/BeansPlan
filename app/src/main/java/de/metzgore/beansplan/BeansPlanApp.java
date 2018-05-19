@@ -8,9 +8,7 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
 import de.metzgore.beansplan.util.di.components.DaggerAppComponent;
 import de.metzgore.beansplan.util.di.modules.ContextModule;
-import de.metzgore.beansplan.util.di.modules.DailyScheduleDaoModule;
-import de.metzgore.beansplan.util.di.modules.RbtvApiModule;
-import de.metzgore.beansplan.util.di.modules.RepositoryModule;
+import de.metzgore.beansplan.util.di.modules.ScheduleDaoModule;
 
 import javax.inject.Inject;
 
@@ -32,9 +30,7 @@ public class BeansPlanApp extends Application implements HasActivityInjector {
     }
 
     private void createAppComponent() {
-        DaggerAppComponent.builder().dailyScheduleDaoModule(new DailyScheduleDaoModule(false))
-                .repositoryModule(new RepositoryModule())
-                .rbtvApiModule(new RbtvApiModule())
+        DaggerAppComponent.builder().scheduleDaoModule(new ScheduleDaoModule(false))
                 .contextModule(new ContextModule(getApplicationContext()))
                 .build()
                 .inject(this);

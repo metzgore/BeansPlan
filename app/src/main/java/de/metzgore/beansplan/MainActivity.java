@@ -13,50 +13,47 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import dagger.android.AndroidInjection;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
 import de.metzgore.beansplan.about.AboutActivity;
 import de.metzgore.beansplan.baseschedule.RefreshableScheduleFragment;
 import de.metzgore.beansplan.dailyschedule.RefreshableDailyScheduleFragment;
-import de.metzgore.beansplan.data.DailySchedule;
 import de.metzgore.beansplan.databinding.ActivityMainBinding;
 import de.metzgore.beansplan.settings.SettingsActivity;
 import de.metzgore.beansplan.settings.repository.AppSettings;
-import de.metzgore.beansplan.settings.repository.AppSettingsImp;
-import de.metzgore.beansplan.shared.ScheduleRepository;
 import de.metzgore.beansplan.weeklyschedule.WeeklyScheduleFragment;
 
 import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements RefreshableScheduleFragment.OnScheduleRefreshedListener {
+public class MainActivity extends AppCompatActivity implements RefreshableScheduleFragment
+        .OnScheduleRefreshedListener, HasSupportFragmentInjector {
+
+    @Inject
+    DispatchingAndroidInjector<Fragment> fragmentInjector;
+
+    @Inject
+    AppSettings settings;
 
     private static final String CURRENT_FRAGMENT_TAG = "current_fragment_tag";
 
     private Map<String, Runnable> defaultSchedules = new HashMap<>(2);
-    private AppSettings settings = new AppSettingsImp(this);
     private FragmentManager fragmentManager;
     @IdRes
     private int selectedItemId;
     private boolean itemSelected = false;
     private ActivityMainBinding binding;
 
-    //TODO remove
-    @Inject
-    ScheduleRepository<DailySchedule> repo;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
-        super.onCreate(savedInstanceState);
-
-        //TODO remove
         AndroidInjection.inject(this);
-
-        Log.d("TEST", "repo is " + (repo == null ? "null" : "not null"));
+        super.onCreate(savedInstanceState);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
@@ -247,5 +244,10 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
     @Override
     public void onRemoveToolbarElevation() {
         ViewCompat.setElevation(binding.activityMainAppbarlayout, 0);
+    }
+
+    @Override
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return fragmentInjector;
     }
 }

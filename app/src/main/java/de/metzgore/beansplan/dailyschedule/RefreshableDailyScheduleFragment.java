@@ -1,6 +1,7 @@
 package de.metzgore.beansplan.dailyschedule;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,14 +11,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.view.*;
+import dagger.android.support.AndroidSupportInjection;
 import de.metzgore.beansplan.R;
 import de.metzgore.beansplan.baseschedule.RefreshableScheduleFragment;
 import de.metzgore.beansplan.data.DailySchedule;
 import de.metzgore.beansplan.data.Resource;
 import de.metzgore.beansplan.databinding.FragmentDailyScheduleBinding;
+import de.metzgore.beansplan.shared.ScheduleRepository;
 import de.metzgore.beansplan.util.DateFormatter;
 import de.metzgore.beansplan.util.di.DailyScheduleViewModelFactory;
-import de.metzgore.beansplan.util.di.Injector;
+
+import javax.inject.Inject;
 
 public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragment {
 
@@ -28,8 +32,17 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
     private DailyScheduleViewModel viewModel;
     private Snackbar snackbar;
 
+    @Inject
+    ScheduleRepository<DailySchedule> repo;
+
     public static Fragment newInstance() {
         return new RefreshableDailyScheduleFragment();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
     }
 
     @Override
@@ -39,9 +52,7 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
 
         dailyScheduleAdapter = new DailyScheduleAdapter();
 
-        viewModel = ViewModelProviders.of(this, new DailyScheduleViewModelFactory(new
-                DailyScheduleRepository(Injector.provideRbtvScheduleApi(), new
-                DailyScheduleDaoImpl(getContext(), false), Injector.provideAppExecutors()))).get
+        viewModel = ViewModelProviders.of(this, new DailyScheduleViewModelFactory(repo)).get
                 (DailyScheduleViewModel.class);
         subscribeUi(viewModel);
     }

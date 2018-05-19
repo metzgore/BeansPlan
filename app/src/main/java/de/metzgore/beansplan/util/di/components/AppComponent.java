@@ -1,21 +1,23 @@
 package de.metzgore.beansplan.util.di.components;
 
 import dagger.Component;
-import dagger.android.AndroidInjectionModule;
 import de.metzgore.beansplan.BeansPlanApp;
 import de.metzgore.beansplan.util.di.modules.ContextModule;
-import de.metzgore.beansplan.util.di.modules.DailyScheduleDaoModule;
-import de.metzgore.beansplan.util.di.modules.MainActivityComponent;
 import de.metzgore.beansplan.util.di.modules.RepositoryModule;
+import de.metzgore.beansplan.util.di.modules.ScheduleDaoModule;
+import de.metzgore.beansplan.util.di.modules.SettingsModule;
 
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = {AndroidInjectionModule.class,
+@Component(modules = {
         RepositoryModule.class,
-        DailyScheduleDaoModule.class,
+        ScheduleDaoModule.class,
         ContextModule.class,
-        MainActivityComponent.class})
+        MainActivityComponent.class,
+        RefreshableDailyScheduleFragmentComponent.class,
+        WeeklyScheduleFragmentComponent.class,
+        SettingsModule.class})
 public interface AppComponent {
 
     void inject(BeansPlanApp app);
