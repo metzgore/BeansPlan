@@ -1,26 +1,29 @@
 package de.metzgore.beansplan;
 
+import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
 import com.squareup.leakcanary.LeakCanary;
-import de.metzgore.beansplan.util.di.components.AppComponent;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.HasActivityInjector;
 import de.metzgore.beansplan.util.di.components.DaggerAppComponent;
 import de.metzgore.beansplan.util.di.modules.ContextModule;
 import de.metzgore.beansplan.util.di.modules.DailyScheduleDaoModule;
+import de.metzgore.beansplan.util.di.modules.RbtvApiModule;
 import de.metzgore.beansplan.util.di.modules.RepositoryModule;
 
-public class BeansPlanApp extends Application {
+import javax.inject.Inject;
 
-    private static BeansPlanApp mAppContext;
-    private AppComponent appComponent;
+public class BeansPlanApp extends Application implements HasActivityInjector {
+
+    @Inject
+    DispatchingAndroidInjector<Activity> activityDispatchingAndroidInjector;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        appComponent = createAppComponent();
-
-        mAppContext = this;
+        createAppComponent();
 
         if (LeakCanary.isInAnalyzerProcess(this)) {
             return;
@@ -28,18 +31,17 @@ public class BeansPlanApp extends Application {
         LeakCanary.install(this);
     }
 
-    public AppComponent appComponent() {
-        return appComponent;
-    }
-
-    private AppComponent createAppComponent() {
-        return DaggerAppComponent.builder().repositoryModule(new RepositoryModule())
-                .contextModule(new ContextModule(getApplicationContext()))
+    private void createAppComponent() {
+        DaggerAppComponent.builder().dailyScheduleDaoModule(new DailyScheduleDaoModule(false))
                 .repositoryModule(new RepositoryModule())
-                .dailyScheduleDaoModule(new DailyScheduleDaoModule(false)).build();
+                .rbtvApiModule(new RbtvApiModule())
+                .contextModule(new ContextModule(getApplicationContext()))
+                .build()
+                .inject(this);
     }
 
-    public static Context getAppContext() {
-        return mAppContext.getApplicationContext();
+    @Override
+    public AndroidInjector<Activity> activityInjector() {
+        return activityDispatchingAndroidInjector;
     }
 }
