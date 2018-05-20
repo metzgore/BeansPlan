@@ -84,9 +84,13 @@ dependencies {
     testImplementation "org.mockito:mockito-core:$mockito_version"
 
     //Android tests
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    androidTestImplementation('com.schibsted.spain:barista:2.4.0') {
+        exclude group: 'com.android.support'
+        exclude group: 'org.jetbrains.kotlin' // Only if you already use Kotlin in your project
+    }
     androidTestImplementation "android.arch.core:core-testing:$arch_components_version"
     androidTestImplementation "org.mockito:mockito-core:$mockito_version"
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:$okhttp3_version"

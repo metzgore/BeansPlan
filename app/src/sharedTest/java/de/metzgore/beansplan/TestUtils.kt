@@ -6,7 +6,7 @@ import okio.Okio
 object TestUtils {
     fun createDailySchedule(): DailySchedule {
         val inputStream = javaClass.classLoader
-                .getResourceAsStream("api-response/daily_schedule.json")
+                .getResourceAsStream("api-response/daily_schedule_09_05_18.json")
         val source = Okio.buffer(Okio.source(inputStream))
 
         return Injector.provideGson().fromJson(source.readUtf8(), DailySchedule::class.java)

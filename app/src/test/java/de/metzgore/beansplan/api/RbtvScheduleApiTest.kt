@@ -99,7 +99,7 @@ class RbtvScheduleApiTest {
 
     @Test
     fun scheduleOfDay() {
-        enqueueResponse("daily_schedule.json")
+        enqueueResponse("daily_schedule_09_05_18.json")
         val dailySchedule = (getValue(service.scheduleOfDay(2018, "05", "09")) as ApiSuccessResponse).body
 
         val request = mockWebServer.takeRequest()

@@ -10,10 +10,15 @@ import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.ViewInteraction
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.BoundedMatcher
-import android.support.test.espresso.matcher.ViewMatchers.*
+import android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom
+import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import android.support.v7.widget.Toolbar
+import com.schibsted.spain.barista.assertion.BaristaRecyclerViewAssertions.assertRecyclerViewItemCount
+import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
+import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
+import com.schibsted.spain.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import de.metzgore.beansplan.util.di.components.DaggerAppComponent
 import de.metzgore.beansplan.util.di.modules.ContextModule
 import de.metzgore.beansplan.util.di.modules.ScheduleDaoModule
@@ -21,7 +26,6 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okio.Okio
 import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.junit.After
@@ -73,9 +77,7 @@ class MainActivityTest {
 
     @Test
     fun displayDefaultDailySchedule() {
-        preferencesEditor.putBoolean(context.getString(R.string.pref_key_remember_last_opened_schedule), false)
-        preferencesEditor.putString(context.getString(R.string.pref_key_select_default_schedule), context.getString(R.string.fragment_daily_schedule_id))
-        preferencesEditor.commit()
+        prepareDailySchedule()
 
         activityTestRule.launchActivity(null)
 
@@ -90,7 +92,7 @@ class MainActivityTest {
 
         activityTestRule.launchActivity(null)
 
-        matchToolbarTitle(context.getString(R.string.drawer_item_weekly_schedule)).check(matches(isDisplayed()))
+        assertDisplayed(R.string.drawer_item_weekly_schedule)
     }
 
     @Test
@@ -101,7 +103,7 @@ class MainActivityTest {
 
         activityTestRule.launchActivity(null)
 
-        matchToolbarTitle(context.getString(R.string.drawer_item_daily_schedule)).check(matches(isDisplayed()))
+        assertDisplayed(R.string.drawer_item_daily_schedule)
 
         activityTestRule.activity.finish()
 
@@ -110,45 +112,81 @@ class MainActivityTest {
 
         activityTestRule.launchActivity(null)
 
-        matchToolbarTitle(context.getString(R.string.drawer_item_weekly_schedule)).check(matches(isDisplayed()))
+        assertDisplayed(R.string.drawer_item_weekly_schedule)
     }
 
     @Test
     fun displayLoadingDailySchedule() {
-        enqueueResponse("daily_schedule.json", delayed = true)
+        enqueueResponse("daily_schedule_09_05_18.json", delayed = true)
 
-        preferencesEditor.putBoolean(context.getString(R.string.pref_key_remember_last_opened_schedule), false)
-        preferencesEditor.putString(context.getString(R.string.pref_key_select_default_schedule), context.getString(R.string.fragment_daily_schedule_id))
-        preferencesEditor.commit()
+        prepareDailySchedule()
 
         activityTestRule.launchActivity(null)
 
-        onView(withId(R.id.fragment_base_schedule_loading_view)).check(matches(isDisplayed()))
-        onView(withId(R.id.fragment_base_schedule_loading_view_progress)).check((matches(isDisplayed())))
-        onView(withId(R.id.fragment_base_schedule_loading_view_text)).check((matches(isDisplayed())))
-        onView(withId(R.id.fragment_base_schedule_shows_list)).check((matches(not(isDisplayed()))))
-        onView(withId(R.id.fragment_base_schedule_empty_view)).check((matches(not(isDisplayed()))))
+        assertDisplayed(R.id.fragment_base_schedule_loading_view)
+        assertDisplayed(R.id.fragment_base_schedule_loading_view_progress)
+        assertDisplayed(R.id.fragment_base_schedule_loading_view_text)
+
+        assertNotDisplayed(R.id.fragment_base_schedule_shows_list)
+        assertNotDisplayed(R.id.fragment_base_schedule_empty_view)
     }
 
     @Test
     fun displayLoadedDailySchedule() {
-        enqueueResponse("daily_schedule.json", delayed = false)
+        enqueueResponse("daily_schedule_09_05_18.json", delayed = false)
 
-        preferencesEditor.putBoolean(context.getString(R.string.pref_key_remember_last_opened_schedule), false)
-        preferencesEditor.putString(context.getString(R.string.pref_key_select_default_schedule), context.getString(R.string.fragment_daily_schedule_id))
-        preferencesEditor.commit()
+        prepareDailySchedule()
 
         activityTestRule.launchActivity(null)
 
-        onView(withId(R.id.fragment_base_schedule_loading_view)).check(matches(not(isDisplayed())))
-        onView(withId(R.id.fragment_base_schedule_loading_view_progress)).check((matches(not(isDisplayed()))))
-        onView(withId(R.id.fragment_base_schedule_loading_view_text)).check((matches(not(isDisplayed()))))
-        onView(withId(R.id.fragment_base_schedule_shows_list)).check((matches(isDisplayed())))
-        onView(withId(R.id.fragment_base_schedule_empty_view)).check((matches(not(isDisplayed()))))
+        assertNotDisplayed(R.id.fragment_base_schedule_loading_view)
+        assertNotDisplayed(R.id.fragment_base_schedule_loading_view_progress)
+        assertNotDisplayed(R.id.fragment_base_schedule_loading_view_text)
+        assertNotDisplayed(R.id.fragment_base_schedule_empty_view)
+
+        assertDisplayed(R.id.fragment_base_schedule_shows_list)
+        assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 20)
     }
 
     @Test
-    fun displayFailedDailySchedule() {
+    fun displayLoadingDailyScheduleFailed() {
+        enqueueErrorResponse()
+
+        prepareDailySchedule()
+
+        activityTestRule.launchActivity(null)
+
+        assertDisplayed(R.id.fragment_base_schedule_empty_view)
+        assertDisplayed(R.string.error_message_daily_schedule_loading_failed)
+
+        assertNotDisplayed(R.id.fragment_base_schedule_loading_view)
+        assertNotDisplayed(R.id.fragment_base_schedule_loading_view_progress)
+        assertNotDisplayed(R.id.fragment_base_schedule_loading_view_text)
+        assertNotDisplayed(R.id.fragment_base_schedule_shows_list)
+    }
+
+    @Test
+    fun displayReloadDailyScheduleSwipe() {
+        enqueueResponse("daily_schedule_09_05_18.json")
+        enqueueResponse("daily_schedule_20_05_18.json")
+
+        prepareDailySchedule()
+
+        activityTestRule.launchActivity(null)
+
+        assertDisplayed(R.id.fragment_base_schedule_shows_list)
+        assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 20)
+
+        refresh()
+
+        assertDisplayed(R.id.fragment_base_schedule_shows_list)
+        assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 18)
+    }
+
+    private fun prepareDailySchedule() {
+        preferencesEditor.putBoolean(context.getString(R.string.pref_key_remember_last_opened_schedule), false)
+        preferencesEditor.putString(context.getString(R.string.pref_key_select_default_schedule), context.getString(R.string.fragment_daily_schedule_id))
+        preferencesEditor.commit()
     }
 
     private fun matchToolbarTitle(title: CharSequence): ViewInteraction {
@@ -167,6 +205,14 @@ class MainActivityTest {
                 textMatcher.describeTo(description)
             }
         }
+    }
+
+    private fun enqueueErrorResponse() {
+        val mockResponse = MockResponse()
+
+        mockResponse.setResponseCode(404)
+
+        mockWebServer.enqueue(mockResponse)
     }
 
     private fun enqueueResponse(fileName: String, headers: Map<String, String> = emptyMap(), delayed: Boolean = false) {
