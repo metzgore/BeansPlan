@@ -14,7 +14,7 @@ object TestUtils {
 
     fun createWeeklySchedule(): WeeklySchedule {
         val inputStream = javaClass.classLoader
-                .getResourceAsStream("api-response/weekly_schedule.json")
+                .getResourceAsStream("api-response/weekly_schedule_one_week.json")
         val source = Okio.buffer(Okio.source(inputStream))
 
         return Injector.provideGson().fromJson(source.readUtf8(), WeeklySchedule::class.java)

@@ -97,7 +97,7 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_fragment_schedule, menu);
+        inflater.inflate(R.menu.menu_fragment_daily_schedule, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
