@@ -13,7 +13,9 @@ import com.schibsted.spain.barista.assertion.BaristaRecyclerViewAssertions.asser
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
+import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions.clickMenu
 import com.schibsted.spain.barista.interaction.BaristaSwipeRefreshInteractions.refresh
+import de.metzgore.beansplan.util.DateFormatter
 import de.metzgore.beansplan.util.ViewPagerItemCountAssertion.Companion.assertViewPagerViewItemCount
 import de.metzgore.beansplan.util.di.components.DaggerAppComponent
 import de.metzgore.beansplan.util.di.modules.ContextModule
@@ -23,6 +25,7 @@ import okhttp3.mockwebserver.MockWebServer
 import okio.Okio
 import org.junit.*
 import org.junit.runner.RunWith
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -139,6 +142,11 @@ class MainActivityTest {
     fun displayLoadedDailySchedule() {
         enqueueResponse("daily_schedule_09_05_18.json", delayed = false)
 
+        val date = getDateFor(2018, Calendar.MAY, 9)
+
+        val subTitle = context.getString(R.string.fragment_daily_schedule_subtitle, DateFormatter
+                .formatDate(context, date))
+
         prepareDailySchedule()
 
         activityTestRule.launchActivity(null)
@@ -149,6 +157,7 @@ class MainActivityTest {
         assertNotDisplayed(R.id.fragment_base_schedule_empty_view)
 
         assertDisplayed(R.id.fragment_base_schedule_shows_list)
+        assertDisplayed(subTitle)
         assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 20)
     }
 
@@ -174,16 +183,26 @@ class MainActivityTest {
         enqueueResponse("daily_schedule_09_05_18.json")
         enqueueResponse("daily_schedule_20_05_18.json")
 
+        val dateBefore = getDateFor(2018, Calendar.MAY, 9)
+        val subTitleBefore = context.getString(R.string.fragment_daily_schedule_subtitle, DateFormatter
+                .formatDate(context, dateBefore))
+
+        val dateAfter = getDateFor(2018, Calendar.MAY, 20)
+        val subTitleAfter = context.getString(R.string.fragment_daily_schedule_subtitle, DateFormatter
+                .formatDate(context, dateAfter))
+
         prepareDailySchedule()
 
         activityTestRule.launchActivity(null)
 
         assertDisplayed(R.id.fragment_base_schedule_shows_list)
+        assertDisplayed(subTitleBefore)
         assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 20)
 
         refresh()
 
         assertDisplayed(R.id.fragment_base_schedule_shows_list)
+        assertDisplayed(subTitleAfter)
         assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 18)
     }
 
@@ -192,15 +211,22 @@ class MainActivityTest {
         enqueueErrorResponse()
         enqueueResponse("daily_schedule_20_05_18.json")
 
+        val date = getDateFor(2018, Calendar.MAY, 20)
+        val subTitle = context.getString(R.string.fragment_daily_schedule_subtitle, DateFormatter
+                .formatDate(context, date))
+
         prepareDailySchedule()
 
         activityTestRule.launchActivity(null)
 
         assertDisplayed(R.id.fragment_base_schedule_empty_view)
+        //TODO crashed, Barista bug?
+        //assertNotDisplayed(subTitle)
 
         refresh()
 
         assertDisplayed(R.id.fragment_base_schedule_shows_list)
+        assertDisplayed(subTitle)
         assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 18)
     }
 
@@ -209,16 +235,26 @@ class MainActivityTest {
         enqueueResponse("daily_schedule_09_05_18.json")
         enqueueResponse("daily_schedule_20_05_18.json")
 
+        val dateBefore = getDateFor(2018, Calendar.MAY, 9)
+        val subTitleBefore = context.getString(R.string.fragment_daily_schedule_subtitle, DateFormatter
+                .formatDate(context, dateBefore))
+
+        val dateAfter = getDateFor(2018, Calendar.MAY, 20)
+        val subTitleAfter = context.getString(R.string.fragment_daily_schedule_subtitle, DateFormatter
+                .formatDate(context, dateAfter))
+
         prepareDailySchedule()
 
         activityTestRule.launchActivity(null)
 
         assertDisplayed(R.id.fragment_base_schedule_shows_list)
+        assertDisplayed(subTitleBefore)
         assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 20)
 
-        clickOn(R.id.action_refresh)
+        clickMenu(R.id.action_refresh)
 
         assertDisplayed(R.id.fragment_base_schedule_shows_list)
+        assertDisplayed(subTitleAfter)
         assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 18)
     }
 
@@ -227,15 +263,22 @@ class MainActivityTest {
         enqueueErrorResponse()
         enqueueResponse("daily_schedule_20_05_18.json")
 
+        val date = getDateFor(2018, Calendar.MAY, 20)
+        val subTitle = context.getString(R.string.fragment_daily_schedule_subtitle, DateFormatter
+                .formatDate(context, date))
+
+
         prepareDailySchedule()
 
         activityTestRule.launchActivity(null)
 
         assertDisplayed(R.id.fragment_base_schedule_empty_view)
+        assertDisplayed(R.string.error_message_daily_schedule_loading_failed)
 
-        clickOn(R.id.action_refresh)
+        clickMenu(R.id.action_refresh)
 
         assertDisplayed(R.id.fragment_base_schedule_shows_list)
+        assertDisplayed(subTitle)
         assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 18)
     }
 
@@ -243,6 +286,10 @@ class MainActivityTest {
     fun displayReloadDailyScheduleAfterFailWithSnackbar() {
         enqueueErrorResponse()
         enqueueResponse("daily_schedule_20_05_18.json")
+
+        val date = getDateFor(2018, Calendar.MAY, 20)
+        val subTitle = context.getString(R.string.fragment_daily_schedule_subtitle, DateFormatter
+                .formatDate(context, date))
 
         prepareDailySchedule()
 
@@ -254,26 +301,8 @@ class MainActivityTest {
         clickOn(R.string.action_retry)
 
         assertDisplayed(R.id.fragment_base_schedule_shows_list)
+        assertDisplayed(subTitle)
         assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 18)
-    }
-
-    @Test
-    fun displayFailureSnackbarAfterSuccessfulDailyScheduleLoadingWithMenuRefresh() {
-        enqueueResponse("daily_schedule_20_05_18.json")
-        enqueueErrorResponse()
-
-        prepareDailySchedule()
-
-        activityTestRule.launchActivity(null)
-
-        assertDisplayed(R.id.fragment_base_schedule_shows_list)
-        assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 18)
-
-        refresh()
-
-        assertDisplayed(R.id.fragment_base_schedule_shows_list)
-        assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 18)
-        assertDisplayed(R.string.error_message_daily_schedule_loading_failed)
     }
 
     @Test
@@ -281,35 +310,48 @@ class MainActivityTest {
         enqueueResponse("daily_schedule_20_05_18.json")
         enqueueErrorResponse()
 
+        val date = getDateFor(2018, Calendar.MAY, 20)
+        val subTitle = context.getString(R.string.fragment_daily_schedule_subtitle, DateFormatter
+                .formatDate(context, date))
+
         prepareDailySchedule()
 
         activityTestRule.launchActivity(null)
 
         assertDisplayed(R.id.fragment_base_schedule_shows_list)
+        assertDisplayed(subTitle)
         assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 18)
 
-        clickOn(R.id.action_refresh)
+        refresh()
 
         assertDisplayed(R.id.fragment_base_schedule_shows_list)
+        assertDisplayed(subTitle)
         assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 18)
         assertDisplayed(R.string.error_message_daily_schedule_loading_failed)
     }
 
     @Test
-    fun displayFailureSnackbarAfterUnsuccessfulDailyScheduleLoadingWithMenuRefresh() {
+    fun displayFailureSnackbarAfterSuccessfulDailyScheduleLoadingWithMenuRefresh() {
+        enqueueResponse("daily_schedule_20_05_18.json")
         enqueueErrorResponse()
-        enqueueErrorResponse()
+
+        val date = getDateFor(2018, Calendar.MAY, 20)
+        val subTitle = context.getString(R.string.fragment_daily_schedule_subtitle, DateFormatter
+                .formatDate(context, date))
 
         prepareDailySchedule()
 
         activityTestRule.launchActivity(null)
 
-        assertDisplayed(R.id.fragment_base_schedule_empty_view)
-        assertDisplayed(R.string.error_message_daily_schedule_loading_failed)
+        assertDisplayed(R.id.fragment_base_schedule_shows_list)
+        assertDisplayed(subTitle)
+        assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 18)
 
-        refresh()
+        clickMenu(R.id.action_refresh)
 
-        assertDisplayed(R.id.fragment_base_schedule_empty_view)
+        assertDisplayed(R.id.fragment_base_schedule_shows_list)
+        assertDisplayed(subTitle)
+        assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 18)
         assertDisplayed(R.string.error_message_daily_schedule_loading_failed)
     }
 
@@ -325,7 +367,25 @@ class MainActivityTest {
         assertDisplayed(R.id.fragment_base_schedule_empty_view)
         assertDisplayed(R.string.error_message_daily_schedule_loading_failed)
 
-        clickOn(R.id.action_refresh)
+        clickMenu(R.id.action_refresh)
+
+        assertDisplayed(R.id.fragment_base_schedule_empty_view)
+        assertDisplayed(R.string.error_message_daily_schedule_loading_failed)
+    }
+
+    @Test
+    fun displayFailureSnackbarAfterUnsuccessfulDailyScheduleLoadingWithMenuRefresh() {
+        enqueueErrorResponse()
+        enqueueErrorResponse()
+
+        prepareDailySchedule()
+
+        activityTestRule.launchActivity(null)
+
+        assertDisplayed(R.id.fragment_base_schedule_empty_view)
+        assertDisplayed(R.string.error_message_daily_schedule_loading_failed)
+
+        clickMenu(R.id.action_refresh)
 
         assertDisplayed(R.id.fragment_base_schedule_empty_view)
         assertDisplayed(R.string.error_message_daily_schedule_loading_failed)
@@ -375,6 +435,12 @@ class MainActivityTest {
     fun displayLoadedWeeklySchedule() {
         enqueueResponse("weekly_schedule_one_week.json", delayed = false)
 
+        val dateStart = getDateFor(2018, Calendar.MAY, 7)
+        val dateEnd = getDateFor(2018, Calendar.MAY, 13)
+
+        val subTitle = context.getString(R.string.fragment_weekly_schedule_subtitle, DateFormatter
+                .formatDate(context, dateStart), DateFormatter.formatDate(context, dateEnd))
+
         prepareWeeklySchedule()
 
         activityTestRule.launchActivity(null)
@@ -385,6 +451,7 @@ class MainActivityTest {
         assertNotDisplayed(R.id.fragment_weekly_schedule_empty_view)
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
+        assertDisplayed(subTitle)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 7)
     }
 
@@ -410,16 +477,30 @@ class MainActivityTest {
         enqueueResponse("weekly_schedule_one_week.json")
         enqueueResponse("weekly_schedule_two_weeks.json")
 
+        val dateStartBefore = getDateFor(2018, Calendar.MAY, 7)
+        val dateEndBefore = getDateFor(2018, Calendar.MAY, 13)
+
+        val subTitleBefore = context.getString(R.string.fragment_weekly_schedule_subtitle, DateFormatter
+                .formatDate(context, dateStartBefore), DateFormatter.formatDate(context, dateEndBefore))
+
+        val dateStartAfter = getDateFor(2018, Calendar.MAY, 14)
+        val dateEndAfter = getDateFor(2018, Calendar.MAY, 27)
+
+        val subTitleAfter = context.getString(R.string.fragment_weekly_schedule_subtitle, DateFormatter
+                .formatDate(context, dateStartAfter), DateFormatter.formatDate(context, dateEndAfter))
+
         prepareWeeklySchedule()
 
         activityTestRule.launchActivity(null)
 
-        assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
+        assertDisplayed(subTitleBefore)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 7)
+        assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
 
         refresh()
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
+        assertDisplayed(subTitleAfter)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 14)
     }
 
@@ -427,6 +508,12 @@ class MainActivityTest {
     fun displayReloadWeeklyScheduleAfterFailWithSwipeRefresh() {
         enqueueErrorResponse()
         enqueueResponse("weekly_schedule_one_week.json")
+
+        val dateStart = getDateFor(2018, Calendar.MAY, 7)
+        val dateEnd = getDateFor(2018, Calendar.MAY, 13)
+
+        val subTitle = context.getString(R.string.fragment_weekly_schedule_subtitle, DateFormatter
+                .formatDate(context, dateStart), DateFormatter.formatDate(context, dateEnd))
 
         prepareWeeklySchedule()
 
@@ -436,6 +523,7 @@ class MainActivityTest {
 
         refresh()
 
+        assertDisplayed(subTitle)
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 7)
     }
@@ -445,16 +533,30 @@ class MainActivityTest {
         enqueueResponse("weekly_schedule_one_week.json")
         enqueueResponse("weekly_schedule_two_weeks.json")
 
+        val dateStartBefore = getDateFor(2018, Calendar.MAY, 7)
+        val dateEndBefore = getDateFor(2018, Calendar.MAY, 13)
+
+        val subTitleBefore = context.getString(R.string.fragment_weekly_schedule_subtitle, DateFormatter
+                .formatDate(context, dateStartBefore), DateFormatter.formatDate(context, dateEndBefore))
+
+        val dateStartAfter = getDateFor(2018, Calendar.MAY, 14)
+        val dateEndAfter = getDateFor(2018, Calendar.MAY, 27)
+
+        val subTitleAfter = context.getString(R.string.fragment_weekly_schedule_subtitle, DateFormatter
+                .formatDate(context, dateStartAfter), DateFormatter.formatDate(context, dateEndAfter))
+
         prepareWeeklySchedule()
 
         activityTestRule.launchActivity(null)
 
-        assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
+        assertDisplayed(subTitleBefore)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 7)
+        assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
 
-        clickOn(R.id.action_refresh)
+        clickMenu(R.id.action_refresh)
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
+        assertDisplayed(subTitleAfter)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 14)
     }
 
@@ -463,15 +565,23 @@ class MainActivityTest {
         enqueueErrorResponse()
         enqueueResponse("weekly_schedule_one_week.json")
 
+        val dateStart = getDateFor(2018, Calendar.MAY, 7)
+        val dateEnd = getDateFor(2018, Calendar.MAY, 13)
+
+        val subTitle = context.getString(R.string.fragment_weekly_schedule_subtitle, DateFormatter
+                .formatDate(context, dateStart), DateFormatter.formatDate(context, dateEnd))
+
         prepareWeeklySchedule()
 
         activityTestRule.launchActivity(null)
 
         assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
+        assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
 
-        clickOn(R.id.action_refresh)
+        clickMenu(R.id.action_refresh)
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
+        assertDisplayed(subTitle)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 7)
     }
 
@@ -479,6 +589,12 @@ class MainActivityTest {
     fun displayReloadWeeklyScheduleAfterFailWithSnackbar() {
         enqueueErrorResponse()
         enqueueResponse("weekly_schedule_one_week.json")
+
+        val dateStart = getDateFor(2018, Calendar.MAY, 7)
+        val dateEnd = getDateFor(2018, Calendar.MAY, 13)
+
+        val subTitle = context.getString(R.string.fragment_weekly_schedule_subtitle, DateFormatter
+                .formatDate(context, dateStart), DateFormatter.formatDate(context, dateEnd))
 
         prepareWeeklySchedule()
 
@@ -490,26 +606,8 @@ class MainActivityTest {
         clickOn(R.string.action_retry)
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
+        assertDisplayed(subTitle)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 7)
-    }
-
-    @Test
-    fun displayFailureSnackbarAfterSuccessfulWeeklyScheduleLoadingWithMenuRefresh() {
-        enqueueResponse("weekly_schedule_one_week.json")
-        enqueueErrorResponse()
-
-        prepareWeeklySchedule()
-
-        activityTestRule.launchActivity(null)
-
-        assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
-        assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 7)
-
-        refresh()
-
-        assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
-        assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 7)
-        assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
     }
 
     @Test
@@ -517,35 +615,52 @@ class MainActivityTest {
         enqueueResponse("weekly_schedule_one_week.json")
         enqueueErrorResponse()
 
+        val dateStart = getDateFor(2018, Calendar.MAY, 7)
+        val dateEnd = getDateFor(2018, Calendar.MAY, 13)
+
+        val subTitle = context.getString(R.string.fragment_weekly_schedule_subtitle, DateFormatter
+                .formatDate(context, dateStart), DateFormatter.formatDate(context, dateEnd))
+
         prepareWeeklySchedule()
 
         activityTestRule.launchActivity(null)
 
-        assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
+        assertDisplayed(subTitle)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 7)
+        assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
 
-        clickOn(R.id.action_refresh)
+        refresh()
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
+        assertDisplayed(subTitle)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 7)
         assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
     }
 
     @Test
-    fun displayFailureSnackbarAfterUnsuccessfulWeeklyScheduleLoadingWithMenuRefresh() {
+    fun displayFailureSnackbarAfterSuccessfulWeeklyScheduleLoadingWithMenuRefresh() {
+        enqueueResponse("weekly_schedule_one_week.json")
         enqueueErrorResponse()
-        enqueueErrorResponse()
+
+        val dateStart = getDateFor(2018, Calendar.MAY, 7)
+        val dateEnd = getDateFor(2018, Calendar.MAY, 13)
+
+        val subTitle = context.getString(R.string.fragment_weekly_schedule_subtitle, DateFormatter
+                .formatDate(context, dateStart), DateFormatter.formatDate(context, dateEnd))
 
         prepareWeeklySchedule()
 
         activityTestRule.launchActivity(null)
 
-        assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
-        assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
+        assertDisplayed(subTitle)
+        assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 7)
+        assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
 
-        refresh()
+        clickMenu(R.id.action_refresh)
 
-        assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
+        assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
+        assertDisplayed(subTitle)
+        assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 7)
         assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
     }
 
@@ -561,7 +676,25 @@ class MainActivityTest {
         assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
         assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
 
-        clickOn(R.id.action_refresh)
+        refresh()
+
+        assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
+        assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
+    }
+
+    @Test
+    fun displayFailureSnackbarAfterUnsuccessfulWeeklyScheduleLoadingWithMenuRefresh() {
+        enqueueErrorResponse()
+        enqueueErrorResponse()
+
+        prepareWeeklySchedule()
+
+        activityTestRule.launchActivity(null)
+
+        assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
+        assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
+
+        clickMenu(R.id.action_refresh)
 
         assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
         assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
@@ -621,5 +754,11 @@ class MainActivityTest {
             mockResponse.setBodyDelay(1, TimeUnit.SECONDS)
 
         mockWebServer.enqueue(mockResponse.setBody(source.readString(Charsets.UTF_8)))
+    }
+
+    private fun getDateFor(year: Int, month: Int, day: Int): Date {
+        val calendar = GregorianCalendar()
+        calendar.set(year, month, day)
+        return calendar.time
     }
 }
