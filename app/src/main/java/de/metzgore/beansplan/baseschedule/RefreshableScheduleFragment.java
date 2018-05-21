@@ -26,7 +26,13 @@ public abstract class RefreshableScheduleFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        callback.onScheduleRefreshed(null);
+        callback.onSubTitleUpdated(null);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        callback.onAddToolbarElevation();
     }
 
     @NonNull
@@ -35,6 +41,10 @@ public abstract class RefreshableScheduleFragment extends Fragment {
     }
 
     public interface OnScheduleRefreshedListener {
-        void onScheduleRefreshed(@Nullable String subtitle);
+        void onSubTitleUpdated(@Nullable String subtitle);
+
+        void onAddToolbarElevation();
+
+        void onRemoveToolbarElevation();
     }
 }

@@ -63,6 +63,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
                     android:background="@color/colorPrimary"
+                    android:elevation="@dimen/toolbar_elevation"
                     app:tabGravity="fill"
                     app:tabIndicatorColor="@android:color/white"
                     app:tabIndicatorHeight="4dp"

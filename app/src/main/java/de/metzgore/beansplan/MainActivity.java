@@ -9,15 +9,12 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import de.metzgore.beansplan.about.AboutActivity;
 import de.metzgore.beansplan.baseschedule.RefreshableScheduleFragment;
 import de.metzgore.beansplan.dailyschedule.RefreshableDailyScheduleFragment;
@@ -26,6 +23,9 @@ import de.metzgore.beansplan.settings.SettingsActivity;
 import de.metzgore.beansplan.settings.repository.AppSettings;
 import de.metzgore.beansplan.settings.repository.AppSettingsImp;
 import de.metzgore.beansplan.weeklyschedule.WeeklyScheduleFragment;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements RefreshableScheduleFragment.OnScheduleRefreshedListener {
 
@@ -83,7 +83,8 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
         Fragment scheduleFragment = fragmentManager.findFragmentByTag(CURRENT_FRAGMENT_TAG);
 
         if (scheduleFragment != null) {
-            fragmentManager.beginTransaction().replace(R.id.fragment_container, scheduleFragment, CURRENT_FRAGMENT_TAG).commit();
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, scheduleFragment,
+                    CURRENT_FRAGMENT_TAG).commit();
         } else {
             if (settings.shouldRememberLastOpenedSchedule()) {
                 restoreLastFragment();
@@ -219,7 +220,18 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
     }
 
     @Override
-    public void onScheduleRefreshed(String subtitle) {
+    public void onSubTitleUpdated(String subtitle) {
         binding.activityMainToolbar.setSubtitle(subtitle);
+    }
+
+    @Override
+    public void onAddToolbarElevation() {
+        ViewCompat.setElevation(binding.activityMainAppbarlayout, getResources().getDimension(R.dimen
+                .toolbar_elevation));
+    }
+
+    @Override
+    public void onRemoveToolbarElevation() {
+        ViewCompat.setElevation(binding.activityMainAppbarlayout, 0);
     }
 }
