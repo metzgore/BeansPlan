@@ -126,7 +126,7 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
             if (schedule.data.getDate() != null)
                 subTitle = getString(R.string.fragment_daily_schedule_subtitle, DateFormatter.formatDate(getContext(), schedule.data.getDate()));
 
-            getCallback().onScheduleRefreshed(subTitle);
+            getCallback().onSubTitleUpdated(subTitle);
         }
     }
 
