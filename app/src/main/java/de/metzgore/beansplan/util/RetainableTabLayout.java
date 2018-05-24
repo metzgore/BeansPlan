@@ -7,14 +7,14 @@ import android.util.AttributeSet;
 public class RetainableTabLayout extends TabLayout {
 
     /*
-    * Variable to store invalid position.
-    */
+     * Variable to store invalid position.
+     */
     private static final int INVALID_TAB_POS = -1;
 
     /*
-    * Variable to store last selected position, init it with invalid tab position.
-    */
-    private int mLastSelectedTabPosition = INVALID_TAB_POS;
+     * Variable to store last selected position, init it with invalid tab position.
+     */
+    private int lastSelectedTabPosition = INVALID_TAB_POS;
 
     public RetainableTabLayout(Context context) {
         super(context);
@@ -31,7 +31,7 @@ public class RetainableTabLayout extends TabLayout {
     @Override
     public void removeAllTabs() {
         // Retain last selected position before removing all tabs
-        mLastSelectedTabPosition = getSelectedTabPosition();
+        lastSelectedTabPosition = getSelectedTabPosition();
         super.removeAllTabs();
     }
 
@@ -40,6 +40,15 @@ public class RetainableTabLayout extends TabLayout {
         // Override selected tab position to return your last selected tab position
         final int selectedTabPositionAtParent = super.getSelectedTabPosition();
         return selectedTabPositionAtParent == INVALID_TAB_POS ?
-                mLastSelectedTabPosition : selectedTabPositionAtParent;
+                lastSelectedTabPosition : selectedTabPositionAtParent;
+    }
+
+    public void notifyDataSetChanged() {
+        post(() -> {
+            final TabLayout.Tab selectedTab = getTabAt(getSelectedTabPosition());
+            if (selectedTab != null) {
+                selectedTab.select();
+            }
+        });
     }
 }

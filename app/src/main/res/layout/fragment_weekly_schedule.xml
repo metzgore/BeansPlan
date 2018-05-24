@@ -69,10 +69,8 @@
                     app:tabIndicatorHeight="2dp"
                     app:tabMode="scrollable"
                     app:tabSelectedTextColor="@color/white"
-                    app:tabTextColor="@color/white_60"/>
-
+                    app:tabTextColor="@color/white"/>
             </android.support.v4.view.ViewPager>
-
         </FrameLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 </layout>
