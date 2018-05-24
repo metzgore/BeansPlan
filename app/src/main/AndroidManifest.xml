@@ -32,7 +32,7 @@
             android:name=".about.AboutActivity"
             android:label="@string/activity_about_title"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppThemeMaterialActionBar">
+            android:theme="@style/AppThemeAbout">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.metzgore.beansplan.MainActivity"/>
