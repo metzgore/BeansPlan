@@ -117,6 +117,7 @@ dependencies {
 
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
+    androidTestImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
 
     implementation 'com.github.daniel-stoneuk:material-about-library:2.3.0'
 

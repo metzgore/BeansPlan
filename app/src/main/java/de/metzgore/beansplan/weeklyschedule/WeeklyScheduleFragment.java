@@ -180,10 +180,10 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
     }
 
     private void handleData(Resource<WeeklySchedule> schedule) {
-        if (schedule.data != null) {
+        if (schedule.getData() != null) {
             getCallback().onRemoveToolbarElevation();
 
-            weeklyScheduleAdapter.setSchedule(schedule.data);
+            weeklyScheduleAdapter.setSchedule(schedule.getData());
             binding.fragmentWeeklyScheduleTabs.notifyDataSetChanged();
             binding.fragmentWeeklyScheduleViewPager.setCurrentItem(weeklyScheduleAdapter.getPositionFromDate(selectedDate));
 
