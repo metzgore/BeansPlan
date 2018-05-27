@@ -1,13 +1,6 @@
 package de.metzgore.beansplan.dailyschedule;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MediatorLiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Transformations;
-import android.arch.lifecycle.ViewModel;
-
-import javax.inject.Inject;
-
+import android.arch.lifecycle.*;
 import de.metzgore.beansplan.data.DailySchedule;
 import de.metzgore.beansplan.data.Resource;
 import de.metzgore.beansplan.data.Status;
@@ -19,18 +12,21 @@ public class DailyScheduleViewModel extends ViewModel implements IScheduleViewMo
     private final MutableLiveData<Boolean> refresh = new MutableLiveData<>();
     private final MutableLiveData<Resource<DailySchedule>> schedule = new MutableLiveData<>();
     private final MediatorLiveData<Resource<DailySchedule>> scheduleMerger = new MediatorLiveData<>();
-    public LiveData<Boolean> isEmpty = Transformations.map(scheduleMerger, schedule -> schedule == null || schedule.data == null || schedule.data.isEmpty());
-    public LiveData<Boolean> isLoading = Transformations.map(scheduleMerger, schedule -> schedule.status == Status.LOADING);
+    public LiveData<Boolean> isEmpty = Transformations.map(scheduleMerger, schedule -> schedule == null || schedule
+            .getData() == null || schedule.getData().isEmpty());
+    public LiveData<Boolean> isLoading = Transformations.map(scheduleMerger, schedule -> schedule
+            .getStatus() == Status.LOADING);
 
-    @Inject
-    public DailyScheduleViewModel(ScheduleRepository scheduleRepo) {
-        LiveData<Resource<DailySchedule>> scheduleFromRepo = Transformations.switchMap(refresh, scheduleRepo::loadScheduleOfToday);
+    public DailyScheduleViewModel(ScheduleRepository<DailySchedule> scheduleRepo) {
+        LiveData<Resource<DailySchedule>> scheduleFromRepo = Transformations.switchMap(refresh,
+                scheduleRepo::loadSchedule);
         scheduleMerger.addSource(scheduleFromRepo, scheduleMerger::setValue);
     }
 
-    public DailyScheduleViewModel(Resource<DailySchedule> scheduleResource) {
+    //TODO refactoring?
+    public DailyScheduleViewModel(DailySchedule dailySchedule) {
         scheduleMerger.addSource(schedule, scheduleMerger::setValue);
-        this.schedule.setValue(scheduleResource);
+        setSchedule(dailySchedule);
     }
 
     public LiveData<Resource<DailySchedule>> getSchedule() {
@@ -47,7 +43,7 @@ public class DailyScheduleViewModel extends ViewModel implements IScheduleViewMo
         refresh.setValue(isEmpty.getValue() == null || isEmpty.getValue());
     }
 
-    public void setSchedule(Resource<DailySchedule> scheduleResource) {
-        schedule.setValue(scheduleResource);
+    public void setSchedule(DailySchedule dailySchedule) {
+        schedule.setValue(Resource.Companion.success(dailySchedule, false));
     }
 }

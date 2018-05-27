@@ -31,11 +31,13 @@
             app:visibleGone="@{safeUnbox(viewModel.isLoading) &amp;&amp; safeUnbox(viewModel.isEmpty)}">
 
             <ProgressBar
+                android:id="@+id/fragment_base_schedule_loading_view_progress"
                 style="?android:attr/progressBarStyleLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <TextView
+                android:id="@+id/fragment_base_schedule_loading_view_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -45,7 +47,7 @@
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/shows_list"
+            android:id="@+id/fragment_base_schedule_shows_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"

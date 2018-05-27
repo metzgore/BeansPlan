@@ -1,7 +1,13 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-allopen'
 apply plugin: 'com.cookpad.android.licensetools'
+
+allOpen {
+    // allows mocking for classes w/o directly opening them for release builds
+    annotation 'de.metzgore.beansplan.testing.OpenClass'
+}
 
 android {
     compileSdkVersion 27
@@ -33,30 +39,75 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
+    sourceSets {
+        String sharedTestResourcesDir = 'src/sharedTest/resources'
+        String sharedTestJavaDir = 'src/sharedTest/java'
+
+        test {
+            java.srcDirs += [sharedTestJavaDir]
+            resources.srcDirs += [sharedTestResourcesDir]
+        }
+
+        androidTest {
+            java.srcDirs += [sharedTestJavaDir]
+            resources.srcDirs += [sharedTestResourcesDir]
+        }
+    }
+
+    flavorDimensions "default"
+
+    productFlavors {
+        app {
+            dimension "default"
+            buildConfigField 'String', 'HOST', '"http://api.rbtv.rodney.io/"'
+        }
+
+        ui_tests {
+            dimension "default"
+            buildConfigField 'String', 'HOST', '"http://127.0.0.1:43210/"'
+        }
+    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+    //Unit tests
+    testImplementation "android.arch.core:core-testing:$arch_components_version"
+    testImplementation 'junit:junit:4.12'
+    testImplementation "com.squareup.okhttp3:mockwebserver:$okhttp3_version"
+    testImplementation "org.mockito:mockito-core:$mockito_version"
+
+    //Android tests
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    androidTestImplementation('com.schibsted.spain:barista:2.4.0') {
+        exclude group: 'com.android.support'
+        exclude group: 'org.jetbrains.kotlin' // Only if you already use Kotlin in your project
+    }
+    androidTestImplementation "android.arch.core:core-testing:$arch_components_version"
+    androidTestImplementation "org.mockito:mockito-core:$mockito_version"
+    androidTestImplementation "com.squareup.okhttp3:mockwebserver:$okhttp3_version"
+
+    //Support libs
     implementation "com.android.support:appcompat-v7:$support_version"
     implementation "com.android.support:support-v4:$support_version"
     implementation "com.android.support:design:$support_version"
-    testImplementation 'junit:junit:4.12'
 
-    implementation 'com.google.code.gson:gson:2.8.1'
+    implementation 'com.google.code.gson:gson:2.8.2'
 
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
 
     implementation 'org.apache.commons:commons-lang3:3.7'
 
-    implementation 'android.arch.lifecycle:extensions:1.1.1'
-
-    implementation "com.google.dagger:dagger:$dagger_version"
-    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    implementation "android.arch.lifecycle:extensions:$arch_components_version"
 
     implementation 'com.vincentbrison.openlibraries.android:dualcache:3.1.1'
 
@@ -64,12 +115,26 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
+    androidTestImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
 
     implementation 'com.github.daniel-stoneuk:material-about-library:2.3.0'
 
     implementation "com.mikepenz:iconics-core:3.0.3@aar"
 
     implementation 'com.mikepenz:community-material-typeface:2.0.46.1@aar'
+
+    implementation "com.google.dagger:dagger-android:$dagger_version"
+    implementation "com.google.dagger:dagger-android-support:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.1.0'
+}
+
+// we need all open to run tests which  a we enable only for debug builds.
+project.tasks.whenTaskAdded {
+    if (it.name == "testReleaseUnitTest") {
+        it.enabled = false
+    }
 }

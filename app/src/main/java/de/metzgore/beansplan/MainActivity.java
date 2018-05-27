@@ -13,26 +13,37 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateUtils;
 import android.view.MenuItem;
 import android.view.View;
+import dagger.android.AndroidInjection;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
 import de.metzgore.beansplan.about.AboutActivity;
 import de.metzgore.beansplan.baseschedule.RefreshableScheduleFragment;
 import de.metzgore.beansplan.dailyschedule.RefreshableDailyScheduleFragment;
 import de.metzgore.beansplan.databinding.ActivityMainBinding;
 import de.metzgore.beansplan.settings.SettingsActivity;
 import de.metzgore.beansplan.settings.repository.AppSettings;
-import de.metzgore.beansplan.settings.repository.AppSettingsImp;
 import de.metzgore.beansplan.weeklyschedule.WeeklyScheduleFragment;
 
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements RefreshableScheduleFragment.OnScheduleRefreshedListener {
+public class MainActivity extends AppCompatActivity implements RefreshableScheduleFragment
+        .OnScheduleRefreshedListener, HasSupportFragmentInjector {
+
+    @Inject
+    DispatchingAndroidInjector<Fragment> fragmentInjector;
+
+    @Inject
+    AppSettings settings;
 
     private static final String CURRENT_FRAGMENT_TAG = "current_fragment_tag";
 
     private Map<String, Runnable> defaultSchedules = new HashMap<>(2);
-    private AppSettings settings = new AppSettingsImp(this);
     private FragmentManager fragmentManager;
     @IdRes
     private int selectedItemId;
@@ -42,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
@@ -227,11 +239,49 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
     @Override
     public void onAddToolbarElevation() {
         ViewCompat.setElevation(binding.activityMainAppbarlayout, getResources().getDimension(R.dimen
-                .toolbar_elevation));
+                .abc_action_bar_elevation_material));
     }
 
     @Override
     public void onRemoveToolbarElevation() {
         ViewCompat.setElevation(binding.activityMainAppbarlayout, 0);
+    }
+
+    public void onLastUpdateUpdated(long timestamp) {
+        if (timestamp <= 0) {
+            binding.activityMainUpdatedTextview.setVisibility(View.GONE);
+        } else {
+            binding.activityMainUpdatedTextview.setVisibility(View.VISIBLE);
+
+            String lastUpdated = getString(R.string.activity_main_last_updated, getString(R.string.activity_main_last_updated_now));
+
+            if (System.currentTimeMillis() - timestamp > DateUtils.MINUTE_IN_MILLIS) {
+                lastUpdated = getString(R.string.activity_main_last_updated, DateUtils.getRelativeTimeSpanString(timestamp));
+                binding.activityMainUpdatedTextview.setText(getString(R.string.activity_main_last_updated, DateUtils
+                        .getRelativeTimeSpanString(timestamp)));
+            }
+
+            binding.activityMainUpdatedTextview.setText(lastUpdated);
+        }
+    }
+
+    @Override
+    public void onAddPaddingBottom() {
+        int paddingBottom = (int) getResources().getDimension(R.dimen.toolbar_content_padding_bottom);
+        int paddingLeft = (int) getResources().getDimension(R.dimen.toolbar_content_padding_left);
+        int paddingRight = (int) getResources().getDimension(R.dimen.toolbar_content_padding_right);
+        binding.activityMainUpdatedTextview.setPadding(paddingLeft, 0, paddingRight, paddingBottom);
+    }
+
+    @Override
+    public void onRemovePaddingBottom() {
+        int paddingLeft = (int) getResources().getDimension(R.dimen.toolbar_content_padding_left);
+        int paddingRight = (int) getResources().getDimension(R.dimen.toolbar_content_padding_right);
+        binding.activityMainUpdatedTextview.setPadding(paddingLeft, 0, paddingRight, 0);
+    }
+
+    @Override
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return fragmentInjector;
     }
 }

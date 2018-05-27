@@ -35,13 +35,14 @@ public class LiveDataCallAdapter<R> implements CallAdapter<R, LiveData<ApiRespon
                 if (started.compareAndSet(false, true)) {
                     call.enqueue(new Callback<R>() {
                         @Override
-                        public void onResponse(@NonNull Call<R> call, @NonNull Response<R> response) {
-                            postValue(new ApiResponse<>(response));
+                        public void onResponse(@NonNull Call<R> call, @NonNull Response<R>
+                                response) {
+                            postValue(ApiResponse.Companion.create(response));
                         }
 
                         @Override
                         public void onFailure(@NonNull Call<R> call, @NonNull Throwable throwable) {
-                            postValue(new ApiResponse<>(throwable));
+                            postValue(ApiResponse.Companion.create(throwable));
                         }
                     });
                 }

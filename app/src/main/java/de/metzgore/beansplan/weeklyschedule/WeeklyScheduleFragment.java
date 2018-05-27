@@ -1,6 +1,7 @@
 package de.metzgore.beansplan.weeklyschedule;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.*;
 import android.widget.Toast;
+import dagger.android.support.AndroidSupportInjection;
 import de.metzgore.beansplan.R;
 import de.metzgore.beansplan.baseschedule.RefreshableScheduleFragment;
 import de.metzgore.beansplan.data.Resource;
@@ -21,6 +23,7 @@ import de.metzgore.beansplan.shared.ScheduleRepository;
 import de.metzgore.beansplan.util.DateFormatter;
 import de.metzgore.beansplan.util.di.WeeklyScheduleViewModelFactory;
 
+import javax.inject.Inject;
 import java.util.Date;
 
 public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
@@ -36,8 +39,17 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
     private WeeklyScheduleViewModel viewModel;
     private boolean scheduleContainsCurrentDay;
 
+    @Inject
+    ScheduleRepository<WeeklySchedule> repo;
+
     public static Fragment newInstance() {
         return new WeeklyScheduleFragment();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
     }
 
     @Override
@@ -50,33 +62,35 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
 
         setHasOptionsMenu(true);
 
-        weeklyScheduleAdapter = new WeeklySchedulePagerAdapter(getContext(), getChildFragmentManager());
+        weeklyScheduleAdapter = new WeeklySchedulePagerAdapter(getContext(),
+                getChildFragmentManager());
 
-        //TODO dagger
-        viewModel = ViewModelProviders.of(this,
-                new WeeklyScheduleViewModelFactory(new ScheduleRepository())).get(WeeklyScheduleViewModel.class);
+        viewModel = ViewModelProviders.of(this, new WeeklyScheduleViewModelFactory(repo)).get
+                (WeeklyScheduleViewModel.class);
         subscribeUi(viewModel);
     }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle
-            savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_weekly_schedule, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_weekly_schedule, container,
+                false);
 
         binding.setLifecycleOwner(this);
         binding.setViewModel(viewModel);
 
-        binding.fragmentWeeklyScheduleViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
+        binding.fragmentWeeklyScheduleViewPager.setPageTransformer(true, new
+                ZoomOutPageTransformer());
         binding.fragmentWeeklyScheduleViewPager.setAdapter(weeklyScheduleAdapter);
         //TODO check if there is a better solution
         binding.fragmentWeeklyScheduleViewPager.setSaveFromParentEnabled(false);
-        binding.fragmentWeeklyScheduleViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener
-                (binding.fragmentWeeklyScheduleTabs) {
+        binding.fragmentWeeklyScheduleViewPager.addOnPageChangeListener(new TabLayout
+                .TabLayoutOnPageChangeListener(binding.fragmentWeeklyScheduleTabs) {
             @Override
             public void onPageScrollStateChanged(int state) {
-                enableDisableSwipeRefresh(binding.fragmentWeeklyScheduleSwipeRefresh.isRefreshing() || state ==
-                        ViewPager.SCROLL_STATE_IDLE);
+                enableDisableSwipeRefresh(binding.fragmentWeeklyScheduleSwipeRefresh.isRefreshing
+                        () || state == ViewPager.SCROLL_STATE_IDLE);
             }
 
             @Override
@@ -85,9 +99,10 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
             }
         });
 
-        binding.fragmentWeeklyScheduleSwipeRefresh.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color
-                .colorPrimary));
-        binding.fragmentWeeklyScheduleSwipeRefresh.setOnRefreshListener(() -> viewModel.loadScheduleFromNetwork());
+        binding.fragmentWeeklyScheduleSwipeRefresh.setColorSchemeColors(ContextCompat.getColor
+                (getContext(), R.color.colorPrimary));
+        binding.fragmentWeeklyScheduleSwipeRefresh.setOnRefreshListener(() -> viewModel
+                .loadScheduleFromNetwork());
 
         return binding.getRoot();
     }
@@ -152,7 +167,8 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
         if (positionOfCurrentDay >= 0 && positionOfCurrentDay < weeklyScheduleAdapter.getCount()) {
             binding.fragmentWeeklyScheduleViewPager.setCurrentItem(positionOfCurrentDay);
         } else {
-            Toast.makeText(getContext(), R.string.error_message_no_day_found, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.error_message_no_day_found, Toast.LENGTH_LONG)
+                    .show();
         }
     }
 
@@ -164,21 +180,23 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
     }
 
     private void handleData(Resource<WeeklySchedule> schedule) {
-        if (schedule.data != null) {
+        if (schedule.getData() != null) {
             getCallback().onRemoveToolbarElevation();
 
-            weeklyScheduleAdapter.setSchedule(schedule.data);
+            weeklyScheduleAdapter.setSchedule(schedule.getData());
             binding.fragmentWeeklyScheduleTabs.notifyDataSetChanged();
             binding.fragmentWeeklyScheduleViewPager.setCurrentItem(weeklyScheduleAdapter.getPositionFromDate(selectedDate));
 
             String subTitle = null;
 
-            if (schedule.data.getStartDate() != null && schedule.data.getEndDate() != null)
-                subTitle = getString(R.string.fragment_weekly_schedule_subtitle,
-                        DateFormatter.formatDate(getContext(), schedule.data.getStartDate()),
-                        DateFormatter.formatDate(getContext(), schedule.data.getEndDate()));
+            if (schedule.getData().getStartDate() != null && schedule.getData().getEndDate() !=
+                    null)
+                subTitle = getString(R.string.fragment_weekly_schedule_subtitle, DateFormatter
+                                .formatDate(getContext(), schedule.getData().getStartDate()),
+                        DateFormatter.formatDate(getContext(), schedule.getData().getEndDate()));
 
             getCallback().onSubTitleUpdated(subTitle);
+            getCallback().onLastUpdateUpdated(schedule.getData().getTimestamp());
 
             boolean containsCurrentDay = weeklyScheduleAdapter.containsScheduleForCurrentDay();
 
@@ -190,7 +208,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
     }
 
     private void handleState(Resource<WeeklySchedule> schedule) {
-        switch (schedule.status) {
+        switch (schedule.getStatus()) {
             case LOADING:
                 showRefreshIndicator(true);
                 hideSnackbar();
@@ -208,14 +226,14 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
 
     public void showRefreshIndicator(final boolean isRefreshing) {
         if (binding != null) {
-            binding.fragmentWeeklyScheduleSwipeRefresh.post(() -> binding.fragmentWeeklyScheduleSwipeRefresh
-                    .setRefreshing(isRefreshing));
+            binding.fragmentWeeklyScheduleSwipeRefresh.post(() -> binding
+                    .fragmentWeeklyScheduleSwipeRefresh.setRefreshing(isRefreshing));
         }
     }
 
     public void showRetrySnackbar() {
-        snackbar = Snackbar.make(getView(), R.string.error_message_weekly_schedule_loading_failed, Snackbar
-                .LENGTH_INDEFINITE)
+        snackbar = Snackbar.make(getView(), R.string
+                .error_message_weekly_schedule_loading_failed, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.action_retry, view -> viewModel.loadScheduleFromNetwork());
         snackbar.show();
     }
@@ -253,9 +271,8 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
                 view.setScaleY(scaleFactor);
 
                 // Fade the page relative to its size.
-                view.setAlpha(MIN_ALPHA +
-                        (scaleFactor - MIN_SCALE) /
-                                (1 - MIN_SCALE) * (1 - MIN_ALPHA));
+                view.setAlpha(MIN_ALPHA + (scaleFactor - MIN_SCALE) / (1 - MIN_SCALE) * (1 -
+                        MIN_ALPHA));
 
             } else { // (1,+Infinity]
                 // This page is way off-screen to the right.

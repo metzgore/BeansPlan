@@ -2,4 +2,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="toolbar_elevation">4dp</dimen>
+    <dimen name="toolbar_content_padding_left">72dp</dimen>
+    <dimen name="toolbar_content_padding_bottom">8dp</dimen>
+    <dimen name="toolbar_content_padding_right">16dp</dimen>
 </resources>
