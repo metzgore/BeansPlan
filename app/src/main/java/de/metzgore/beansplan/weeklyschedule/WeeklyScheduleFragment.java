@@ -196,6 +196,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
                         DateFormatter.formatDate(getContext(), schedule.getData().getEndDate()));
 
             getCallback().onSubTitleUpdated(subTitle);
+            getCallback().onLastUpdateUpdated(schedule.getData().getTimestamp());
 
             boolean containsCurrentDay = weeklyScheduleAdapter.containsScheduleForCurrentDay();
 

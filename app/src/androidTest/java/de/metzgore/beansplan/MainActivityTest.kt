@@ -156,6 +156,7 @@ class MainActivityTest {
         assertNotDisplayed(R.id.fragment_base_schedule_loading_view_text)
         assertNotDisplayed(R.id.fragment_base_schedule_empty_view)
 
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertDisplayed(R.id.fragment_base_schedule_shows_list)
         assertDisplayed(subTitle)
         assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 20)
@@ -172,6 +173,7 @@ class MainActivityTest {
         assertDisplayed(R.id.fragment_base_schedule_empty_view)
         assertDisplayed(R.string.error_message_daily_schedule_loading_failed)
 
+        assertNotDisplayed(R.id.activity_main_updated_textview)
         assertNotDisplayed(R.id.fragment_base_schedule_loading_view)
         assertNotDisplayed(R.id.fragment_base_schedule_loading_view_progress)
         assertNotDisplayed(R.id.fragment_base_schedule_loading_view_text)
@@ -197,12 +199,14 @@ class MainActivityTest {
 
         assertDisplayed(R.id.fragment_base_schedule_shows_list)
         assertDisplayed(subTitleBefore)
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 20)
 
         refresh()
 
         assertDisplayed(R.id.fragment_base_schedule_shows_list)
         assertDisplayed(subTitleAfter)
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 18)
     }
 
@@ -220,6 +224,7 @@ class MainActivityTest {
         activityTestRule.launchActivity(null)
 
         assertDisplayed(R.id.fragment_base_schedule_empty_view)
+        assertNotDisplayed(R.id.activity_main_updated_textview)
         //TODO crashed, Barista bug?
         //assertNotDisplayed(subTitle)
 
@@ -227,6 +232,7 @@ class MainActivityTest {
 
         assertDisplayed(R.id.fragment_base_schedule_shows_list)
         assertDisplayed(subTitle)
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 18)
     }
 
@@ -249,12 +255,14 @@ class MainActivityTest {
 
         assertDisplayed(R.id.fragment_base_schedule_shows_list)
         assertDisplayed(subTitleBefore)
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 20)
 
         clickMenu(R.id.action_refresh)
 
         assertDisplayed(R.id.fragment_base_schedule_shows_list)
         assertDisplayed(subTitleAfter)
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 18)
     }
 
@@ -274,11 +282,13 @@ class MainActivityTest {
 
         assertDisplayed(R.id.fragment_base_schedule_empty_view)
         assertDisplayed(R.string.error_message_daily_schedule_loading_failed)
+        assertNotDisplayed(R.id.activity_main_updated_textview)
 
         clickMenu(R.id.action_refresh)
 
         assertDisplayed(R.id.fragment_base_schedule_shows_list)
         assertDisplayed(subTitle)
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 18)
     }
 
@@ -297,11 +307,13 @@ class MainActivityTest {
 
         assertDisplayed(R.id.fragment_base_schedule_empty_view)
         assertDisplayed(R.string.error_message_daily_schedule_loading_failed)
+        assertNotDisplayed(R.id.activity_main_updated_textview)
 
         clickOn(R.string.action_retry)
 
         assertDisplayed(R.id.fragment_base_schedule_shows_list)
         assertDisplayed(subTitle)
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 18)
     }
 
@@ -320,12 +332,14 @@ class MainActivityTest {
 
         assertDisplayed(R.id.fragment_base_schedule_shows_list)
         assertDisplayed(subTitle)
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 18)
 
         refresh()
 
         assertDisplayed(R.id.fragment_base_schedule_shows_list)
         assertDisplayed(subTitle)
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 18)
         assertDisplayed(R.string.error_message_daily_schedule_loading_failed)
     }
@@ -345,12 +359,14 @@ class MainActivityTest {
 
         assertDisplayed(R.id.fragment_base_schedule_shows_list)
         assertDisplayed(subTitle)
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 18)
 
         clickMenu(R.id.action_refresh)
 
         assertDisplayed(R.id.fragment_base_schedule_shows_list)
         assertDisplayed(subTitle)
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertRecyclerViewItemCount(R.id.fragment_base_schedule_shows_list, 18)
         assertDisplayed(R.string.error_message_daily_schedule_loading_failed)
     }
@@ -366,11 +382,13 @@ class MainActivityTest {
 
         assertDisplayed(R.id.fragment_base_schedule_empty_view)
         assertDisplayed(R.string.error_message_daily_schedule_loading_failed)
+        assertNotDisplayed(R.id.activity_main_updated_textview)
 
         clickMenu(R.id.action_refresh)
 
         assertDisplayed(R.id.fragment_base_schedule_empty_view)
         assertDisplayed(R.string.error_message_daily_schedule_loading_failed)
+        assertNotDisplayed(R.id.activity_main_updated_textview)
     }
 
     @Test
@@ -384,11 +402,13 @@ class MainActivityTest {
 
         assertDisplayed(R.id.fragment_base_schedule_empty_view)
         assertDisplayed(R.string.error_message_daily_schedule_loading_failed)
+        assertNotDisplayed(R.id.activity_main_updated_textview)
 
         clickMenu(R.id.action_refresh)
 
         assertDisplayed(R.id.fragment_base_schedule_empty_view)
         assertDisplayed(R.string.error_message_daily_schedule_loading_failed)
+        assertNotDisplayed(R.id.activity_main_updated_textview)
     }
 
     @Test
@@ -402,11 +422,13 @@ class MainActivityTest {
 
         assertDisplayed(R.id.fragment_base_schedule_empty_view)
         assertDisplayed(R.string.error_message_daily_schedule_loading_failed)
+        assertNotDisplayed(R.id.activity_main_updated_textview)
 
         clickOn(R.string.action_retry)
 
         assertDisplayed(R.id.fragment_base_schedule_empty_view)
         assertDisplayed(R.string.error_message_daily_schedule_loading_failed)
+        assertNotDisplayed(R.id.activity_main_updated_textview)
     }
 
     /**
@@ -494,12 +516,14 @@ class MainActivityTest {
         activityTestRule.launchActivity(null)
 
         assertDisplayed(subTitleBefore)
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 7)
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
 
         refresh()
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertDisplayed(subTitleAfter)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 14)
     }
@@ -519,11 +543,14 @@ class MainActivityTest {
 
         activityTestRule.launchActivity(null)
 
+        assertNotDisplayed(R.id.activity_main_updated_textview)
+        assertNotDisplayed(R.id.fragment_weekly_schedule_view_pager)
         assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
 
         refresh()
 
         assertDisplayed(subTitle)
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 7)
     }
@@ -550,12 +577,14 @@ class MainActivityTest {
         activityTestRule.launchActivity(null)
 
         assertDisplayed(subTitleBefore)
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 7)
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
 
         clickMenu(R.id.action_refresh)
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertDisplayed(subTitleAfter)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 14)
     }
@@ -577,11 +606,14 @@ class MainActivityTest {
 
         assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
         assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
+        assertNotDisplayed(R.id.activity_main_updated_textview)
+        assertNotDisplayed(R.id.fragment_weekly_schedule_view_pager)
 
         clickMenu(R.id.action_refresh)
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
         assertDisplayed(subTitle)
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 7)
     }
 
@@ -602,11 +634,14 @@ class MainActivityTest {
 
         assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
         assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
+        assertNotDisplayed(R.id.fragment_weekly_schedule_view_pager)
+        assertNotDisplayed(R.id.activity_main_updated_textview)
 
         clickOn(R.string.action_retry)
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
         assertDisplayed(subTitle)
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 7)
     }
 
@@ -626,6 +661,7 @@ class MainActivityTest {
         activityTestRule.launchActivity(null)
 
         assertDisplayed(subTitle)
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 7)
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
 
@@ -633,6 +669,7 @@ class MainActivityTest {
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
         assertDisplayed(subTitle)
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 7)
         assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
     }
@@ -653,12 +690,14 @@ class MainActivityTest {
         activityTestRule.launchActivity(null)
 
         assertDisplayed(subTitle)
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 7)
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
 
         clickMenu(R.id.action_refresh)
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
+        assertDisplayed(R.id.activity_main_updated_textview)
         assertDisplayed(subTitle)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 7)
         assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
@@ -675,11 +714,15 @@ class MainActivityTest {
 
         assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
         assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
+        assertNotDisplayed(R.id.fragment_weekly_schedule_view_pager)
+        assertNotDisplayed(R.id.activity_main_updated_textview)
 
         refresh()
 
         assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
         assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
+        assertNotDisplayed(R.id.fragment_weekly_schedule_view_pager)
+        assertNotDisplayed(R.id.activity_main_updated_textview)
     }
 
     @Test
@@ -693,11 +736,15 @@ class MainActivityTest {
 
         assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
         assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
+        assertNotDisplayed(R.id.fragment_weekly_schedule_view_pager)
+        assertNotDisplayed(R.id.activity_main_updated_textview)
 
         clickMenu(R.id.action_refresh)
 
         assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
         assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
+        assertNotDisplayed(R.id.fragment_weekly_schedule_view_pager)
+        assertNotDisplayed(R.id.activity_main_updated_textview)
     }
 
     @Test
@@ -711,11 +758,15 @@ class MainActivityTest {
 
         assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
         assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
+        assertNotDisplayed(R.id.fragment_weekly_schedule_view_pager)
+        assertNotDisplayed(R.id.activity_main_updated_textview)
 
         clickOn(R.string.action_retry)
 
         assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
         assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
+        assertNotDisplayed(R.id.fragment_weekly_schedule_view_pager)
+        assertNotDisplayed(R.id.activity_main_updated_textview)
     }
 
     /**

@@ -128,6 +128,8 @@ dependencies {
     implementation "com.google.dagger:dagger-android:$dagger_version"
     implementation "com.google.dagger:dagger-android-support:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
+
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.1.0'
 }
 
 // we need all open to run tests which  a we enable only for debug builds.

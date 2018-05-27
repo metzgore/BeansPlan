@@ -136,6 +136,8 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
                         .formatDate(getContext(), schedule.getData().getDate()));
 
             getCallback().onSubTitleUpdated(subTitle);
+            getCallback().onLastUpdateUpdated(schedule.getData().getTimestamp());
+            getCallback().onAddPaddingBottom();
         }
     }
 

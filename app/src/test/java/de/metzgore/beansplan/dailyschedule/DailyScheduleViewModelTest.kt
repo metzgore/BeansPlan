@@ -66,7 +66,6 @@ class DailyScheduleViewModelTest {
     fun testSetDailySchedule() {
         dailyScheduleViewModel.schedule.observeForever(mock())
 
-        //test loading from network with empty schedule
         dailyScheduleViewModel.setSchedule(TestUtils.createDailySchedule())
         verify(dailyScheduleRepository, never()).loadSchedule(anyBoolean())
 

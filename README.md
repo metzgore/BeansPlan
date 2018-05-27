@@ -19,6 +19,7 @@ Wochenplan
 ## Used patterns and libraries
 The app utilizes MVVM pattern, Android LiveData, ViewModel, Data Binding, and various libraries, including:
 * [Retrofit](https://square.github.io/retrofit/)
+* [Dagger](https://google.github.io/dagger/)
 * [Gson](https://github.com/google/gson)
 * [commons-lang](https://github.com/apache/commons-lang)
 

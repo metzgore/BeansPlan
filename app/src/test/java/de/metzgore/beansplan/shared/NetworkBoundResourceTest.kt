@@ -6,11 +6,11 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import de.metzgore.beansplan.api.ApiResponse
 import de.metzgore.beansplan.data.Resource
+import de.metzgore.beansplan.mock
 import de.metzgore.beansplan.util.ApiUtil
 import de.metzgore.beansplan.util.NetworkBoundResource
 import de.metzgore.beansplan.utils.CountingAppExecutors
 import de.metzgore.beansplan.utils.InstantAppExecutors
-import de.metzgore.beansplan.mock
 import okhttp3.MediaType
 import okhttp3.ResponseBody
 import org.hamcrest.CoreMatchers.`is`
@@ -37,6 +37,8 @@ Boolean) {
 
     private lateinit var handleShouldMatch: (Foo?) -> Boolean
 
+    private lateinit var handleShouldSaveCallResult: (Foo?) -> Boolean
+
     private lateinit var handleCreateCall: () -> LiveData<ApiResponse<Foo>>
 
     private val dbData = MutableLiveData<Foo>()
@@ -59,6 +61,10 @@ Boolean) {
         else
             InstantAppExecutors()
         networkBoundResource = object : NetworkBoundResource<Foo, Foo>(appExecutors, forceRefresh) {
+            override fun shouldSave(item: Foo): Boolean {
+                return handleShouldSaveCallResult(item)
+            }
+
             override fun saveCallResult(item: Foo) {
                 handleSaveCallResult(item)
             }
@@ -94,6 +100,7 @@ Boolean) {
     fun basicFromNetwork() {
         val saved = AtomicReference<Foo>()
         handleShouldMatch = { it == null }
+        handleShouldSaveCallResult = { true }
         val fetchedDbValue = Foo(1)
         handleSaveCallResult = { foo ->
             saved.set(foo)
@@ -117,6 +124,7 @@ Boolean) {
     fun failureFromNetwork() {
         val saved = AtomicBoolean(false)
         handleShouldMatch = { it == null }
+        handleShouldSaveCallResult = { true }
         handleSaveCallResult = {
             saved.set(true)
         }
@@ -139,6 +147,7 @@ Boolean) {
     fun dbSuccessWithoutNetwork() {
         val saved = AtomicBoolean(false)
         handleShouldMatch = { it == null }
+        handleShouldSaveCallResult = { true }
         handleSaveCallResult = {
             saved.set(true)
         }
@@ -165,6 +174,7 @@ Boolean) {
         val dbValue = Foo(1)
         val saved = AtomicBoolean(false)
         handleShouldMatch = { foo -> foo === dbValue }
+        handleShouldSaveCallResult = { true }
         handleSaveCallResult = {
             saved.set(true)
         }
@@ -200,6 +210,7 @@ Boolean) {
         val dbValue2 = Foo(2)
         val saved = AtomicReference<Foo>()
         handleShouldMatch = { foo -> foo === dbValue }
+        handleShouldSaveCallResult = { true }
         handleSaveCallResult = { foo ->
             saved.set(foo)
             dbData.setValue(dbValue2)
@@ -222,6 +233,91 @@ Boolean) {
         assertThat(saved.get(), `is`(networkResult))
         verify(observer).onChanged(Resource.success(dbValue2, forceRefresh))
         verifyNoMoreInteractions(observer)
+    }
+
+    @Test
+    fun doSaveWhenCachedIsNull() {
+        val saved = AtomicReference<Boolean>()
+        saved.set(false)
+        handleShouldMatch = {
+            true
+        }
+
+        handleSaveCallResult = { _ ->
+            saved.set(true)
+        }
+
+        val networkResult = Foo(1)
+        handleCreateCall = { ApiUtil.createCall(Response.success(networkResult)) }
+
+        val observer = mock<Observer<Resource<Foo>>>()
+
+        handleShouldSaveCallResult = {
+            null != it
+        }
+        networkBoundResource.asLiveData().observeForever(observer)
+        drain()
+        reset(observer)
+        dbData.value = null
+        drain()
+        assertThat(saved.get(), `is`(true))
+    }
+
+    @Test
+    fun doNotSaveWhenCachedAndNetworkEqual() {
+        val saved = AtomicReference<Boolean>()
+        saved.set(false)
+        handleShouldMatch = {
+            true
+        }
+
+        handleSaveCallResult = { _ ->
+            saved.set(true)
+        }
+
+        val networkResult = Foo(1)
+        handleCreateCall = { ApiUtil.createCall(Response.success(networkResult)) }
+
+        val observer = mock<Observer<Resource<Foo>>>()
+
+        handleShouldSaveCallResult = {
+            networkResult != it
+        }
+        networkBoundResource.asLiveData().observeForever(observer)
+        drain()
+        reset(observer)
+        dbData.value = null
+        drain()
+        assertThat(saved.get(), `is`(false))
+    }
+
+    @Test
+    fun doSaveWhenCachedAndNetworkNotEqual() {
+        val saved = AtomicReference<Boolean>()
+        saved.set(false)
+        handleShouldMatch = {
+            true
+        }
+
+        handleSaveCallResult = { _ ->
+            saved.set(true)
+        }
+
+        val networkResult = Foo(1)
+        handleCreateCall = { ApiUtil.createCall(Response.success(networkResult)) }
+
+        val observer = mock<Observer<Resource<Foo>>>()
+
+        //cached data is null
+        handleShouldSaveCallResult = {
+            Foo(2) != it
+        }
+        networkBoundResource.asLiveData().observeForever(observer)
+        drain()
+        reset(observer)
+        dbData.value = null
+        drain()
+        assertThat(saved.get(), `is`(true))
     }
 
     private data class Foo(var value: Int)

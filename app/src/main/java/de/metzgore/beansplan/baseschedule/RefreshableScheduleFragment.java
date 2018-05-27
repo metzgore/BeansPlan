@@ -27,6 +27,8 @@ public abstract class RefreshableScheduleFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         callback.onSubTitleUpdated(null);
+        callback.onLastUpdateUpdated(0);
+        callback.onRemovePaddingBottom();
     }
 
     @Override
@@ -46,5 +48,11 @@ public abstract class RefreshableScheduleFragment extends Fragment {
         void onAddToolbarElevation();
 
         void onRemoveToolbarElevation();
+
+        void onLastUpdateUpdated(long timestamp);
+
+        void onAddPaddingBottom();
+
+        void onRemovePaddingBottom();
     }
 }

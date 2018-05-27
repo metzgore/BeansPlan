@@ -10,6 +10,7 @@ import de.metzgore.beansplan.data.WeeklySchedule
 import de.metzgore.beansplan.shared.ScheduleRepository
 import de.metzgore.beansplan.shared.WeeklyScheduleDao
 import de.metzgore.beansplan.testing.OpenForTesting
+import de.metzgore.beansplan.util.Clock
 import de.metzgore.beansplan.util.NetworkBoundResource
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -18,16 +19,22 @@ import javax.inject.Singleton
 @Singleton
 class WeeklyScheduleRepository @Inject constructor(private val api: RbtvScheduleApi, private val dao: WeeklyScheduleDao,
                                                    private val
-                                                   appExecutors: AppExecutors) : ScheduleRepository<WeeklySchedule> {
+                                                   appExecutors: AppExecutors, private val
+                                                   clock: Clock) : ScheduleRepository<WeeklySchedule> {
 
     private val weeklyScheduleCacheData = MutableLiveData<WeeklySchedule>()
 
     override fun loadSchedule(forceRefresh: Boolean): LiveData<Resource<WeeklySchedule>> {
         return object : NetworkBoundResource<WeeklySchedule, WeeklySchedule>(appExecutors,
                 forceRefresh) {
+            override fun shouldSave(item: WeeklySchedule): Boolean {
+                val savedSchedule = dao.get()
+                return savedSchedule != item
+            }
+
             override fun saveCallResult(item: WeeklySchedule) {
                 //TODO check preSerialize
-                item.updateTimestamp()
+                item.timestamp = clock.nowInMillis()
                 dao.save(item)
             }
 

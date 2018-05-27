@@ -52,7 +52,9 @@ abstract class NetworkBoundResource<ResultType, RequestType>
             when (response) {
                 is ApiSuccessResponse -> {
                     appExecutors.diskIO().execute {
-                        saveCallResult(processResponse(response))
+                        if (shouldSave(processResponse(response))) {
+                            saveCallResult(processResponse(response))
+                        }
                         appExecutors.mainThread().execute {
                             // we specially request a new live data,
                             // otherwise we will get immediately last cached value,
@@ -90,6 +92,9 @@ abstract class NetworkBoundResource<ResultType, RequestType>
 
     @WorkerThread
     protected abstract fun saveCallResult(item: RequestType)
+
+    @WorkerThread
+    protected abstract fun shouldSave(item: RequestType): Boolean
 
     @MainThread
     protected abstract fun shouldFetch(data: ResultType?): Boolean

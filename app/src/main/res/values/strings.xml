@@ -7,6 +7,9 @@
 <resources>
     <string name="app_name">&appname;</string>
 
+    <string name="activity_main_last_updated">Stand: %s</string>
+    <string name="activity_main_last_updated_now">Gerade</string>
+
     <string name="fragment_daily_schedule_id">0</string>
     <string name="error_message_daily_schedule_loading_failed">Tagesplan konnte nicht abgerufen werden</string>
     <string name="alert_message_no_daily_schedule">Tagesplan nicht vorhanden</string>
