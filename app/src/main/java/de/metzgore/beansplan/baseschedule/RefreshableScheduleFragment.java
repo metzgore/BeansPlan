@@ -21,6 +21,8 @@ public abstract class RefreshableScheduleFragment extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement OnScheduleRefreshedListener");
         }
+
+        callback.onExpandAppBar();
     }
 
     @Override
@@ -54,5 +56,7 @@ public abstract class RefreshableScheduleFragment extends Fragment {
         void onAddPaddingBottom();
 
         void onRemovePaddingBottom();
+
+        void onExpandAppBar();
     }
 }

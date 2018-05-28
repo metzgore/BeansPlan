@@ -281,6 +281,11 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
     }
 
     @Override
+    public void onExpandAppBar() {
+        binding.activityMainAppbarlayout.setExpanded(true, false);
+    }
+
+    @Override
     public AndroidInjector<Fragment> supportFragmentInjector() {
         return fragmentInjector;
     }
