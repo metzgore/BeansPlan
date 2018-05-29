@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.transition.Fade;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -95,8 +97,7 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
         Fragment scheduleFragment = fragmentManager.findFragmentByTag(CURRENT_FRAGMENT_TAG);
 
         if (scheduleFragment != null) {
-            fragmentManager.beginTransaction().replace(R.id.fragment_container, scheduleFragment,
-                    CURRENT_FRAGMENT_TAG).commit();
+            replaceFragment(scheduleFragment);
         } else {
             if (settings.shouldRememberLastOpenedSchedule()) {
                 restoreLastFragment();
@@ -198,7 +199,14 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
             e.printStackTrace();
         }
 
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment, CURRENT_FRAGMENT_TAG).commit();
+        replaceFragment(fragment);
+    }
+
+    private void replaceFragment(@NonNull Fragment fragment) {
+        fragment.setExitTransition(new Fade(Fade.OUT));
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment, CURRENT_FRAGMENT_TAG).commit();
     }
 
 
@@ -238,8 +246,7 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
 
     @Override
     public void onAddToolbarElevation() {
-        ViewCompat.setElevation(binding.activityMainAppbarlayout, getResources().getDimension(R.dimen
-                .abc_action_bar_elevation_material));
+        ViewCompat.setElevation(binding.activityMainAppbarlayout, getResources().getDimension(R.dimen.toolbar_elevation));
     }
 
     @Override
