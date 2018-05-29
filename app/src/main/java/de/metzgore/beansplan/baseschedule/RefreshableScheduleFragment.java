@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.view.View;
 
 public abstract class RefreshableScheduleFragment extends Fragment {
 
@@ -21,22 +20,16 @@ public abstract class RefreshableScheduleFragment extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement OnScheduleRefreshedListener");
         }
-
-        callback.onExpandAppBar();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        callback.onSubTitleUpdated(null);
-        callback.onLastUpdateUpdated(0);
-        callback.onRemovePaddingBottom();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         callback.onAddToolbarElevation();
+        callback.onExpandAppBar();
+        callback.onSubTitleUpdated(null);
+        callback.onLastUpdateUpdated(0);
+        callback.onRemovePaddingBottom();
     }
 
     @NonNull
