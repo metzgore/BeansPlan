@@ -68,8 +68,7 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
         binding.setViewModel(viewModel);
 
         binding.singleDayIncluded.fragmentBaseScheduleShowsList.addItemDecoration(new DividerItemDecoration
-                (getActivity(), DividerItemDecoration.VERTICAL));
-        binding.singleDayIncluded.fragmentBaseScheduleShowsList.setItemAnimator(null);
+                (getContext(), DividerItemDecoration.VERTICAL));
         binding.singleDayIncluded.fragmentBaseScheduleShowsList.setHasFixedSize(true);
 
         binding.swipeRefresh.setOnRefreshListener(() -> viewModel.loadScheduleFromNetwork());
