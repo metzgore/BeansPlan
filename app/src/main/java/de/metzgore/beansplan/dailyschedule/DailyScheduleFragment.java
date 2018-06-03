@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,6 +82,9 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
         binding.fragmentBaseScheduleShowsList.addItemDecoration(new DividerItemDecoration(getActivity(),
                 DividerItemDecoration.VERTICAL));
         binding.fragmentBaseScheduleShowsList.setHasFixedSize(true);
+        ((SimpleItemAnimator) binding.fragmentBaseScheduleShowsList.getItemAnimator()).setSupportsChangeAnimations
+                (false);
+
         binding.fragmentBaseScheduleShowsList.setAdapter(dailyScheduleAdapter);
 
         return binding.getRoot();
