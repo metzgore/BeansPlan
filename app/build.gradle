@@ -67,7 +67,7 @@ android {
             buildConfigField 'String', 'HOST', '"http://api.rbtv.rodney.io/"'
         }
 
-        ui_tests {
+        uiTests {
             dimension "default"
             buildConfigField 'String', 'HOST', '"http://127.0.0.1:43210/"'
         }

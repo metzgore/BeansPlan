@@ -18,7 +18,6 @@ class ViewPagerItemCountAssertion {
         }
     }
 
-
     private class ViewPagerItemCountAssertion(private val count: Int) : ViewAssertion {
 
         override fun check(view: View, noViewFoundException: NoMatchingViewException?) {
