@@ -239,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
     @Override
     public void onAddToolbarElevation() {
         ViewCompat.setElevation(binding.activityMainAppbarlayout, getResources().getDimension(R.dimen
-                .abc_action_bar_elevation_material));
+                .toolbar_elevation));
     }
 
     @Override

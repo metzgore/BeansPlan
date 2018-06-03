@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.view.*;
 import dagger.android.support.AndroidSupportInjection;
 import de.metzgore.beansplan.R;
@@ -70,6 +71,8 @@ public class RefreshableDailyScheduleFragment extends RefreshableScheduleFragmen
         binding.singleDayIncluded.fragmentBaseScheduleShowsList.addItemDecoration(new DividerItemDecoration
                 (getContext(), DividerItemDecoration.VERTICAL));
         binding.singleDayIncluded.fragmentBaseScheduleShowsList.setHasFixedSize(true);
+        ((SimpleItemAnimator) binding.singleDayIncluded.fragmentBaseScheduleShowsList.getItemAnimator()).setSupportsChangeAnimations
+         (false);
 
         binding.swipeRefresh.setOnRefreshListener(() -> viewModel.loadScheduleFromNetwork());
         binding.swipeRefresh.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color
