@@ -10,113 +10,117 @@
             type="de.metzgore.beansplan.shared.ShowViewModel"/>
     </data>
 
-    <LinearLayout
-        android:id="@+id/list_item_show_base"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:alpha="@{viewModel.alpha}"
-        android:background="@{viewModel.getBackground(context)}"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:id="@+id/list_item_show_base"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="@{viewModel.alpha}"
+            android:background="@{viewModel.getBackground(context)}"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
 
-            <TextView
-                android:id="@+id/list_item_show_start_text_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@{viewModel.getStartTimeFormatted(context)}"
-                tools:text="Start"/>
-
-            <TextView
-                android:id="@+id/list_item_show_time_dash"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="-"
-                tools:text="-"/>
-
-            <TextView
-                android:id="@+id/list_item_show_end_text_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@{viewModel.getEndTimeFormatted(context)}"
-                tools:text="End"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/list_item_show_title_text_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:gravity="center_vertical"
-                android:lines="1"
-                android:text="@{viewModel.title}"
-                android:textStyle="bold"
-                tools:text="Title"/>
-
-            <TextView
-                android:id="@+id/list_item_show_topic_text_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:minLines="1"
-                android:text="@{viewModel.topic}"
-                tools:text="Topic"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="74dp"
-            android:layout_height="match_parent"
-            android:gravity="right"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/list_item_show_length_text_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{viewModel.lengthFormatted}"
-                android:textAlignment="textEnd"
-                tools:text="12 h 10 min"/>
-
-            <TextView
-                android:id="@+id/list_item_show_type_text_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{viewModel.typeFormatted}"
-                android:textAlignment="textEnd"
-                android:textColor="@color/colorAccent"
-                tools:text="PREMIERE"/>
-
-            <ImageView
-                android:id="@+id/list_view_item_show_youtube_image_view"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAlignment="textEnd"
-                app:srcCompat="@drawable/ic_youtube"
-                app:visibleInvisible="@{viewModel.onYoutube}"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/list_item_show_start_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@{viewModel.getStartTimeFormatted(context)}"
+                    tools:text="Start"/>
+
+                <TextView
+                    android:id="@+id/list_item_show_time_dash"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="-"
+                    tools:text="-"/>
+
+                <TextView
+                    android:id="@+id/list_item_show_end_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@{viewModel.getEndTimeFormatted(context)}"
+                    tools:text="End"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/list_item_show_title_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:lines="1"
+                    android:text="@{viewModel.title}"
+                    android:textStyle="bold"
+                    tools:text="Title"/>
+
+                <TextView
+                    android:id="@+id/list_item_show_topic_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:minLines="1"
+                    android:text="@{viewModel.topic}"
+                    tools:text="Topic"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="74dp"
+                android:layout_height="match_parent"
+                android:gravity="right"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/list_item_show_length_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.lengthFormatted}"
+                    android:textAlignment="textEnd"
+                    tools:text="12 h 10 min"/>
+
+                <TextView
+                    android:id="@+id/list_item_show_type_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.typeFormatted}"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/colorAccent"
+                    tools:text="PREMIERE"/>
+
+                <ImageView
+                    android:id="@+id/list_view_item_show_youtube_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textEnd"
+                    app:srcCompat="@drawable/ic_youtube"
+                    app:visibleInvisible="@{viewModel.onYoutube}"/>
+
+            </LinearLayout>
         </LinearLayout>
-
-    </LinearLayout>
+    </FrameLayout>
 </layout>
