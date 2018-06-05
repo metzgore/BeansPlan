@@ -113,10 +113,6 @@ class WeeklyScheduleRepositoryTest {
         val calendar = GregorianCalendar()
         calendar.time = Date()
 
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH) + 1
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-
         `when`(rbtvService!!.scheduleOfCurrentWeek()).thenReturn(call)
         val dailySchedule = (LiveDataTestUtil.getValue(rbtvService.scheduleOfCurrentWeek()) as ApiSuccessResponse).body
         val observer = mock<Observer<Resource<WeeklySchedule>>>()
