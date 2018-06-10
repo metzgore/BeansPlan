@@ -14,6 +14,7 @@ import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertD
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
 import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions.clickMenu
+import com.schibsted.spain.barista.interaction.BaristaSleepInteractions.sleep
 import com.schibsted.spain.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import de.metzgore.beansplan.util.DateFormatter
 import de.metzgore.beansplan.util.ViewPagerItemCountAssertion.Companion.assertViewPagerViewItemCount
@@ -68,7 +69,6 @@ class MainActivityMockedServerTest {
     fun tearDown() {
         mockWebServer.shutdown()
     }
-
 
 
     /**
@@ -476,11 +476,12 @@ class MainActivityMockedServerTest {
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
 
         refresh()
+        sleep(100)
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
         assertDisplayed(R.id.activity_main_updated_textview)
-        assertDisplayed(subTitleAfter)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 14)
+        assertDisplayed(subTitleAfter)
     }
 
     @Test
@@ -503,6 +504,7 @@ class MainActivityMockedServerTest {
         assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
 
         refresh()
+        sleep(100)
 
         assertDisplayed(subTitle)
         assertDisplayed(R.id.activity_main_updated_textview)
@@ -537,6 +539,7 @@ class MainActivityMockedServerTest {
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
 
         clickMenu(R.id.action_refresh)
+        sleep(100)
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
         assertDisplayed(R.id.activity_main_updated_textview)
@@ -565,6 +568,7 @@ class MainActivityMockedServerTest {
         assertNotDisplayed(R.id.fragment_weekly_schedule_view_pager)
 
         clickMenu(R.id.action_refresh)
+        sleep(100)
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
         assertDisplayed(subTitle)
@@ -593,6 +597,7 @@ class MainActivityMockedServerTest {
         assertNotDisplayed(R.id.activity_main_updated_textview)
 
         clickOn(R.string.action_retry)
+        sleep(100)
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
         assertDisplayed(subTitle)
@@ -621,6 +626,7 @@ class MainActivityMockedServerTest {
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
 
         refresh()
+        sleep(100)
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
         assertDisplayed(subTitle)
@@ -650,6 +656,7 @@ class MainActivityMockedServerTest {
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
 
         clickMenu(R.id.action_refresh)
+        sleep(100)
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
         assertDisplayed(R.id.activity_main_updated_textview)
@@ -673,6 +680,7 @@ class MainActivityMockedServerTest {
         assertNotDisplayed(R.id.activity_main_updated_textview)
 
         refresh()
+        sleep(100)
 
         assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
         assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
@@ -695,6 +703,7 @@ class MainActivityMockedServerTest {
         assertNotDisplayed(R.id.activity_main_updated_textview)
 
         clickMenu(R.id.action_refresh)
+        sleep(100)
 
         assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
         assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
@@ -717,6 +726,7 @@ class MainActivityMockedServerTest {
         assertNotDisplayed(R.id.activity_main_updated_textview)
 
         clickOn(R.string.action_retry)
+        sleep(100)
 
         assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
         assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
