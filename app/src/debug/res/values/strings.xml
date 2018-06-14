@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE resources [
+    <!ENTITY appname "Beans Plan">
+    <!ENTITY rbtv "Rocket Beans TV">
+    ]>
+
+<resources>
+    <string name="app_name">Beans Plan Dev</string>
+</resources>

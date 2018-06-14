@@ -22,9 +22,24 @@ android {
     }
 
     buildTypes {
+        debug {
+            applicationIdSuffix ".dev"
+            minifyEnabled false
+            shrinkResources false
+            useProguard false
+        }
+
         release {
             minifyEnabled false
+            useProguard false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "beansplan_${variant.buildType.name}_${variant.versionName}.apk"
         }
     }
 
@@ -69,6 +84,8 @@ android {
             resources.srcDirs += [sharedTestResourcesDir]
         }
     }
+
+
 
     flavorDimensions "default"
 
