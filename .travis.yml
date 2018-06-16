@@ -14,7 +14,7 @@ env:
   - ANDROID_BUILD_TOOLS=27.0.3
 
 before_install:
-- openssl aes-256-cbc -K $encrypted_31e5a142734f_key -iv $encrypted_31e5a142734f_iv
+- openssl aes-256-cbc -K $encrypted_28bdaaf761f5_key -iv $encrypted_28bdaaf761f5_iv
   -in android.jks.enc -out android.jks -d
 - export TZ=Europe/Berlin
 - mkdir "$ANDROID_HOME/licenses" || true
@@ -51,9 +51,9 @@ script:
 deploy:
   provider: releases
   api_key:
-    secure: aLlng9yIRkaZ5ZTNanNyLR76QTM/q8hXIuDZiR3cBgYf3vo6XC4XbLelqF3ewah/PfQ/RQ6MbDQhnbCXk0c8c7JPXzTHwOw4bop7nNSAJyPkcPPuFWEvjhkFpmtiKSZ9sPFZxIvRTeEOaPiF7047owy9B/EBftFXgqmvWw7SRUKGvS845wb6xknnEuS6wMuVgEnkXLBaSOviWJR63FhKkx0hg1gx60pgCrsnSaAvXjqPFOtmlzLVakr/OcHMwGAQyF+//jh51J7fubCC4PQzTLqPkn8JjmNW6r0eY1iLEDmD/H4oDEn9GeTH9BtO9lQfrFPh0HTFxKrCTpxT8pGoTLpaHmQBia2kpbrhig8I/r7hTQHpElaPFKsgDjFIZCvKC+pllX3B+Hqa3QlMGxisS540vvO0feXLqjXOpBimMPqYepwQjkto/l5wsTjLMbD2rKysGPkgYpfBXevmE0fGk8ar94+YPS8IZie5FPSzrJw8b9SCsFIA7H+NPQeqUAKoggF7lHiiEq7m5YJGTRaLMzeYztEY4gPXgqYZCOe5ixRROIK+42Fd3tPnCnxtEQfWAyYNJjQ05IxDurA3zPcmuBQR3wbizIPU5RiaeQNYe798o+5cBNyoTONZ3iqMOq4lH0YYNLBEpnkYC2SR0rvRD1ZYXswB/c4R/jQkQbr5g+g=
-    file_glob: true
-  file: /home/travis/build/metzgore/BeansPlan/app/build/outputs/apk/app/release/beansplan_${TRAVIS_TAG}.apk
+    secure: Prn0fafaFzaYlf2BMGr9Gv4WVc/tjRLfBJAfQdhi+nNWuWLxUV+raavTghsH5wK4/9gejic37/s/a79OA/enoioZKeqV4azABM2Ap7gQZ3VtULNZtY3EZ4YxHSNLXXgeZsv36ft3n0nXKhoNJfGdwSgR1TtJOWyWpkTAXFlYR4aXd7j4INvDG7JWgJe3sID0BLNlpoQr3UGbExfuX7x5f8OhxASNcB7a2AGz3uk6jRX+/kMn2hxdDHJXyC3j9uisuxLAXHGLe5knPtQjEN7Ycg5PnYJrtjrTFp8gHj953FqL4+tjlTE4N9t6GDT4iBroGfiRo8ZP1nF/uIKPqrZwtDIgp/L1pbaRk43JON33TjpSvlHGMIfaj4TYIGseRVrHZ79pOlfIivB6oA9UzSRDY7Y0zT7X7fJ4xrSR4hNqBjfTxrlIr9fugH+VeFj4hUwUbkhOQRWTCzH+pqOKKQHT/HC5psV1aNXZzutUbB9DEeQHkrhl/0cjkReb5bWHo44/3DobjKYHKbM/B06CA5Hg9q9Xq1ERagNRryhOCANqXk4WFNu+yC+IHwvWGrsX0HTn6HpImcygc6ARhC013tar6ZSmVaplnXrcOD4Erx+TngbwoQZkuCEUV3zIyVPySSk1NRI0e+OClq7qyqYGTP9y75yGJtu/w7CCqKuOxKIQuJw=
+  file_glob: true
+  file: "app/build/outputs/apk/prod/release/*.apk"
   skip_cleanup: true
   overwrite: true
   on:
