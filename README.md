@@ -10,11 +10,11 @@ The schedule data is used from <http://api.rbtv.rodney.io>.
 ## Screenshots
 Tagesplan
 
-<img src="/screenshots/screenshot_daily_schedule.png" width="40%">
+<img src="/screenshots/screenshot_daily_schedule_phone.png" width="40%">
 
 Wochenplan
 
-<img src="/screenshots/screenshot_weekly_schedule.png" width="40%">
+<img src="/screenshots/screenshot_weekly_schedule_phone.png" width="40%">
 
 ## Used patterns and libraries
 The app utilizes MVVM pattern, Android LiveData, ViewModel, Data Binding, and various libraries, including:
