@@ -17,15 +17,65 @@ android {
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        release
+    }
+
     buildTypes {
+        debug {
+            applicationIdSuffix ".dev"
+            minifyEnabled false
+            shrinkResources false
+            useProguard false
+        }
+
         release {
             minifyEnabled false
+            useProguard false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+
         }
     }
+
+    def isRunningOnTravis = System.getenv("CI") == "true"
+
+    if (isRunningOnTravis) {
+        signingConfigs.release.storeFile = file("../android.jks")
+        signingConfigs.release.storePassword = System.getenv("keystore_password")
+        signingConfigs.release.keyAlias = System.getenv("keystore_alias")
+        signingConfigs.release.keyPassword = System.getenv("keystore_alias_password")
+    } else {
+        File propFile = file('signing.properties')
+        if (propFile.exists()) {
+            Properties props = new Properties()
+            props.load(new FileInputStream(propFile))
+
+            if (props.containsKey('STORE_FILE') && props.containsKey('STORE_PASSWORD') &&
+                    props.containsKey('KEY_ALIAS') && props.containsKey('KEY_PASSWORD')) {
+                signingConfigs.release.storeFile = file(props['STORE_FILE'])
+                signingConfigs.release.storePassword = props['STORE_PASSWORD']
+                signingConfigs.release.keyAlias = props['KEY_ALIAS']
+                signingConfigs.release.keyPassword = props['KEY_PASSWORD']
+            } else {
+                buildTypes.release.signingConfig = null
+            }
+        } else {
+            buildTypes.release.signingConfig = null
+        }
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "beansplan_${variant.versionName}.apk"
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -40,8 +90,17 @@ android {
         exclude 'META-INF/NOTICE'
     }
 
+    lintOptions {
+        abortOnError false
+    }
+
     testOptions {
         unitTests.returnDefaultValues = true
+        unitTests.all {
+            testLogging {
+                events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+            }
+        }
     }
 
     sourceSets {
@@ -62,12 +121,12 @@ android {
     flavorDimensions "default"
 
     productFlavors {
-        app {
+        prod {
             dimension "default"
             buildConfigField 'String', 'HOST', '"http://api.rbtv.rodney.io/"'
         }
 
-        uiTests {
+        mockedServer {
             dimension "default"
             buildConfigField 'String', 'HOST', '"http://127.0.0.1:43210/"'
         }
@@ -134,7 +193,7 @@ dependencies {
 
 // we need all open to run tests which  a we enable only for debug builds.
 project.tasks.whenTaskAdded {
-    if (it.name == "testReleaseUnitTest") {
+    if (it.name == "testProdReleaseUnitTest" || it.name == "testMockedServerReleaseUnitTest") {
         it.enabled = false
     }
 }

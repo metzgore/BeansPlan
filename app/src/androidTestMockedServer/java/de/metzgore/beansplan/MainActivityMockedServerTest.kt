@@ -14,6 +14,7 @@ import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertD
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
 import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
 import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions.clickMenu
+import com.schibsted.spain.barista.interaction.BaristaSleepInteractions.sleep
 import com.schibsted.spain.barista.interaction.BaristaSwipeRefreshInteractions.refresh
 import de.metzgore.beansplan.util.DateFormatter
 import de.metzgore.beansplan.util.ViewPagerItemCountAssertion.Companion.assertViewPagerViewItemCount
@@ -31,7 +32,7 @@ import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class MainActivityTest {
+class MainActivityMockedServerTest {
 
     private lateinit var preferencesEditor: SharedPreferences.Editor
     private lateinit var context: Context
@@ -69,52 +70,6 @@ class MainActivityTest {
         mockWebServer.shutdown()
     }
 
-    @Test
-    fun displayDefaultDailySchedule() {
-        enqueueResponse("daily_schedule_09_05_18.json")
-
-        prepareDailySchedule()
-
-        activityTestRule.launchActivity(null)
-
-        assertDisplayed(R.string.drawer_item_daily_schedule)
-    }
-
-    @Test
-    fun displayDefaultWeeklySchedule() {
-        enqueueResponse("weekly_schedule_one_week.json")
-
-        preferencesEditor.putBoolean(context.getString(R.string.pref_key_remember_last_opened_schedule), false)
-        preferencesEditor.putString(context.getString(R.string.pref_key_select_default_schedule), context.getString(R.string.fragment_weekly_schedule_id))
-        preferencesEditor.commit()
-
-        activityTestRule.launchActivity(null)
-
-        assertDisplayed(R.string.drawer_item_weekly_schedule)
-    }
-
-    @Test
-    fun displayLastOpenedSchedule() {
-        enqueueResponse("daily_schedule_09_05_18.json")
-        enqueueResponse("weekly_schedule_one_week.json")
-
-        preferencesEditor.putBoolean(context.getString(R.string.pref_key_remember_last_opened_schedule), true)
-        preferencesEditor.putString(context.getString(R.string.pref_key_last_opened_schedule_id), context.getString(R.string.fragment_daily_schedule_id))
-        preferencesEditor.commit()
-
-        activityTestRule.launchActivity(null)
-
-        assertDisplayed(R.string.drawer_item_daily_schedule)
-
-        activityTestRule.activity.finish()
-
-        preferencesEditor.putString(context.getString(R.string.pref_key_last_opened_schedule_id), context.getString(R.string.fragment_weekly_schedule_id))
-        preferencesEditor.commit()
-
-        activityTestRule.launchActivity(null)
-
-        assertDisplayed(R.string.drawer_item_weekly_schedule)
-    }
 
     /**
      * Daily schedule fragment tests
@@ -521,11 +476,12 @@ class MainActivityTest {
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
 
         refresh()
+        sleep(100)
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
         assertDisplayed(R.id.activity_main_updated_textview)
-        assertDisplayed(subTitleAfter)
         assertViewPagerViewItemCount(R.id.fragment_weekly_schedule_view_pager, 14)
+        assertDisplayed(subTitleAfter)
     }
 
     @Test
@@ -548,6 +504,7 @@ class MainActivityTest {
         assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
 
         refresh()
+        sleep(100)
 
         assertDisplayed(subTitle)
         assertDisplayed(R.id.activity_main_updated_textview)
@@ -582,6 +539,7 @@ class MainActivityTest {
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
 
         clickMenu(R.id.action_refresh)
+        sleep(100)
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
         assertDisplayed(R.id.activity_main_updated_textview)
@@ -610,6 +568,7 @@ class MainActivityTest {
         assertNotDisplayed(R.id.fragment_weekly_schedule_view_pager)
 
         clickMenu(R.id.action_refresh)
+        sleep(100)
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
         assertDisplayed(subTitle)
@@ -638,6 +597,7 @@ class MainActivityTest {
         assertNotDisplayed(R.id.activity_main_updated_textview)
 
         clickOn(R.string.action_retry)
+        sleep(100)
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
         assertDisplayed(subTitle)
@@ -666,6 +626,7 @@ class MainActivityTest {
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
 
         refresh()
+        sleep(100)
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
         assertDisplayed(subTitle)
@@ -695,6 +656,7 @@ class MainActivityTest {
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
 
         clickMenu(R.id.action_refresh)
+        sleep(100)
 
         assertDisplayed(R.id.fragment_weekly_schedule_view_pager)
         assertDisplayed(R.id.activity_main_updated_textview)
@@ -718,6 +680,7 @@ class MainActivityTest {
         assertNotDisplayed(R.id.activity_main_updated_textview)
 
         refresh()
+        sleep(100)
 
         assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
         assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
@@ -740,6 +703,7 @@ class MainActivityTest {
         assertNotDisplayed(R.id.activity_main_updated_textview)
 
         clickMenu(R.id.action_refresh)
+        sleep(100)
 
         assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
         assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)
@@ -762,6 +726,7 @@ class MainActivityTest {
         assertNotDisplayed(R.id.activity_main_updated_textview)
 
         clickOn(R.string.action_retry)
+        sleep(100)
 
         assertDisplayed(R.id.fragment_weekly_schedule_empty_view)
         assertDisplayed(R.string.error_message_weekly_schedule_loading_failed)

@@ -117,3 +117,5 @@ fastlane/test_output
 fastlane/readme.md
 
 \.idea/
+
+app/signing\.properties
