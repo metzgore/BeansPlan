@@ -70,12 +70,24 @@
   year: 2013
   url: http://square.github.io/retrofit/
 
-
-
+- artifact: com.jakewharton.threetenabp:threetenabp:+
+  name: ThreeTenAbp
+  copyrightHolder: Jake Wharton
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/JakeWharton/ThreeTenABP/
+  year: 2015
 
 
 
 #skip licenses
+- artifact: org.threeten:threetenbp:+
+  name: ThreeTen backport
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: BSD 3-clause
+  licenseUrl: https://raw.githubusercontent.com/ThreeTen/threetenbp/master/LICENSE.txt
+  url: https://www.threeten.org/threetenbp
+  skip: true
 - artifact: com.google.dagger:dagger-android:+
   name: Dagger Android
   copyrightHolder: The Dagger Authors

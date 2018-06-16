@@ -46,7 +46,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="-"
-                    tools:text="-"/>
+                    tools:text="-"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/list_item_show_end_text_view"
@@ -93,7 +94,8 @@
                 android:layout_width="74dp"
                 android:layout_height="match_parent"
                 android:gravity="right"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                tools:ignore="RtlHardcoded">
 
                 <TextView
                     android:id="@+id/list_item_show_length_text_view"
