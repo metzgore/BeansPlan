@@ -1,64 +1,61 @@
 sudo: required
-
 language: android
 jdk: oraclejdk8
 
 notifications:
-  email: false
+  email:
+    on_success: never
+    on_failure: always
 
 env:
- global:
- - ANDROID_API=27
- - ANDROID_EMULATOR_API=21
- - ANDROID_BUILD_TOOLS=27.0.3
+  global:
+  - ANDROID_API=27
+  - ANDROID_EMULATOR_API=21
+  - ANDROID_BUILD_TOOLS=27.0.3
 
 before_install:
-  - export TZ=Europe/Berlin
-  # Install SDK license so Android Gradle plugin can install deps.
-  - mkdir "$ANDROID_HOME/licenses" || true
-  - echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > "$ANDROID_HOME/licenses/android-sdk-license"
-  - yes | sdkmanager "platforms;android-27"
-  # Install the rest of tools (e.g., avdmanager).
-  #- sdkmanager tools
-  # Install the system image.
-  #- sdkmanager "system-images;android-${ANDROID_EMULATOR_API};default;armeabi-v7a"
-  # Create and start emulator for the script. Meant to race the install task.
-  #- echo no | avdmanager create avd --force -n test -k "system-images;android-${ANDROID_EMULATOR_API};default;armeabi-v7a"
-  #- $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window &
+- openssl aes-256-cbc -K $encrypted_31e5a142734f_key -iv $encrypted_31e5a142734f_iv
+  -in android.jks.enc -out android.jks -d
+- export TZ=Europe/Berlin
+- mkdir "$ANDROID_HOME/licenses" || true
+- echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > "$ANDROID_HOME/licenses/android-sdk-license"
+- yes | sdkmanager "platforms;android-27"
 
 before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -rf $HOME/.gradle/caches/*/plugin-resolution/
+- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+- rm -rf $HOME/.gradle/caches/*/plugin-resolution/
 
 cache:
   directories:
-  - $HOME/.gradle/caches/
-  - $HOME/.gradle/wrapper/
-  - $HOME/.android/build-cache
+  - "$HOME/.gradle/caches/"
+  - "$HOME/.gradle/wrapper/"
+  - "$HOME/.android/build-cache"
 
 android:
   components:
-    - tools # Update android-sdk (also called android-sdk-tools)
-    - platform-tools
-    - tools # Write the second time to update to thes newest as described in the document
-    - build-tools-${ANDROID_BUILD_TOOLS} # For building
-    - android-${ANDROID_API} # For building
-    - extra
-    - extra-android-m2repository # Support library
-#  - sys-img-armeabi-v7a-android-${ANDROID_EMULATOR_API}
-
+  - tools
+  - platform-tools
+  - tools
+  - build-tools-${ANDROID_BUILD_TOOLS}
+  - android-${ANDROID_API}
+  - extra
+  - extra-android-m2repository
   licenses:
-  - 'android-sdk-preview-license-52d11cd2'
-  - 'android-sdk-license-.+'
-  - 'google-gdk-license-.+'
-
-#before_script:
-#  - android-wait-for-emulator
-#  - adb shell settings put global window_animation_scale 0 &
-#  - adb shell settings put global transition_animation_scale 0 &
-#  - adb shell settings put global animator_duration_scale 0 &
-#  - adb shell input keyevent 82 &
+  - android-sdk-preview-license-52d11cd2
+  - android-sdk-license-.+
+  - google-gdk-license-.+
 
 script:
-  #- ./gradlew clean build connectedCheck -PdisablePreDex --stacktrace
-  - ./gradlew clean build -PdisablePreDex --stacktrace
+- "./gradlew clean build --stacktrace"
+
+deploy:
+  provider: releases
+  api_key:
+    secure: aLlng9yIRkaZ5ZTNanNyLR76QTM/q8hXIuDZiR3cBgYf3vo6XC4XbLelqF3ewah/PfQ/RQ6MbDQhnbCXk0c8c7JPXzTHwOw4bop7nNSAJyPkcPPuFWEvjhkFpmtiKSZ9sPFZxIvRTeEOaPiF7047owy9B/EBftFXgqmvWw7SRUKGvS845wb6xknnEuS6wMuVgEnkXLBaSOviWJR63FhKkx0hg1gx60pgCrsnSaAvXjqPFOtmlzLVakr/OcHMwGAQyF+//jh51J7fubCC4PQzTLqPkn8JjmNW6r0eY1iLEDmD/H4oDEn9GeTH9BtO9lQfrFPh0HTFxKrCTpxT8pGoTLpaHmQBia2kpbrhig8I/r7hTQHpElaPFKsgDjFIZCvKC+pllX3B+Hqa3QlMGxisS540vvO0feXLqjXOpBimMPqYepwQjkto/l5wsTjLMbD2rKysGPkgYpfBXevmE0fGk8ar94+YPS8IZie5FPSzrJw8b9SCsFIA7H+NPQeqUAKoggF7lHiiEq7m5YJGTRaLMzeYztEY4gPXgqYZCOe5ixRROIK+42Fd3tPnCnxtEQfWAyYNJjQ05IxDurA3zPcmuBQR3wbizIPU5RiaeQNYe798o+5cBNyoTONZ3iqMOq4lH0YYNLBEpnkYC2SR0rvRD1ZYXswB/c4R/jQkQbr5g+g=
+    file_glob: true
+  file: /home/travis/build/metzgore/BeansPlan/app/build/outputs/apk/app/release/beansplan_${TRAVIS_TAG}.apk
+  skip_cleanup: true
+  overwrite: true
+  on:
+    repo: metzgore/BeansPlan
+    tags: true
