@@ -1,6 +1,6 @@
 <img src="/misc/ic_launcher-web.png" width="20%" align="left" hspace="1" vspace="1">
 
-# Beans Plan
+# Beans Plan [![Build Status](https://travis-ci.org/metzgore/BeansPlan.svg?branch=master)](https://travis-ci.org/metzgore/BeansPlan)
 
 **Beans Plan** is an Android app which downloads and shows the daily and weekly schedules of the online streaming station [Rocketbeans TV](https://www.rocketbeans.tv/).
 The schedule data is used from <http://api.rbtv.rodney.io>.
