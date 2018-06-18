@@ -18,6 +18,7 @@ public class GsonSerializer<T> implements CacheSerializer<T> {
                 .enableHooks(Show.class)
                 .createGsonBuilder()
                 .setDateFormat("EEE MMM dd HH:mm:ss z yyyy")
+                .enableComplexMapKeySerialization()
                 .create();
     }
 
