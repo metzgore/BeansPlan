@@ -8,11 +8,11 @@ The schedule data is used from <http://api.rbtv.rodney.io>.
 </br>
 
 ## Screenshots
-Tagesplan
+Daily schedule
 
 <img src="/screenshots/screenshot_daily_schedule_phone.png" width="40%">
 
-Wochenplan
+Weekly schedule
 
 <img src="/screenshots/screenshot_weekly_schedule_phone.png" width="40%">
 
