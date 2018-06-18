@@ -1,11 +1,12 @@
 package de.metzgore.beansplan.shared
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import android.text.format.DateUtils
-
 import de.metzgore.beansplan.R
 import de.metzgore.beansplan.data.Show
 import org.apache.commons.lang3.time.DurationFormatUtils
@@ -39,5 +40,11 @@ class ShowViewModel(private val show: Show) {
 
     fun getEndTimeFormatted(context: Context): String {
         return DateUtils.formatDateTime(context, show.timeEnd.time, DateUtils.FORMAT_SHOW_TIME)
+    }
+
+    fun openVideo(context: Context) {
+        if (isOnYoutube) {
+            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=${show.youtubeId}")))
+        }
     }
 }
