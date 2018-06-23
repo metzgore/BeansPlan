@@ -1,11 +1,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="viewModel"
-            type="de.metzgore.beansplan.dailyschedule.DailyScheduleViewModel"/>
+            type="de.metzgore.beansplan.dailyschedule.DailyScheduleViewModel" />
     </data>
 
     <FrameLayout
@@ -18,9 +18,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:drawableTop="@drawable/ic_schedule_not_available"
-            android:text="@string/alert_message_no_daily_schedule"
+            android:text="@string/alert_message_no_weekly_schedule"
             android:textSize="24sp"
-            app:visibleGone="@{!safeUnbox(viewModel.isLoading) &amp;&amp; safeUnbox(viewModel.isEmpty)}"/>
+            app:visibleGone="@{!safeUnbox(viewModel.isLoading) &amp;&amp; safeUnbox(viewModel.isEmpty)}" />
 
         <LinearLayout
             android:id="@+id/fragment_base_schedule_loading_view"
@@ -34,15 +34,15 @@
                 android:id="@+id/fragment_base_schedule_loading_view_progress"
                 style="?android:attr/progressBarStyleLarge"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/fragment_base_schedule_loading_view_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/alert_message_load_daily_schedule"
-                android:textSize="24sp"/>
+                android:text="@string/alert_message_load_weekly_schedule"
+                android:textSize="24sp" />
 
         </LinearLayout>
 
@@ -52,7 +52,7 @@
             android:layout_height="match_parent"
             android:scrollbars="vertical"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-            app:visibleGone="@{safeUnbox(!viewModel.isEmpty)}"/>
+            app:visibleGone="@{safeUnbox(!viewModel.isEmpty)}" />
 
     </FrameLayout>
 </layout>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen>
 
     <!--
     <CheckBoxPreference
@@ -14,21 +13,5 @@
         android:key="@string/pref_key_hide_past_days"
         android:summary="@string/pref_hide_past_days_summary"
         android:title="@string/pref_hide_past_days_title"/>-->
-
-    <SwitchPreference
-        android:disableDependentsState="true"
-        android:key="@string/pref_key_remember_last_opened_schedule"
-        android:summary="@string/pref_remember_last_opened_schedule_summary"
-        android:title="@string/pref_remember_last_opened_schedule_title"/>
-
-    <ListPreference
-        android:defaultValue="@string/pref_select_default_schedule_default"
-        android:dependency="@string/pref_key_remember_last_opened_schedule"
-        android:dialogTitle="@string/pref_select_default_schedule_dialog_title"
-        android:entries="@array/pref_select_default_schedule_entries"
-        android:entryValues="@array/pref_select_default_schedule_entry_values"
-        android:key="@string/pref_key_select_default_schedule"
-        android:summary="%s"
-        android:title="@string/pref_select_default_schedule_title"/>
 
 </PreferenceScreen>

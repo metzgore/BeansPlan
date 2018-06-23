@@ -10,6 +10,7 @@ import de.metzgore.beansplan.data.Resource
 import de.metzgore.beansplan.shared.DailyScheduleDao
 import de.metzgore.beansplan.shared.ScheduleRepository
 import de.metzgore.beansplan.testing.OpenForTesting
+import de.metzgore.beansplan.util.AbsentLiveData
 import de.metzgore.beansplan.util.Clock
 import de.metzgore.beansplan.util.NetworkBoundResource
 import java.util.*
@@ -61,7 +62,7 @@ appExecutors: AppExecutors, private val clock: Clock) : ScheduleRepository<Daily
             }
 
             override fun createCall(): LiveData<ApiResponse<DailySchedule>> {
-                return api.scheduleOfDay(year, formattedMonth, formattedDay)
+                return AbsentLiveData.create()
             }
         }.asLiveData()
     }
