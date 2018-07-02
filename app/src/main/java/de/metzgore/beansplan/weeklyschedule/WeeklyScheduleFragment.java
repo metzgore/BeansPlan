@@ -11,20 +11,28 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
+
+import java.util.Date;
+
+import javax.inject.Inject;
+
 import dagger.android.support.AndroidSupportInjection;
 import de.metzgore.beansplan.R;
 import de.metzgore.beansplan.baseschedule.RefreshableScheduleFragment;
 import de.metzgore.beansplan.data.Resource;
-import de.metzgore.beansplan.data.WeeklySchedule;
+import de.metzgore.beansplan.data.Status;
+import de.metzgore.beansplan.data.room.WeeklyScheduleWithDailySchedules;
 import de.metzgore.beansplan.databinding.FragmentWeeklyScheduleBinding;
 import de.metzgore.beansplan.shared.ScheduleRepository;
 import de.metzgore.beansplan.util.DateFormatter;
 import de.metzgore.beansplan.util.di.WeeklyScheduleViewModelFactory;
-
-import javax.inject.Inject;
-import java.util.Date;
 
 public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
 
@@ -40,7 +48,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
     private boolean scheduleContainsCurrentDay;
 
     @Inject
-    ScheduleRepository<WeeklySchedule> repo;
+    ScheduleRepository<WeeklyScheduleWithDailySchedules> repo;
 
     public static Fragment newInstance() {
         return new WeeklyScheduleFragment();
@@ -174,29 +182,32 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
 
     private void subscribeUi(WeeklyScheduleViewModel viewModel) {
         viewModel.getSchedule().observe(this, schedule -> {
-            handleState(schedule);
-            handleData(schedule);
+            if (schedule != null && schedule.getData() != null) {
+                handleState(schedule.getStatus());
+                handleData(schedule);
+            }
         });
     }
 
-    private void handleData(Resource<WeeklySchedule> schedule) {
+    private void handleData(Resource<WeeklyScheduleWithDailySchedules> schedule) {
         if (schedule.getData() != null) {
             getCallback().onRemoveToolbarElevation();
 
-            weeklyScheduleAdapter.setSchedule(schedule.getData());
+            weeklyScheduleAdapter.setSchedule(schedule.getData().getDailySchedulesWithShows());
             binding.fragmentWeeklyScheduleTabs.notifyDataSetChanged();
-            binding.fragmentWeeklyScheduleViewPager.setCurrentItem(weeklyScheduleAdapter.getPositionFromDate(selectedDate));
-
-            String subTitle = null;
+            binding.fragmentWeeklyScheduleViewPager.setCurrentItem(weeklyScheduleAdapter
+                    .getPositionFromDate(selectedDate));
 
             if (schedule.getData().getStartDate() != null && schedule.getData().getEndDate() !=
-                    null)
-                subTitle = getString(R.string.fragment_weekly_schedule_subtitle, DateFormatter
-                                .formatDate(getContext(), schedule.getData().getStartDate()),
-                        DateFormatter.formatDate(getContext(), schedule.getData().getEndDate()));
+                    null) {
+                String subTitle = getString(R.string.fragment_weekly_schedule_subtitle,
+                        DateFormatter.formatDate(getContext(), schedule.getData().getStartDate())
+                        , DateFormatter.formatDate(getContext(), schedule.getData().getEndDate()));
 
-            getCallback().onSubTitleUpdated(subTitle);
-            getCallback().onLastUpdateUpdated(schedule.getData().getTimestamp());
+                getCallback().onSubTitleUpdated(subTitle);
+            }
+
+            getCallback().onLastUpdateUpdated(schedule.getData().weeklySchedule.getTimestamp());
 
             boolean containsCurrentDay = weeklyScheduleAdapter.containsScheduleForCurrentDay();
 
@@ -207,8 +218,8 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
         }
     }
 
-    private void handleState(Resource<WeeklySchedule> schedule) {
-        switch (schedule.getStatus()) {
+    private void handleState(Status status) {
+        switch (status) {
             case LOADING:
                 showRefreshIndicator(true);
                 hideSnackbar();

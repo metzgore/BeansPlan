@@ -7,6 +7,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
+import java.util.Objects;
 
 import io.gsonfire.annotations.PostDeserialize;
 
@@ -14,7 +15,7 @@ public class Show implements Parcelable {
 
     @SerializedName("id")
     @Expose
-    private int id;
+    private long id;
     @SerializedName("title")
     @Expose
     private String title;
@@ -48,15 +49,22 @@ public class Show implements Parcelable {
     private boolean isRunning;
 
     public enum Type {
-        @SerializedName("")
-        NONE,
-        @SerializedName("premiere")
-        PREMIERE,
-        @SerializedName("live")
-        LIVE
+        @SerializedName("") NONE(0),
+        @SerializedName("premiere") PREMIERE(1),
+        @SerializedName("live") LIVE(2);
+
+        private int value;
+
+        Type(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -114,47 +122,50 @@ public class Show implements Parcelable {
 
     @Override
     public String toString() {
-        return "Show{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", topic='" + topic + '\'' +
-                ", show='" + show + '\'' +
-                ", timeStart=" + timeStart +
-                ", timeEnd=" + timeEnd +
-                ", length=" + length +
-                ", type=" + type +
-                ", game='" + game + '\'' +
-                ", youtubeId='" + youtubeId + '\'' +
-                ", isOver=" + isOver +
-                ", isRunning=" + isRunning +
-                '}';
+        return "Show{" + "id=" + id + ", title='" + title + '\'' + ", topic='" + topic + '\'' +
+                ", show='" + show + '\'' + ", timeStart=" + timeStart + ", timeEnd=" + timeEnd +
+                ", length=" + length + ", type=" + type + ", game='" + game + '\'' + ", " +
+                "youtubeId='" + youtubeId + '\'' + ", isOver=" + isOver + ", isRunning=" +
+                isRunning + '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         Show show1 = (Show) o;
 
-        if (id != show1.id) return false;
-        if (length != show1.length) return false;
-        if (isOver != show1.isOver) return false;
-        if (isRunning != show1.isRunning) return false;
-        if (title != null ? !title.equals(show1.title) : show1.title != null) return false;
-        if (topic != null ? !topic.equals(show1.topic) : show1.topic != null) return false;
-        if (show != null ? !show.equals(show1.show) : show1.show != null) return false;
+        if (id != show1.id)
+            return false;
+        if (length != show1.length)
+            return false;
+        if (isOver != show1.isOver)
+            return false;
+        if (isRunning != show1.isRunning)
+            return false;
+        if (title != null ? !title.equals(show1.title) : show1.title != null)
+            return false;
+        if (topic != null ? !topic.equals(show1.topic) : show1.topic != null)
+            return false;
+        if (show != null ? !show.equals(show1.show) : show1.show != null)
+            return false;
         if (timeStart != null ? !timeStart.equals(show1.timeStart) : show1.timeStart != null)
             return false;
-        if (timeEnd != null ? !timeEnd.equals(show1.timeEnd) : show1.timeEnd != null) return false;
-        if (type != show1.type) return false;
-        if (game != null ? !game.equals(show1.game) : show1.game != null) return false;
+        if (timeEnd != null ? !timeEnd.equals(show1.timeEnd) : show1.timeEnd != null)
+            return false;
+        if (type != show1.type)
+            return false;
+        if (game != null ? !game.equals(show1.game) : show1.game != null)
+            return false;
         return youtubeId != null ? youtubeId.equals(show1.youtubeId) : show1.youtubeId == null;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = Objects.hash(getId());
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (topic != null ? topic.hashCode() : 0);
         result = 31 * result + (show != null ? show.hashCode() : 0);
@@ -177,7 +188,7 @@ public class Show implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.id);
+        dest.writeLong(this.id);
         dest.writeString(this.title);
         dest.writeString(this.topic);
         dest.writeString(this.show);
@@ -192,7 +203,7 @@ public class Show implements Parcelable {
     }
 
     protected Show(Parcel in) {
-        this.id = in.readInt();
+        this.id = in.readLong();
         this.title = in.readString();
         this.topic = in.readString();
         this.show = in.readString();

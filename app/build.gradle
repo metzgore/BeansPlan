@@ -163,10 +163,13 @@ dependencies {
 
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3_version"
 
     implementation 'org.apache.commons:commons-lang3:3.7'
 
     implementation "android.arch.lifecycle:extensions:$arch_components_version"
+    implementation "android.arch.persistence.room:runtime:$arch_components_version"
+    kapt "android.arch.persistence.room:compiler:$arch_components_version"
 
     implementation 'com.vincentbrison.openlibraries.android:dualcache:3.1.1'
 

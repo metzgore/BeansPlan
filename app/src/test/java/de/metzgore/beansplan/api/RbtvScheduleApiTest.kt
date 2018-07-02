@@ -2,7 +2,7 @@ package de.metzgore.beansplan.api
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import de.metzgore.beansplan.LiveDataTestUtil.getValue
-import de.metzgore.beansplan.data.WeeklySchedule
+import de.metzgore.beansplan.data.WeeklyScheduleResponse
 import de.metzgore.beansplan.util.LiveDataCallAdapterFactory
 import de.metzgore.beansplan.util.di.Injector
 import okhttp3.mockwebserver.MockResponse
@@ -56,7 +56,7 @@ class RbtvScheduleApiTest {
         val request = mockWebServer.takeRequest()
         assertThat(request.path, `is`("/api/1.0/schedule/schedule.json"))
 
-        assertThat<WeeklySchedule>(weeklySchedule, notNullValue())
+        assertThat<WeeklyScheduleResponse>(weeklySchedule, notNullValue())
         assertThat(weeklySchedule.isEmpty, `is`(false))
 
         assertThat(weeklySchedule.size, `is`(7))

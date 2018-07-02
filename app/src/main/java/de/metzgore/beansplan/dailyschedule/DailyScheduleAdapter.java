@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import de.metzgore.beansplan.R;
-import de.metzgore.beansplan.data.Show;
+import de.metzgore.beansplan.data.room.Show;
 import de.metzgore.beansplan.databinding.ListItemShowBinding;
 import de.metzgore.beansplan.shared.ShowViewHolder;
 import de.metzgore.beansplan.shared.ShowViewModel;

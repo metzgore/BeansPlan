@@ -1,6 +1,7 @@
 package de.metzgore.beansplan.api
 
 import retrofit2.Response
+import java.net.HttpURLConnection
 
 /**
  * Common class used by API responses.
@@ -15,8 +16,11 @@ sealed class ApiResponse<T> {
 
         fun <T> create(response: Response<T>): ApiResponse<T> {
             return if (response.isSuccessful) {
+                if (response.raw().networkResponse()?.code() == HttpURLConnection.HTTP_NOT_MODIFIED)
+                    return ApiEmptyResponse()
+
                 val body = response.body()
-                if (body == null || response.code() == 204) {
+                if (body == null || response.code() == HttpURLConnection.HTTP_NO_CONTENT) {
                     ApiEmptyResponse()
                 } else {
                     ApiSuccessResponse(

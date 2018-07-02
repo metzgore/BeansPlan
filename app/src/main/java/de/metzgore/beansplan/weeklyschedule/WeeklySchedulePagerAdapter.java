@@ -12,11 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import de.metzgore.beansplan.dailyschedule.DailyScheduleFragment;
-import de.metzgore.beansplan.data.WeeklySchedule;
 import de.metzgore.beansplan.shared.UpdatableScheduleFragment;
 
 import static android.text.format.DateUtils.FORMAT_SHOW_DATE;
@@ -26,7 +27,6 @@ class WeeklySchedulePagerAdapter extends PagerAdapter {
 
     private final FragmentManager fragmentManager;
     private Context context;
-    private WeeklySchedule weeklySchedule;
     private List<Date> dateKeys;
     private FragmentTransaction curTransaction = null;
     private Fragment currentPrimaryItem = null;
@@ -34,19 +34,19 @@ class WeeklySchedulePagerAdapter extends PagerAdapter {
     WeeklySchedulePagerAdapter(Context context, FragmentManager mgr) {
         this.context = context;
         fragmentManager = mgr;
-        weeklySchedule = new WeeklySchedule();
         dateKeys = new ArrayList<>();
     }
 
     @Override
     public int getCount() {
-        return weeklySchedule.getSize();
+        return dateKeys.size();
     }
 
     @Override
     public String getPageTitle(int position) {
         Date dateOfSchedule = dateKeys.get(position);
-        return DateUtils.formatDateTime(context, dateOfSchedule.getTime(), FORMAT_SHOW_WEEKDAY | FORMAT_SHOW_DATE);
+        return DateUtils.formatDateTime(context, dateOfSchedule.getTime(), FORMAT_SHOW_WEEKDAY |
+                FORMAT_SHOW_DATE);
     }
 
     @Override
@@ -54,8 +54,8 @@ class WeeklySchedulePagerAdapter extends PagerAdapter {
         if (object instanceof UpdatableScheduleFragment) {
             UpdatableScheduleFragment fragment = (UpdatableScheduleFragment) object;
             Date dateKey = fragment.getDateKey();
-            if (weeklySchedule.hasDailySchedule(dateKey)) {
-                fragment.update(weeklySchedule.getDailySchedule(dateKey));
+            if (dateKeys.contains(dateKey)) {
+                fragment.update(dateKey);
                 return dateKeys.indexOf(dateKey);
             } else {
                 return PagerAdapter.POSITION_NONE;
@@ -67,8 +67,9 @@ class WeeklySchedulePagerAdapter extends PagerAdapter {
     @Override
     public void startUpdate(@NonNull ViewGroup container) {
         if (container.getId() == View.NO_ID) {
-            throw new IllegalStateException("ViewPager with adapter " + this
-                    + " requires a view id");
+            throw new IllegalStateException("ViewPager with adapter " + this + " requires a view " +
+                    "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + ""
+                    + "" + "" + "id");
         }
     }
 
@@ -88,13 +89,13 @@ class WeeklySchedulePagerAdapter extends PagerAdapter {
         if (fragment != null) {
             if (fragment instanceof UpdatableScheduleFragment) {
                 Date dateKey = ((UpdatableScheduleFragment) fragment).getDateKey();
-                ((UpdatableScheduleFragment) fragment).update(weeklySchedule.getDailySchedule(dateKey));
+                ((UpdatableScheduleFragment) fragment).update(dateKey);
             }
             curTransaction.attach(fragment);
         } else {
             fragment = getItem(position);
-            curTransaction.add(container.getId(), fragment,
-                    makeFragmentName(container.getId(), itemId));
+            curTransaction.add(container.getId(), fragment, makeFragmentName(container.getId(),
+                    itemId));
         }
         if (fragment != currentPrimaryItem) {
             fragment.setMenuVisibility(false);
@@ -153,28 +154,36 @@ class WeeklySchedulePagerAdapter extends PagerAdapter {
     public void restoreState(Parcelable state, ClassLoader loader) {
     }
 
-    public void setSchedule(WeeklySchedule weeklySchedule) {
-        if (!this.weeklySchedule.equals(weeklySchedule)) {
-            this.weeklySchedule = weeklySchedule;
-            dateKeys = this.weeklySchedule.getDateKeys();
+    public void setSchedule(List<? extends Date> dates) {
+        List<Date> newDates = new ArrayList<>(dates);
+        if (!newDates.equals(dateKeys)) {
+            dateKeys.clear();
+            dateKeys.addAll(dates);
             notifyDataSetChanged();
         }
     }
 
     public int getPositionOfCurrentDay() {
-        return weeklySchedule.getPositionOfCurrentDay();
+        return dateKeys.indexOf(getCurrentDay());
     }
 
     public Date getDayFromPosition(int pos) {
-        return weeklySchedule.getDateKeys().get(pos);
+        return dateKeys.get(pos);
     }
 
     public int getPositionFromDate(Date date) {
-        return weeklySchedule.getDateKeys().indexOf(date);
+        return dateKeys.indexOf(date);
     }
 
     public boolean containsScheduleForCurrentDay() {
-        return weeklySchedule.containsScheduleForCurrentDay();
+        Date today = getCurrentDay();
+
+        for (Date date : dateKeys) {
+            if (date.equals(today))
+                return true;
+        }
+
+        return false;
     }
 
     private static String makeFragmentName(int viewId, long id) {
@@ -186,7 +195,16 @@ class WeeklySchedulePagerAdapter extends PagerAdapter {
     }
 
     private Fragment getItem(int position) {
-        Date selectedDate = dateKeys.get(position);
-        return DailyScheduleFragment.newInstance(selectedDate, weeklySchedule.getDailySchedule(selectedDate));
+        return DailyScheduleFragment.newInstance(dateKeys.get(position));
+    }
+
+    private Date getCurrentDay() {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
     }
 }

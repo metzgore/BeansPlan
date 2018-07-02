@@ -16,7 +16,7 @@ import java.util.TreeMap;
 
 import io.gsonfire.annotations.PostDeserialize;
 
-public class WeeklySchedule extends BaseSchedule {
+public class WeeklyScheduleResponse extends BaseSchedule {
 
     @SerializedName("schedule")
     @Expose
@@ -24,8 +24,8 @@ public class WeeklySchedule extends BaseSchedule {
 
     private TreeMap<Date, DailySchedule> weeklySchedule = new TreeMap<>();
 
-    public TreeMap<Date, DailySchedule> getSchedule() {
-        return weeklySchedule;
+    public TreeMap<Date, List<Show>> getSchedule() {
+        return scheduleJson;
     }
 
     public boolean hasDailySchedule(Date key) {
@@ -41,7 +41,7 @@ public class WeeklySchedule extends BaseSchedule {
     }
 
     public List<Date> getDateKeys() {
-        return new ArrayList<>(getSchedule().keySet());
+        return new ArrayList<>(scheduleJson.keySet());
     }
 
     @PostDeserialize
@@ -143,18 +143,18 @@ public class WeeklySchedule extends BaseSchedule {
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (!(o instanceof WeeklySchedule))
+        if (!(o instanceof WeeklyScheduleResponse))
             return false;
 
-        WeeklySchedule that = (WeeklySchedule) o;
+        WeeklyScheduleResponse that = (WeeklyScheduleResponse) o;
 
-        return weeklySchedule != null ? weeklySchedule.equals(that.weeklySchedule) : that
-                .weeklySchedule == null;
+        return scheduleJson != null ? scheduleJson.equals(that.scheduleJson) : that.scheduleJson
+                == null;
     }
 
     @Override
     public int hashCode() {
-        return weeklySchedule != null ? weeklySchedule.hashCode() : 0;
+        return scheduleJson != null ? scheduleJson.hashCode() : 0;
     }
 
     public DailySchedule getDailySchedule(Date date) {

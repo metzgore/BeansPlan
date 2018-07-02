@@ -1,12 +1,12 @@
 package de.metzgore.beansplan.shared
 
-import de.metzgore.beansplan.data.WeeklySchedule
+import de.metzgore.beansplan.data.WeeklyScheduleResponse
 
 interface WeeklyScheduleDao {
 
-    fun save(item: WeeklySchedule?)
+    fun save(item: WeeklyScheduleResponse?)
 
-    fun get(): WeeklySchedule?
+    fun get(): WeeklyScheduleResponse?
 
     companion object {
 

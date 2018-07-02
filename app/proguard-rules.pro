@@ -29,7 +29,7 @@
 # My stuff
 #######################################################################
 -keep class de.metzgore.beansplan.data.DailySchedule { *; }
--keep class de.metzgore.beansplan.data.WeeklySchedule { *; }
+-keep class de.metzgore.beansplan.data.WeeklyScheduleResponse { *; }
 -keep class de.metzgore.beansplan.data.Show { *; }
 
 #######################################################################

@@ -7,7 +7,10 @@ import de.metzgore.beansplan.util.di.modules.*
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [(ClockModule::class), (RepositoryModule::class), (ScheduleDaoModule::class), (ContextModule::class), (MainActivityComponent::class), (WeeklyScheduleFragmentComponent::class), (SettingsModule::class)])
+@Component(modules = [(ClockModule::class), (RepositoryModule::class), (ScheduleDaoModule::class)
+    , (ContextModule::class), (MainActivityComponent::class),
+    (WeeklyScheduleFragmentComponent::class), (DailyScheduleFragmentComponent::class),
+    (SettingsModule::class)])
 interface AppComponent {
 
     fun inject(app: BeansPlanApp)

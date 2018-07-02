@@ -24,7 +24,7 @@ class DailyScheduleRepositoryTest {
 
     @Test
     fun loadSchedule() {
-        repo.loadSchedule(false)
+        repo.loadScheduleFromCache(false)
         verify(scheduleDao).get()
     }
 }
