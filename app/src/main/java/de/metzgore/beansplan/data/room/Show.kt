@@ -2,6 +2,7 @@ package de.metzgore.beansplan.data.room
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.ForeignKey
+import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 import de.metzgore.beansplan.data.Show
 import java.util.*
@@ -25,15 +26,15 @@ class Show(
         val youtubeId: String,
         val type: Show.Type
 ) {
+    @Ignore
+    private val comparisonDate: Date = Date()
+
     val isRunning: Boolean
         get() {
-            //TODO fix this
-            val now = Date()
-            return !now.before(timeStart) && !now.after(timeEnd)
+            return !comparisonDate.before(timeStart) && !comparisonDate.after(timeEnd)
         }
 
-    //TODO fix that
-    val isOver get() = timeEnd.before(Date())
+    val isOver get() = timeEnd.before(comparisonDate)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
