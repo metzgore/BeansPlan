@@ -86,6 +86,9 @@ abstract class WeeklyScheduleRoomDao {
     abstract fun getWeeklyScheduleResponse(): WeeklyScheduleResponse?
 
     //TODO is it possible to use TypeConverter for this?
-    @Query("DELETE FROM dailyschedule WHERE id NOT IN (:dailySchedules)")
-    abstract fun deleteLeftOverDailySchedule(dailySchedules: List<Long>)
+    @Query("DELETE FROM dailyschedule WHERE id NOT IN (:dailyScheduleIds)")
+    abstract fun deleteLeftOverDailySchedule(dailyScheduleIds: List<Long>)
+
+    @Query("DELETE FROM show WHERE id NOT IN (:showIds)")
+    abstract fun deleteLeftOverShows(showIds: List<Long>)
 }

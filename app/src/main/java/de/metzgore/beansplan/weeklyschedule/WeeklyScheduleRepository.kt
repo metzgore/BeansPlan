@@ -55,14 +55,18 @@ class WeeklyScheduleRepository @Inject constructor(private val api: RbtvSchedule
                     it.id.time
                 })
 
+                val showsRoom = arrayListOf<de.metzgore.beansplan.data.room.Show>()
                 item.schedule.forEach { (date, shows) ->
-                    val showsRoom = arrayListOf<de.metzgore.beansplan.data.room.Show>()
                     shows.forEach { show ->
                         showsRoom.add(Show(show.id, date, show.title, show.topic, show.timeStart,
                                 show.timeEnd, show.length, show.game, show.youtubeId, show.type))
                     }
-                    roomDao.upsertShows(showsRoom)
+
                 }
+                roomDao.upsertShows(showsRoom)
+                roomDao.deleteLeftOverShows(showsRoom.map {
+                    it.id
+                })
             }
 
             override fun shouldFetch(data: WeeklyScheduleWithDailySchedules?): Boolean {
