@@ -16,9 +16,6 @@ sealed class ApiResponse<T> {
 
         fun <T> create(response: Response<T>): ApiResponse<T> {
             return if (response.isSuccessful) {
-                if (response.raw().networkResponse()?.code() == HttpURLConnection.HTTP_NOT_MODIFIED)
-                    return ApiEmptyResponse()
-
                 val body = response.body()
                 if (body == null || response.code() == HttpURLConnection.HTTP_NO_CONTENT) {
                     ApiEmptyResponse()
