@@ -182,7 +182,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
 
     private void subscribeUi(WeeklyScheduleViewModel viewModel) {
         viewModel.getSchedule().observe(this, schedule -> {
-            if (schedule != null && schedule.getData() != null) {
+            if (schedule != null) {
                 handleState(schedule.getStatus());
                 handleData(schedule);
             }
