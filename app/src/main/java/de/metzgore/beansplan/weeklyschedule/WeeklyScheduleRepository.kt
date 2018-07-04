@@ -6,7 +6,6 @@ import de.metzgore.beansplan.api.ApiResponse
 import de.metzgore.beansplan.api.RbtvScheduleApi
 import de.metzgore.beansplan.data.Resource
 import de.metzgore.beansplan.data.WeeklyScheduleResponse
-import de.metzgore.beansplan.data.room.Show
 import de.metzgore.beansplan.data.room.WeeklyScheduleWithDailySchedules
 import de.metzgore.beansplan.shared.ScheduleRepository
 import de.metzgore.beansplan.shared.WeeklyScheduleDao
@@ -41,32 +40,7 @@ class WeeklyScheduleRepository @Inject constructor(private val api: RbtvSchedule
             }
 
             override fun saveCallResult(item: WeeklyScheduleResponse) {
-                //TODO transaction
-                val weeklySchedule = de.metzgore.beansplan.data.room.WeeklySchedule(timestamp =
-                clock.nowInMillis(), weeklyScheduleRaw = item)
-                roomDao.upsert(weeklySchedule)
-                val dailySchedules = arrayListOf<de.metzgore.beansplan.data.room.DailySchedule>()
-                item.dateKeys.forEach { date ->
-                    dailySchedules.add(de.metzgore
-                            .beansplan.data.room.DailySchedule(date, weeklySchedule.id))
-                }
-                roomDao.upsertDailySchedules(dailySchedules)
-                roomDao.deleteLeftOverDailySchedule(dailySchedules.map {
-                    it.id.time
-                })
-
-                val showsRoom = arrayListOf<de.metzgore.beansplan.data.room.Show>()
-                item.schedule.forEach { (date, shows) ->
-                    shows.forEach { show ->
-                        showsRoom.add(Show(show.id, date, show.title, show.topic, show.timeStart,
-                                show.timeEnd, show.length, show.game, show.youtubeId, show.type))
-                    }
-
-                }
-                roomDao.upsertShows(showsRoom)
-                roomDao.deleteLeftOverShows(showsRoom.map {
-                    it.id
-                })
+                roomDao.upsertSchedule(clock, item)
             }
 
             override fun shouldFetch(data: WeeklyScheduleWithDailySchedules?): Boolean {

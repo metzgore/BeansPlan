@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import de.metzgore.beansplan.data.WeeklyScheduleResponse
 import de.metzgore.beansplan.data.room.*
+import de.metzgore.beansplan.util.Clock
 import de.metzgore.beansplan.util.distinctUntilChanged
 import java.util.*
 
@@ -91,4 +92,34 @@ abstract class WeeklyScheduleRoomDao {
 
     @Query("DELETE FROM show WHERE id NOT IN (:showIds)")
     abstract fun deleteLeftOverShows(showIds: List<Long>)
+
+    @Transaction
+    open fun upsertSchedule(clock: Clock, item: WeeklyScheduleResponse) {
+        val weeklySchedule = de.metzgore.beansplan.data.room.WeeklySchedule(timestamp =
+        clock.nowInMillis(), weeklyScheduleRaw = item)
+        upsert(weeklySchedule)
+
+        val dailySchedules = arrayListOf<de.metzgore.beansplan.data.room.DailySchedule>()
+        item.dateKeys.forEach { date ->
+            dailySchedules.add(de.metzgore
+                    .beansplan.data.room.DailySchedule(date, weeklySchedule.id))
+        }
+        upsertDailySchedules(dailySchedules)
+        deleteLeftOverDailySchedule(dailySchedules.map {
+            it.id.time
+        })
+
+        val showsRoom = arrayListOf<de.metzgore.beansplan.data.room.Show>()
+        item.schedule.forEach { (date, shows) ->
+            shows.forEach { show ->
+                showsRoom.add(Show(show.id, date, show.title, show.topic, show.timeStart,
+                        show.timeEnd, show.length, show.game, show.youtubeId, show.type))
+            }
+
+        }
+        upsertShows(showsRoom)
+        deleteLeftOverShows(showsRoom.map {
+            it.id
+        })
+    }
 }
