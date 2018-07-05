@@ -3,7 +3,6 @@ package de.metzgore.beansplan.data.room
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
-import de.metzgore.beansplan.weeklyschedule.WeeklyScheduleRoomDao
 
 @Database(
         entities = [
@@ -16,5 +15,5 @@ import de.metzgore.beansplan.weeklyschedule.WeeklyScheduleRoomDao
 @TypeConverters(RoomConverters::class)
 abstract class BeansPlanDb : RoomDatabase() {
 
-    abstract fun scheduleDao(): WeeklyScheduleRoomDao
+    abstract fun scheduleDao(): ScheduleRoomDao
 }

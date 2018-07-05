@@ -12,6 +12,5 @@ import javax.inject.Singleton
     (WeeklyScheduleFragmentComponent::class), (DailyScheduleFragmentComponent::class),
     (SettingsModule::class)])
 interface AppComponent {
-
     fun inject(app: BeansPlanApp)
 }

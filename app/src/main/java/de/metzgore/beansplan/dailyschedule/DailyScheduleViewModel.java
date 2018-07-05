@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import java.util.Date;
 
 import de.metzgore.beansplan.data.room.DailyScheduleWithShows;
-import de.metzgore.beansplan.shared.ScheduleRepository;
 
 public class DailyScheduleViewModel extends ViewModel {
 
@@ -17,7 +16,7 @@ public class DailyScheduleViewModel extends ViewModel {
     private final LiveData<DailyScheduleWithShows> schedule;
     public final LiveData<Boolean> isEmpty;
 
-    public DailyScheduleViewModel(ScheduleRepository<DailyScheduleWithShows> scheduleRepo) {
+    public DailyScheduleViewModel(DailyScheduleRepository scheduleRepo) {
         schedule = Transformations.switchMap(dateToLoad, scheduleRepo::loadScheduleFromCache);
         isEmpty = Transformations.map(schedule, schedule -> schedule == null || schedule.shows
                 .isEmpty());

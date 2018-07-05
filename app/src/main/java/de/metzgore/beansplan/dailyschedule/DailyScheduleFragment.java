@@ -20,7 +20,6 @@ import dagger.android.support.AndroidSupportInjection;
 import de.metzgore.beansplan.R;
 import de.metzgore.beansplan.data.room.DailyScheduleWithShows;
 import de.metzgore.beansplan.databinding.LayoutScheduleBaseBinding;
-import de.metzgore.beansplan.shared.ScheduleRepository;
 import de.metzgore.beansplan.shared.UpdatableScheduleFragment;
 import de.metzgore.beansplan.util.di.DailyScheduleViewModelFactory;
 
@@ -35,7 +34,7 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
     private DailyScheduleViewModel viewModel;
 
     @Inject
-    ScheduleRepository<DailyScheduleWithShows> repo;
+    DailyScheduleRepository repo;
 
     public static Fragment newInstance(Date date) {
         DailyScheduleFragment fragment = new DailyScheduleFragment();

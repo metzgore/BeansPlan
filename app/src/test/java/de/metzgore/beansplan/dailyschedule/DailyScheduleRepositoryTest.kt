@@ -2,7 +2,6 @@ package de.metzgore.beansplan.dailyschedule
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import de.metzgore.beansplan.api.RbtvScheduleApi
-import de.metzgore.beansplan.shared.DailyScheduleDao
 import de.metzgore.beansplan.util.Clock
 import de.metzgore.beansplan.utils.InstantAppExecutors
 import org.junit.Rule

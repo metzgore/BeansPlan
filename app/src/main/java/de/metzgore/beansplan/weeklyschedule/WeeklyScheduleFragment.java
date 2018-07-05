@@ -30,7 +30,6 @@ import de.metzgore.beansplan.data.Resource;
 import de.metzgore.beansplan.data.Status;
 import de.metzgore.beansplan.data.room.WeeklyScheduleWithDailySchedules;
 import de.metzgore.beansplan.databinding.FragmentWeeklyScheduleBinding;
-import de.metzgore.beansplan.shared.ScheduleRepository;
 import de.metzgore.beansplan.util.DateFormatter;
 import de.metzgore.beansplan.util.di.WeeklyScheduleViewModelFactory;
 
@@ -48,7 +47,7 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
     private boolean scheduleContainsCurrentDay;
 
     @Inject
-    ScheduleRepository<WeeklyScheduleWithDailySchedules> repo;
+    WeeklyScheduleRepository repo;
 
     public static Fragment newInstance() {
         return new WeeklyScheduleFragment();

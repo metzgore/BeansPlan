@@ -1,16 +1,15 @@
-package de.metzgore.beansplan.weeklyschedule
+package de.metzgore.beansplan.data.room
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import de.metzgore.beansplan.data.WeeklyScheduleResponse
-import de.metzgore.beansplan.data.room.*
 import de.metzgore.beansplan.util.Clock
 import de.metzgore.beansplan.util.distinctUntilChanged
 import java.util.*
 
 
 @Dao
-abstract class WeeklyScheduleRoomDao {
+abstract class ScheduleRoomDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     abstract fun insert(weeklySchedule: WeeklySchedule): Long

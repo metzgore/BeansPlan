@@ -9,7 +9,7 @@ import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 
-class WeeklyScheduleRoomDaoTest : DbTest() {
+class ScheduleRoomDaoTest : DbTest() {
 
     @Test
     fun insertAndRead() {
