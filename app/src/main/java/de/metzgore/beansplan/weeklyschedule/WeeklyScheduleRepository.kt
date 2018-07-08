@@ -22,7 +22,7 @@ class WeeklyScheduleRepository @Inject constructor(private val api: RbtvSchedule
                                                    appExecutors: AppExecutors, private val
                                                    clock: Clock) {
 
-    val weeklySchedule = roomDao.getWeeklyScheduleWithDailySchedulesDistinct()
+    lateinit var weeklySchedule: LiveData<WeeklyScheduleWithDailySchedules>
 
     fun loadSchedule(forceRefresh: Boolean):
             LiveData<Resource<WeeklyScheduleWithDailySchedules>> {
@@ -42,6 +42,9 @@ class WeeklyScheduleRepository @Inject constructor(private val api: RbtvSchedule
             }
 
             override fun loadFromDb(): LiveData<WeeklyScheduleWithDailySchedules> {
+                if (!::weeklySchedule.isInitialized) {
+                    weeklySchedule = roomDao.getWeeklyScheduleWithDailySchedulesDistinct()
+                }
                 return weeklySchedule
             }
 

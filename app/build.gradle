@@ -163,7 +163,6 @@ dependencies {
 
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3_version"
 
     implementation 'org.apache.commons:commons-lang3:3.7'
 

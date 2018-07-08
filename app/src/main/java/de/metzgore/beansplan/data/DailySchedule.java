@@ -1,8 +1,7 @@
 package de.metzgore.beansplan.data;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DailySchedule extends BaseSchedule implements Parcelable {
+public class DailySchedule {
 
     @SerializedName("schedule")
     @Expose
@@ -53,8 +52,10 @@ public class DailySchedule extends BaseSchedule implements Parcelable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         DailySchedule dailySchedule = (DailySchedule) o;
 
@@ -65,30 +66,4 @@ public class DailySchedule extends BaseSchedule implements Parcelable {
     public int hashCode() {
         return getShows().hashCode();
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeTypedList(this.shows);
-    }
-
-    protected DailySchedule(Parcel in) {
-        this.shows = in.createTypedArrayList(Show.CREATOR);
-    }
-
-    public static final Parcelable.Creator<DailySchedule> CREATOR = new Parcelable.Creator<DailySchedule>() {
-        @Override
-        public DailySchedule createFromParcel(Parcel source) {
-            return new DailySchedule(source);
-        }
-
-        @Override
-        public DailySchedule[] newArray(int size) {
-            return new DailySchedule[size];
-        }
-    };
 }

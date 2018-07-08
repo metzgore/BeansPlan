@@ -1,5 +1,6 @@
 package de.metzgore.beansplan.weeklyschedule
 
+import TestUtils
 import de.metzgore.beansplan.DbTest
 import de.metzgore.beansplan.LiveDataTestUtil.getValue
 import de.metzgore.beansplan.data.room.WeeklySchedule
@@ -14,10 +15,11 @@ class ScheduleRoomDaoTest : DbTest() {
     @Test
     fun insertAndRead() {
         val timestamp = ClockImpl().nowInMillis()
+        val rawSchedule = TestUtils.createWeeklySchedule()
 
-        db.scheduleDao().insert(WeeklySchedule(timestamp = timestamp))
-        val loaded = getValue(db.scheduleDao().getWeeklySchedule("weekly_schedule"))
+        db.scheduleDao().upsert(WeeklySchedule(timestamp = timestamp, weeklyScheduleRaw = rawSchedule))
+        val loaded = getValue(db.scheduleDao().getWeeklyScheduleWithDailySchedules())
         assertThat(loaded, notNullValue())
-        assertThat(loaded.timestamp, `is`(timestamp))
+        assertThat(loaded.weeklySchedule.timestamp, `is`(timestamp))
     }
 }

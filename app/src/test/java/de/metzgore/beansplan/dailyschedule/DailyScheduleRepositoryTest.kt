@@ -1,21 +1,17 @@
 package de.metzgore.beansplan.dailyschedule
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import de.metzgore.beansplan.api.RbtvScheduleApi
-import de.metzgore.beansplan.util.Clock
-import de.metzgore.beansplan.utils.InstantAppExecutors
+import de.metzgore.beansplan.LiveDataTestUtil
+import de.metzgore.beansplan.data.room.ScheduleRoomDao
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
-
+import org.mockito.Mockito.*
+import java.util.*
 
 class DailyScheduleRepositoryTest {
 
-    private val scheduleDao = mock(DailyScheduleDao::class.java)
-    private val rbtvService = mock(RbtvScheduleApi::class.java)
-    private val clock = mock(Clock::class.java)
-    private val repo = DailyScheduleRepository(rbtvService, scheduleDao, InstantAppExecutors(), clock)
+    private val scheduleDao = mock(ScheduleRoomDao::class.java)
+    private val repo = DailyScheduleRepository(scheduleDao)
 
     @Rule
     @JvmField
@@ -23,7 +19,14 @@ class DailyScheduleRepositoryTest {
 
     @Test
     fun loadSchedule() {
-        repo.loadScheduleFromCache(false)
-        verify(scheduleDao).get()
+        val date = Date()
+
+        `when`(scheduleDao.getDailyScheduleWithShows(date)).thenReturn(LiveDataTestUtil
+                .createFilledDailyScheduleWithShowsLiveData())
+
+        repo.loadScheduleFromCache(date)
+        verify(scheduleDao).getDailyScheduleWithShows(date)
+        //TODO check this
+        //verify(scheduleDao).getDailyScheduleWithShowsDistinct(date)
     }
 }
