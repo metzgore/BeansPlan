@@ -25,7 +25,7 @@ class WeeklyScheduleViewModelTest {
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    private val weeklyScheduleRepository = mock(WeeklyScheduleRepository::class.java)
+    private val weeklyScheduleRepository = mock<WeeklyScheduleRepository>()
     private val weeklyScheduleViewModel = WeeklyScheduleViewModel(weeklyScheduleRepository)
 
     @Test

@@ -75,7 +75,7 @@ object LiveDataTestUtil {
             LiveData<Resource<WeeklyScheduleWithDailySchedules>> {
 
         val clock = ClockImpl()
-        val weeklyScheduleResponse = TestUtils.createWeeklySchedule()
+        val weeklyScheduleResponse = TestUtils.createWeeklyScheduleOneWeek()
 
         val weeklySchedule = de.metzgore.beansplan.data.room.WeeklySchedule(timestamp =
         clock.nowInMillis(), weeklyScheduleRaw = weeklyScheduleResponse)
@@ -96,7 +96,7 @@ object LiveDataTestUtil {
             LiveData<WeeklyScheduleWithDailySchedules> {
 
         val clock = ClockImpl()
-        val weeklyScheduleResponse = TestUtils.createWeeklySchedule()
+        val weeklyScheduleResponse = TestUtils.createWeeklyScheduleOneWeek()
 
         val weeklySchedule = de.metzgore.beansplan.data.room.WeeklySchedule(timestamp =
         clock.nowInMillis(), weeklyScheduleRaw = weeklyScheduleResponse)
@@ -118,7 +118,7 @@ object LiveDataTestUtil {
 
     fun createEmptyWeeklyScheduleWithDailySchedulesResourceLiveData(status: Status, forceRefresh: Boolean): LiveData<Resource<WeeklyScheduleWithDailySchedules>> {
         val clock = ClockImpl()
-        val weeklyScheduleResponse = TestUtils.createWeeklySchedule()
+        val weeklyScheduleResponse = TestUtils.createWeeklyScheduleOneWeek()
 
         val weeklySchedule = de.metzgore.beansplan.data.room.WeeklySchedule(timestamp =
         clock.nowInMillis(), weeklyScheduleRaw = weeklyScheduleResponse)

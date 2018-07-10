@@ -7,7 +7,6 @@ import de.metzgore.beansplan.util.Clock
 import de.metzgore.beansplan.util.distinctUntilChanged
 import java.util.*
 
-
 @Dao
 abstract class ScheduleRoomDao {
 

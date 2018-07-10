@@ -73,6 +73,13 @@
 
 
 #skip licenses
+- artifact: org.jetbrains.kotlin:kotlin-stdlib-common:+
+  name: org.jetbrains.kotlin:kotlin-stdlib-common
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://kotlinlang.org/
+  skip: true
 - artifact: android.arch.persistence:db:+
   name: Android DB
   copyrightHolder: #COPYRIGHT_HOLDER#

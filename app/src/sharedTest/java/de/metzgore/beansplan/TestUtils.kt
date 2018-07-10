@@ -12,9 +12,17 @@ object TestUtils {
         return Injector.provideGson().fromJson(source.readUtf8(), DailySchedule::class.java)
     }
 
-    fun createWeeklySchedule(): WeeklyScheduleResponse {
+    fun createWeeklyScheduleOneWeek(): WeeklyScheduleResponse {
         val inputStream = javaClass.classLoader
                 .getResourceAsStream("api-response/weekly_schedule_one_week.json")
+        val source = Okio.buffer(Okio.source(inputStream))
+
+        return Injector.provideGson().fromJson(source.readUtf8(), WeeklyScheduleResponse::class.java)
+    }
+
+    fun createWeeklyScheduleTwoWeek(): WeeklyScheduleResponse {
+        val inputStream = javaClass.classLoader
+                .getResourceAsStream("api-response/weekly_schedule_two_weeks.json")
         val source = Okio.buffer(Okio.source(inputStream))
 
         return Injector.provideGson().fromJson(source.readUtf8(), WeeklyScheduleResponse::class.java)

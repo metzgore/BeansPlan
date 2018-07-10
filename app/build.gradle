@@ -39,7 +39,6 @@ android {
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-
         }
     }
 
@@ -153,6 +152,7 @@ dependencies {
     androidTestImplementation "android.arch.core:core-testing:$arch_components_version"
     androidTestImplementation "org.mockito:mockito-core:$mockito_version"
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:$okhttp3_version"
+    androidTestImplementation "io.mockk:mockk-android:1.8.5"
 
     //Support libs
     implementation "com.android.support:appcompat-v7:$support_version"

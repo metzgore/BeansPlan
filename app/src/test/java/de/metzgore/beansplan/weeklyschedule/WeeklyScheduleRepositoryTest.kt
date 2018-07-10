@@ -22,9 +22,9 @@ import java.util.*
 
 class WeeklyScheduleRepositoryTest {
 
-    private val scheduleDao = mock(ScheduleRoomDao::class.java)
-    private val rbtvService = mock(RbtvScheduleApi::class.java)
-    private val clock = mock(Clock::class.java)
+    private val scheduleDao = mock<ScheduleRoomDao>()
+    private val rbtvService = mock<RbtvScheduleApi>()
+    private val clock = mock<Clock>()
     private val repo = WeeklyScheduleRepository(rbtvService, scheduleDao, InstantAppExecutors(), clock)
 
     @Rule
@@ -186,7 +186,7 @@ class WeeklyScheduleRepositoryTest {
 
     @Test
     fun saveItemWhenCacheAndNetworkAreDifferent() {
-        val updatedSchedule = TestUtils.createWeeklySchedule()
+        val updatedSchedule = TestUtils.createWeeklyScheduleOneWeek()
         val updatedCall = ApiUtil.successCall(updatedSchedule)
 
         `when`(rbtvService.scheduleOfCurrentWeek()).thenReturn(updatedCall)
