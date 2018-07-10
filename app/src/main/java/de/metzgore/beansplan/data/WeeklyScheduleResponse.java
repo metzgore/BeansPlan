@@ -1,20 +1,12 @@
 package de.metzgore.beansplan.data;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
-
-import io.gsonfire.annotations.PostDeserialize;
 
 public class WeeklyScheduleResponse {
 
@@ -22,116 +14,29 @@ public class WeeklyScheduleResponse {
     @Expose
     private TreeMap<Date, List<Show>> scheduleJson = new TreeMap<>();
 
-    private TreeMap<Date, DailySchedule> weeklySchedule = new TreeMap<>();
-
     public TreeMap<Date, List<Show>> getSchedule() {
         return scheduleJson;
     }
 
-    public boolean hasDailySchedule(Date key) {
-        return weeklySchedule.containsKey(key);
-    }
-
     public int getSize() {
-        return weeklySchedule.size();
+        return scheduleJson.size();
     }
 
     public boolean isEmpty() {
-        return weeklySchedule == null || weeklySchedule.isEmpty();
+        return scheduleJson == null || scheduleJson.isEmpty();
     }
 
     public List<Date> getDateKeys() {
         return new ArrayList<>(scheduleJson.keySet());
     }
 
-    @PostDeserialize
-    @SuppressWarnings("unused")
-    public void postDeserializeLogic() {
-        for (Map.Entry<Date, List<Show>> entry : scheduleJson.entrySet()) {
-            weeklySchedule.put(entry.getKey(), new DailySchedule(entry.getValue()));
-        }
-    }
-
-    public int getPositionOfCurrentDay() {
-        return getDateKeys().indexOf(getCurrentDate());
-    }
-
-    public boolean containsScheduleForCurrentDay() {
-        Date today = getCurrentDate();
-        List<Date> dates = getDateKeys();
-
-        for (Date date : dates) {
-            if (date.equals(today))
-                return true;
-        }
-
-        return false;
-    }
-
-    @Nullable
-    public Date getStartDate() {
-        if (!weeklySchedule.isEmpty())
-            return weeklySchedule.firstKey();
-        else
-            return null;
-    }
-
-    @Nullable
-    public Date getEndDate() {
-        if (!weeklySchedule.isEmpty())
-            return weeklySchedule.lastKey();
-        else
-            return null;
-    }
-
-    @NonNull
-    private Date getCurrentDate() {
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(new Date());
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-
-        return calendar.getTime();
-    }
-
-    /*public void removePastShows() {
-        removePastDays();
-
-        Date today = getCurrentDate();
-        Date[] schedules = getKeysAsDate();
-
-        for (Date date : schedules) {
-            if (date.equals(today)) {
-                List<Show> showsOfToday = weeklySchedule.get(date).getShows();
-                Iterator<Show> iterator = showsOfToday.iterator();
-                while (iterator.hasNext()) {
-                    Show show = iterator.next();
-                    if (show.isOver())
-                        iterator.remove();
-                }
-            }
-        }
-    }
-
-    public void removePastDays() {
-        Date today = getCurrentDate();
-        Date[] schedules = getKeysAsDate();
-
-        for (Date date : schedules) {
-            if (date.before(today))
-                weeklySchedule.remove(date);
-        }
-    }*/
-
     @Override
     public String toString() {
         StringBuilder shows = new StringBuilder();
 
-        for (Date key : weeklySchedule.keySet()) {
+        for (Date key : getDateKeys()) {
             shows.append(key).append("\n");
-            for (Show show : weeklySchedule.get(key).getShows()) {
+            for (Show show : scheduleJson.get(key)) {
                 shows.append(show.toString()).append("\n");
             }
         }
@@ -155,12 +60,5 @@ public class WeeklyScheduleResponse {
     @Override
     public int hashCode() {
         return scheduleJson != null ? scheduleJson.hashCode() : 0;
-    }
-
-    public DailySchedule getDailySchedule(Date date) {
-        if (weeklySchedule.containsKey(date))
-            return weeklySchedule.get(date);
-        else
-            return new DailySchedule();
     }
 }

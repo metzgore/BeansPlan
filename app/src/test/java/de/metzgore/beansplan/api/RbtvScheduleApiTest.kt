@@ -67,25 +67,9 @@ class RbtvScheduleApiTest {
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
 
-        //test startDate
-
-        assertThat(DateUtils.truncatedEquals(weeklySchedule.startDate!!, calendar.time, Calendar.YEAR), `is`(true))
-        assertThat(DateUtils.truncatedEquals(weeklySchedule.startDate!!, calendar.time, Calendar.MONTH), `is`(true))
-        assertThat(DateUtils.truncatedEquals(weeklySchedule.startDate!!, calendar.time, Calendar.DAY_OF_MONTH), `is`(true))
-
-        //test endDate
-
-        calendar.set(Calendar.DAY_OF_MONTH, 13)
-
-        assertThat(DateUtils.truncatedEquals(weeklySchedule.endDate!!, calendar.time, Calendar.YEAR), `is`(true))
-        assertThat(DateUtils.truncatedEquals(weeklySchedule.endDate!!, calendar.time, Calendar.MONTH), `is`(true))
-        assertThat(DateUtils.truncatedEquals(weeklySchedule.endDate!!, calendar.time, Calendar.DAY_OF_MONTH), `is`(true))
-
         // test dateKeys
 
         val dateKeys = weeklySchedule.dateKeys
-
-        calendar.set(Calendar.DAY_OF_MONTH, 7)
 
         dateKeys.forEach {
             assertThat(DateUtils.truncatedEquals(it, calendar.time, Calendar.YEAR), `is`(true))

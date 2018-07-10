@@ -38,14 +38,6 @@
   url: https://github.com/google/gson
   year: 2008
 
-- artifact: io.gsonfire:gson-fire:+
-  name: Gson on Fire!
-  copyrightHolder: Julio Viera
-  license: The MIT License
-  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
-  url: http://gsonfire.io
-  year: 2015
-
 - artifact: com.mikepenz:iconics-core:+
   name: iconics-core
   copyrightHolder: Mike Penz

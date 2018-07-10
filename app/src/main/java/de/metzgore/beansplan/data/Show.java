@@ -9,8 +9,6 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 import java.util.Objects;
 
-import io.gsonfire.annotations.PostDeserialize;
-
 public class Show implements Parcelable {
 
     @SerializedName("id")
@@ -49,9 +47,8 @@ public class Show implements Parcelable {
     private boolean isRunning;
 
     public enum Type {
-        @SerializedName("") NONE(0),
-        @SerializedName("premiere") PREMIERE(1),
-        @SerializedName("live") LIVE(2);
+        @SerializedName("") NONE(0), @SerializedName("premiere") PREMIERE(1), @SerializedName
+                ("live") LIVE(2);
 
         private int value;
 
@@ -102,22 +99,6 @@ public class Show implements Parcelable {
 
     public String getYoutubeId() {
         return youtubeId;
-    }
-
-    public boolean isRunning() {
-        return isRunning;
-    }
-
-    public boolean isOver() {
-        return isOver;
-    }
-
-    @PostDeserialize
-    @SuppressWarnings("unused")
-    public void postDeserializeLogic() {
-        Date now = new Date();
-        isRunning = !now.before(timeStart) && !now.after(timeEnd);
-        isOver = timeEnd.before(now);
     }
 
     @Override
