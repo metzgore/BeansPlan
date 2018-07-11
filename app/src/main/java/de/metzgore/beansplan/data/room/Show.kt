@@ -4,7 +4,7 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.ForeignKey
 import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
-import de.metzgore.beansplan.data.Show
+import de.metzgore.beansplan.data.ShowResponse
 import java.util.*
 
 @Entity
@@ -24,7 +24,7 @@ class Show(
         val length: Int,
         val game: String,
         val youtubeId: String,
-        val type: Show.Type
+        val type: ShowResponse.Type
 ) {
     @Ignore
     private val comparisonDate: Date = Date()
@@ -38,7 +38,7 @@ class Show(
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is de.metzgore.beansplan.data.room.Show) return false
+        if (other !is Show) return false
 
         if (id != other.id) return false
         if (scheduleId != other.scheduleId) return false

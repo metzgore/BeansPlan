@@ -9,21 +9,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DailySchedule {
+public class DailyScheduleResponse {
 
     @SerializedName("schedule")
     @Expose
-    private List<Show> shows;
+    private List<ShowResponse> shows;
 
-    public DailySchedule(List<Show> shows) {
+    public DailyScheduleResponse(List<ShowResponse> shows) {
         this.shows = shows;
     }
 
-    public DailySchedule() {
+    public DailyScheduleResponse() {
         this.shows = new ArrayList<>();
     }
 
-    public List<Show> getShows() {
+    public List<ShowResponse> getShows() {
         return shows;
     }
 
@@ -35,8 +35,8 @@ public class DailySchedule {
     public String toString() {
         StringBuilder showsBuilder = new StringBuilder();
 
-        for (Show show : shows) {
-            showsBuilder.append(show.toString()).append("\n");
+        for (ShowResponse showResponse : shows) {
+            showsBuilder.append(showResponse.toString()).append("\n");
         }
 
         return showsBuilder.toString();
@@ -57,9 +57,9 @@ public class DailySchedule {
         if (o == null || getClass() != o.getClass())
             return false;
 
-        DailySchedule dailySchedule = (DailySchedule) o;
+        DailyScheduleResponse dailyScheduleResponse = (DailyScheduleResponse) o;
 
-        return getShows().equals(dailySchedule.getShows());
+        return getShows().equals(dailyScheduleResponse.getShows());
     }
 
     @Override

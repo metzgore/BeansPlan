@@ -6,9 +6,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import de.metzgore.beansplan.data.Resource
 import de.metzgore.beansplan.data.Status
-import de.metzgore.beansplan.data.room.DailyScheduleWithShows
-import de.metzgore.beansplan.data.room.Show
-import de.metzgore.beansplan.data.room.WeeklyScheduleWithDailySchedules
+import de.metzgore.beansplan.data.room.*
 import de.metzgore.beansplan.util.ClockImpl
 import java.util.*
 import java.util.concurrent.CountDownLatch
@@ -36,12 +34,12 @@ object LiveDataTestUtil {
         val dailySchedule = TestUtils.createDailySchedule()
         val scheduleWithShows = DailyScheduleWithShows()
 
-        val dailyScheduleRoom = de.metzgore.beansplan.data.room.DailySchedule(dailySchedule.date!!,
+        val dailyScheduleRoom = DailySchedule(dailySchedule.date!!,
                 "foo")
 
         scheduleWithShows.dailySchedule = dailyScheduleRoom
 
-        val showsRoom = arrayListOf<de.metzgore.beansplan.data.room.Show>()
+        val showsRoom = arrayListOf<Show>()
         dailySchedule.shows.forEach { show ->
             showsRoom.add(Show(show.id, dailySchedule.date!!, show.title, show.topic, show.timeStart,
                     show.timeEnd, show.length, show.game, show.youtubeId, show.type))
@@ -59,7 +57,7 @@ object LiveDataTestUtil {
         val dailySchedule = TestUtils.createDailySchedule()
         val scheduleWithShows = DailyScheduleWithShows()
 
-        val dailyScheduleRoom = de.metzgore.beansplan.data.room.DailySchedule(dailySchedule.date!!,
+        val dailyScheduleRoom = DailySchedule(dailySchedule.date!!,
                 "foo")
 
         scheduleWithShows.dailySchedule = dailyScheduleRoom
@@ -77,7 +75,7 @@ object LiveDataTestUtil {
         val clock = ClockImpl()
         val weeklyScheduleResponse = TestUtils.createWeeklyScheduleOneWeek()
 
-        val weeklySchedule = de.metzgore.beansplan.data.room.WeeklySchedule(timestamp =
+        val weeklySchedule = WeeklySchedule(timestamp =
         clock.nowInMillis(), weeklyScheduleRaw = weeklyScheduleResponse)
 
         val dailySchedules = arrayListOf<Date>()
@@ -98,7 +96,7 @@ object LiveDataTestUtil {
         val clock = ClockImpl()
         val weeklyScheduleResponse = TestUtils.createWeeklyScheduleOneWeek()
 
-        val weeklySchedule = de.metzgore.beansplan.data.room.WeeklySchedule(timestamp =
+        val weeklySchedule = WeeklySchedule(timestamp =
         clock.nowInMillis(), weeklyScheduleRaw = weeklyScheduleResponse)
 
         val dailySchedules = arrayListOf<Date>()
@@ -120,7 +118,7 @@ object LiveDataTestUtil {
         val clock = ClockImpl()
         val weeklyScheduleResponse = TestUtils.createWeeklyScheduleOneWeek()
 
-        val weeklySchedule = de.metzgore.beansplan.data.room.WeeklySchedule(timestamp =
+        val weeklySchedule = WeeklySchedule(timestamp =
         clock.nowInMillis(), weeklyScheduleRaw = weeklyScheduleResponse)
 
         val weeklyScheduleWithDailySchedules = WeeklyScheduleWithDailySchedules()

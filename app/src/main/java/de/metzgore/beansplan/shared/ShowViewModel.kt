@@ -7,6 +7,7 @@ import android.net.Uri
 import android.support.v4.content.ContextCompat
 import android.text.format.DateUtils
 import de.metzgore.beansplan.R
+import de.metzgore.beansplan.data.ShowResponse
 import de.metzgore.beansplan.data.room.Show
 import org.apache.commons.lang3.time.DurationFormatUtils
 
@@ -21,8 +22,8 @@ class ShowViewModel(private val show: Show) {
     val isOnYoutube: Boolean = !show.youtubeId.isBlank()
 
     val typeFormatted: String = when (show.type) {
-        de.metzgore.beansplan.data.Show.Type.LIVE, de.metzgore.beansplan.data.Show.Type.PREMIERE -> show.type.toString()
-        de.metzgore.beansplan.data.Show.Type.NONE -> ""
+        ShowResponse.Type.LIVE, ShowResponse.Type.PREMIERE -> show.type.toString()
+        ShowResponse.Type.NONE -> ""
     }
 
     val lengthFormatted: String = DurationFormatUtils.formatDuration((show.length * 1000)

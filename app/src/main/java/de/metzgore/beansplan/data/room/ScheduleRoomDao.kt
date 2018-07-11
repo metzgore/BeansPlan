@@ -93,11 +93,11 @@ abstract class ScheduleRoomDao {
 
     @Transaction
     open fun upsertSchedule(clock: Clock, item: WeeklyScheduleResponse) {
-        val weeklySchedule = de.metzgore.beansplan.data.room.WeeklySchedule(timestamp =
+        val weeklySchedule = WeeklySchedule(timestamp =
         clock.nowInMillis(), weeklyScheduleRaw = item)
         upsert(weeklySchedule)
 
-        val dailySchedules = arrayListOf<de.metzgore.beansplan.data.room.DailySchedule>()
+        val dailySchedules = arrayListOf<DailySchedule>()
         item.dateKeys.forEach { date ->
             dailySchedules.add(de.metzgore
                     .beansplan.data.room.DailySchedule(date, weeklySchedule.id))
@@ -107,7 +107,7 @@ abstract class ScheduleRoomDao {
             it.id.time
         })
 
-        val showsRoom = arrayListOf<de.metzgore.beansplan.data.room.Show>()
+        val showsRoom = arrayListOf<Show>()
         item.schedule.forEach { (date, shows) ->
             shows.forEach { show ->
                 showsRoom.add(Show(show.id, date, show.title, show.topic, show.timeStart,

@@ -12,9 +12,9 @@ public class WeeklyScheduleResponse {
 
     @SerializedName("schedule")
     @Expose
-    private TreeMap<Date, List<Show>> scheduleJson = new TreeMap<>();
+    private TreeMap<Date, List<ShowResponse>> scheduleJson = new TreeMap<>();
 
-    public TreeMap<Date, List<Show>> getSchedule() {
+    public TreeMap<Date, List<ShowResponse>> getSchedule() {
         return scheduleJson;
     }
 
@@ -36,8 +36,8 @@ public class WeeklyScheduleResponse {
 
         for (Date key : getDateKeys()) {
             shows.append(key).append("\n");
-            for (Show show : scheduleJson.get(key)) {
-                shows.append(show.toString()).append("\n");
+            for (ShowResponse showResponse : scheduleJson.get(key)) {
+                shows.append(showResponse.toString()).append("\n");
             }
         }
 

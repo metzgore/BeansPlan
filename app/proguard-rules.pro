@@ -28,9 +28,9 @@
 #######################################################################
 # My stuff
 #######################################################################
--keep class de.metzgore.beansplan.data.DailySchedule { *; }
+-keep class de.metzgore.beansplan.data.DailyScheduleResponse { *; }
 -keep class de.metzgore.beansplan.data.WeeklyScheduleResponse { *; }
--keep class de.metzgore.beansplan.data.Show { *; }
+-keep class de.metzgore.beansplan.data.ShowResponse { *; }
 
 #######################################################################
 # Android

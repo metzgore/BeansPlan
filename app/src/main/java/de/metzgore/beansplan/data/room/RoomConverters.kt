@@ -2,7 +2,7 @@ package de.metzgore.beansplan.data.room
 
 import android.arch.persistence.room.TypeConverter
 import com.google.gson.GsonBuilder
-import de.metzgore.beansplan.data.Show
+import de.metzgore.beansplan.data.ShowResponse
 import de.metzgore.beansplan.data.WeeklyScheduleResponse
 import java.util.*
 
@@ -23,19 +23,19 @@ object RoomConverters {
 
     @TypeConverter
     @JvmStatic
-    fun typeEnumToInt(type: Show.Type): Int {
+    fun typeEnumToInt(type: ShowResponse.Type): Int {
         return type.value
     }
 
     @TypeConverter
     @JvmStatic
-    fun intToTypeEnum(value: Int): Show.Type {
-        for (type in Show.Type.values()) {
+    fun intToTypeEnum(value: Int): ShowResponse.Type {
+        for (type in ShowResponse.Type.values()) {
             if (type.value == value) {
                 return type
             }
         }
-        return Show.Type.NONE
+        return ShowResponse.Type.NONE
     }
 
     @TypeConverter
