@@ -1,5 +1,6 @@
 package de.metzgore.beansplan;
 
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateUtils;
 import android.view.MenuItem;
 import android.view.View;
+
+import java.io.File;
 
 import javax.inject.Inject;
 
@@ -52,6 +55,10 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
         setTheme(R.style.AppTheme);
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
+
+        //TODO remove in future version
+        deleteRecursive(getDir("dualcachedaily_schedule_key", Context.MODE_PRIVATE));
+        deleteRecursive(getDir("dualcacheweekly_schedule_key", Context.MODE_PRIVATE));
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
@@ -96,6 +103,17 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
                     CURRENT_FRAGMENT_TAG).commit();
         } else {
             selectDrawerItem(R.id.nav_weekly_schedule);
+        }
+    }
+
+    //TODO remove in future version
+    void deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.exists()) {
+            if (fileOrDirectory.isDirectory())
+                for (File child : fileOrDirectory.listFiles())
+                    deleteRecursive(child);
+
+            fileOrDirectory.delete();
         }
     }
 

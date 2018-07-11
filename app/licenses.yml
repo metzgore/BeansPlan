@@ -22,14 +22,6 @@
   url: https://github.com/google/dagger
   year: 2012
 
-- artifact: com.vincentbrison.openlibraries.android:dualcache:+
-  name: Dual Cache
-  copyrightHolder: Vincent Brison
-  license: The Apache Software License, Version 2.0
-  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
-  url: https://github.com/vincentbrison/dualcache
-  year: 2016
-
 - artifact: com.google.code.gson:gson:+
   name: Gson
   copyrightHolder: Google Inc
@@ -138,14 +130,6 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: http://developer.android.com/tools/extras/support-library.html
-- artifact: com.vincentbrison.openlibraries.android:dualcache-serializerinterface:+
-  name: Android Dual Cache
-  skip: true
-  copyrightHolder: Vincent Brison
-  license: The Apache Software License, Version 2.0
-  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
-  url: https://github.com/vincentbrison/android-dual-cache
-  year: 2016
 - artifact: com.jakewharton:disklrucache:+
   name: Disk LRU Cache
   skip: true

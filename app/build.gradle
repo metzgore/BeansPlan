@@ -170,8 +170,6 @@ dependencies {
     implementation "android.arch.persistence.room:runtime:$arch_components_version"
     kapt "android.arch.persistence.room:compiler:$arch_components_version"
 
-    implementation 'com.vincentbrison.openlibraries.android:dualcache:3.1.1'
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"
