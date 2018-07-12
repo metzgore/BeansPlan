@@ -65,6 +65,8 @@ public class WeeklyScheduleFragment extends RefreshableScheduleFragment {
 
         if (savedInstanceState != null) {
             selectedDate = new Date(savedInstanceState.getLong(SELECTED_DATE_TIMESTAMP));
+        } else {
+            selectedDate = new Date();
         }
 
         setHasOptionsMenu(true);
