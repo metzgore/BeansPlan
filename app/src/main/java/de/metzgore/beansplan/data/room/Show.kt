@@ -1,9 +1,6 @@
 package de.metzgore.beansplan.data.room
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
-import android.arch.persistence.room.Ignore
-import android.arch.persistence.room.PrimaryKey
+import android.arch.persistence.room.*
 import de.metzgore.beansplan.data.ShowResponse
 import java.util.*
 
@@ -12,7 +9,8 @@ import java.util.*
         parentColumns = arrayOf("id"),
         childColumns = arrayOf("scheduleId"),
         onDelete = ForeignKey.CASCADE,
-        onUpdate = ForeignKey.CASCADE))])
+        onUpdate = ForeignKey.CASCADE))],
+        indices = [(Index(value = ["scheduleId"]))])
 class Show(
         @PrimaryKey
         val id: Long,
