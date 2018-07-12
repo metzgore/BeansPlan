@@ -1,13 +1,10 @@
 package de.metzgore.beansplan.dailyschedule
 
-import TestUtils
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import de.metzgore.beansplan.LiveDataTestUtil
-import de.metzgore.beansplan.data.DailySchedule
-import de.metzgore.beansplan.data.Resource
-import de.metzgore.beansplan.data.Status
+import de.metzgore.beansplan.data.room.DailyScheduleWithShows
 import de.metzgore.beansplan.mock
 import org.hamcrest.CoreMatchers.*
 import org.junit.Assert.assertThat
@@ -16,6 +13,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.mockito.Mockito.*
+import java.util.*
 
 @RunWith(JUnit4::class)
 class DailyScheduleViewModelTest {
@@ -23,7 +21,7 @@ class DailyScheduleViewModelTest {
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    private val dailyScheduleRepository = mock(DailyScheduleRepository::class.java)
+    private val dailyScheduleRepository = mock<DailyScheduleRepository>()
     private val dailyScheduleViewModel = DailyScheduleViewModel(dailyScheduleRepository)
 
     @Test
@@ -32,9 +30,7 @@ class DailyScheduleViewModelTest {
         assertThat(dailyScheduleViewModel.schedule.value, nullValue())
         assertThat(dailyScheduleViewModel.isEmpty, notNullValue())
         assertThat(dailyScheduleViewModel.isEmpty.value, nullValue())
-        assertThat(dailyScheduleViewModel.isLoading, notNullValue())
-        assertThat(dailyScheduleViewModel.isLoading.value, nullValue())
-        verify(dailyScheduleRepository, never()).loadSchedule(anyBoolean())
+        verify(dailyScheduleRepository, never()).loadScheduleFromCache(Date())
     }
 
     @Test
@@ -42,58 +38,42 @@ class DailyScheduleViewModelTest {
         dailyScheduleViewModel.schedule.observeForever(mock())
         dailyScheduleViewModel.isEmpty.observeForever(mock())
 
-        `when`(dailyScheduleRepository.loadSchedule(true)).thenReturn(LiveDataTestUtil.createFilledDailyScheduleLiveData(Status.SUCCESS, true))
+        val date = Date()
+
+        `when`(dailyScheduleRepository.loadScheduleFromCache(date)).thenReturn(LiveDataTestUtil
+                .createFilledDailyScheduleWithShowsLiveData())
 
         //test loading from network with empty schedule
-        dailyScheduleViewModel.loadSchedule()
-        verify(dailyScheduleRepository, never()).loadSchedule(false)
-        verify(dailyScheduleRepository, times(1)).loadSchedule(true)
-
-        //test loading from cache
-        dailyScheduleViewModel.loadSchedule()
-        verify(dailyScheduleRepository, times(1)).loadSchedule(true)
-        verify(dailyScheduleRepository, times(1)).loadSchedule(false)
-
-        //test force loading from network with schedule
-        dailyScheduleViewModel.loadScheduleFromNetwork()
-        verify(dailyScheduleRepository, times(2)).loadSchedule(true)
-        verify(dailyScheduleRepository, times(1)).loadSchedule(false)
-
-        verifyNoMoreInteractions(dailyScheduleRepository)
-    }
-
-    @Test
-    fun testSetDailySchedule() {
-        dailyScheduleViewModel.schedule.observeForever(mock())
-
-        dailyScheduleViewModel.setSchedule(TestUtils.createDailySchedule())
-        verify(dailyScheduleRepository, never()).loadSchedule(anyBoolean())
+        dailyScheduleViewModel.loadSchedule(date)
+        verify(dailyScheduleRepository, times(1)).loadScheduleFromCache(date)
 
         verifyNoMoreInteractions(dailyScheduleRepository)
     }
 
     @Test
     fun sendResultToUI() {
-        val foo = MutableLiveData<Resource<DailySchedule>>()
-        val bar = MutableLiveData<Resource<DailySchedule>>()
+        val foo = MutableLiveData<DailyScheduleWithShows>()
+        val bar = MutableLiveData<DailyScheduleWithShows>()
 
-        `when`(dailyScheduleRepository.loadSchedule(true)).thenReturn(foo)
-        val observer = mock<Observer<Resource<DailySchedule>>>()
+        val date = Date()
+
+        `when`(dailyScheduleRepository.loadScheduleFromCache(date)).thenReturn(foo)
+        val observer = mock<Observer<DailyScheduleWithShows>>()
         dailyScheduleViewModel.schedule.observeForever(observer)
-        dailyScheduleViewModel.loadScheduleFromNetwork()
+        dailyScheduleViewModel.loadSchedule(date)
 
         verify(observer, never()).onChanged(any())
-        val fooValue = Resource.success(DailySchedule(), true)
+        val fooValue = DailyScheduleWithShows()
 
         foo.value = fooValue
         verify(observer).onChanged(fooValue)
         reset(observer)
 
-        `when`(dailyScheduleRepository.loadSchedule(true)).thenReturn(bar)
-        dailyScheduleViewModel.loadScheduleFromNetwork()
+        `when`(dailyScheduleRepository.loadScheduleFromCache(date)).thenReturn(bar)
+        dailyScheduleViewModel.loadSchedule(date)
 
         verify(observer, never()).onChanged(any())
-        val barValue = Resource.success(TestUtils.createDailySchedule(), false)
+        val barValue = DailyScheduleWithShows()
 
         bar.value = barValue
         verify(observer).onChanged(barValue)
@@ -105,35 +85,17 @@ class DailyScheduleViewModelTest {
         dailyScheduleViewModel.schedule.observeForever(mock())
         dailyScheduleViewModel.isEmpty.observeForever(mock())
 
+        val date = Date()
+
         //test loading from network with filled schedule
-        `when`(dailyScheduleRepository.loadSchedule(anyBoolean())).thenReturn(LiveDataTestUtil.createFilledDailyScheduleLiveData(Status.SUCCESS, true))
-        dailyScheduleViewModel.loadSchedule()
+        `when`(dailyScheduleRepository.loadScheduleFromCache(date)).thenReturn(LiveDataTestUtil
+                .createFilledDailyScheduleWithShowsLiveData())
+        dailyScheduleViewModel.loadSchedule(date)
         assertThat(dailyScheduleViewModel.isEmpty.value, `is`(false))
 
         //test loading from network with empty schedule
-        `when`(dailyScheduleRepository.loadSchedule(anyBoolean())).thenReturn(LiveDataTestUtil.createEmptyDailyScheduleLiveData(Status.SUCCESS, true))
-        dailyScheduleViewModel.loadSchedule()
+        `when`(dailyScheduleRepository.loadScheduleFromCache(date)).thenReturn(LiveDataTestUtil.createEmptyDailyScheduleWithShowsLiveData())
+        dailyScheduleViewModel.loadSchedule(date)
         assertThat(dailyScheduleViewModel.isEmpty.value, `is`(true))
-    }
-
-    @Test
-    fun testLoadingState() {
-        dailyScheduleViewModel.schedule.observeForever(mock())
-        dailyScheduleViewModel.isLoading.observeForever(mock())
-
-        //test loading with state LOADING
-        `when`(dailyScheduleRepository.loadSchedule(anyBoolean())).thenReturn(LiveDataTestUtil.createEmptyDailyScheduleLiveData(Status.LOADING, true))
-        dailyScheduleViewModel.loadSchedule()
-        assertThat(dailyScheduleViewModel.isLoading.value, `is`(true))
-
-        //test loading with state SUCCESS
-        `when`(dailyScheduleRepository.loadSchedule(anyBoolean())).thenReturn(LiveDataTestUtil.createEmptyDailyScheduleLiveData(Status.SUCCESS, true))
-        dailyScheduleViewModel.loadSchedule()
-        assertThat(dailyScheduleViewModel.isLoading.value, `is`(false))
-
-        //test loading with state ERROR
-        `when`(dailyScheduleRepository.loadSchedule(anyBoolean())).thenReturn(LiveDataTestUtil.createEmptyDailyScheduleLiveData(Status.ERROR, true))
-        dailyScheduleViewModel.loadSchedule()
-        assertThat(dailyScheduleViewModel.isLoading.value, `is`(false))
     }
 }

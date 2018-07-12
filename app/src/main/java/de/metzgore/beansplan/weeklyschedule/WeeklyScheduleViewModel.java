@@ -7,37 +7,31 @@ import android.arch.lifecycle.ViewModel;
 
 import de.metzgore.beansplan.data.Resource;
 import de.metzgore.beansplan.data.Status;
-import de.metzgore.beansplan.data.WeeklySchedule;
-import de.metzgore.beansplan.shared.IScheduleViewModel;
-import de.metzgore.beansplan.shared.ScheduleRepository;
+import de.metzgore.beansplan.data.room.WeeklyScheduleWithDailySchedules;
 
-public class WeeklyScheduleViewModel extends ViewModel implements
-        IScheduleViewModel<WeeklySchedule> {
+public class WeeklyScheduleViewModel extends ViewModel {
 
     private final MutableLiveData<Boolean> refresh = new MutableLiveData<>();
-    private final LiveData<Resource<WeeklySchedule>> schedule;
+    private final LiveData<Resource<WeeklyScheduleWithDailySchedules>> schedule;
     public final LiveData<Boolean> isEmpty;
     public final LiveData<Boolean> isLoading;
 
-    public WeeklyScheduleViewModel(ScheduleRepository<WeeklySchedule> scheduleRepo) {
+    public WeeklyScheduleViewModel(WeeklyScheduleRepository scheduleRepo) {
         schedule = Transformations.switchMap(refresh, scheduleRepo::loadSchedule);
         isEmpty = Transformations.map(schedule, schedule -> schedule == null || schedule.getData
-                () == null || schedule.getData().isEmpty());
+                () == null || schedule.getData().getDailySchedulesWithShows().isEmpty());
         isLoading = Transformations.map(schedule, schedule -> schedule.getStatus() == Status
                 .LOADING);
     }
 
-    @Override
-    public LiveData<Resource<WeeklySchedule>> getSchedule() {
+    public LiveData<Resource<WeeklyScheduleWithDailySchedules>> getSchedule() {
         return schedule;
     }
 
-    @Override
     public void loadScheduleFromNetwork() {
         refresh.setValue(true);
     }
 
-    @Override
     public void loadSchedule() {
         refresh.setValue(isEmpty.getValue() == null || isEmpty.getValue());
     }

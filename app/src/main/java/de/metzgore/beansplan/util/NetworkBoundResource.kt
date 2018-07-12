@@ -60,7 +60,11 @@ abstract class NetworkBoundResource<ResultType, RequestType>
                             // otherwise we will get immediately last cached value,
                             // which may not be updated with latest results received from network.
                             result.addSource(loadFromDb()) { newData ->
-                                setValue(Resource.success(newData, forceRefresh))
+                                if (newData == null) {
+                                    setValue(Resource.loading(newData, forceRefresh))
+                                } else {
+                                    setValue(Resource.success(newData, forceRefresh))
+                                }
                             }
                         }
                     }

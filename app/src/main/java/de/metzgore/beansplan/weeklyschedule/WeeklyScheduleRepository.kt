@@ -1,14 +1,13 @@
 package de.metzgore.beansplan.weeklyschedule
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import de.metzgore.beansplan.AppExecutors
 import de.metzgore.beansplan.api.ApiResponse
 import de.metzgore.beansplan.api.RbtvScheduleApi
 import de.metzgore.beansplan.data.Resource
-import de.metzgore.beansplan.data.WeeklySchedule
-import de.metzgore.beansplan.shared.ScheduleRepository
-import de.metzgore.beansplan.shared.WeeklyScheduleDao
+import de.metzgore.beansplan.data.WeeklyScheduleResponse
+import de.metzgore.beansplan.data.room.ScheduleRoomDao
+import de.metzgore.beansplan.data.room.WeeklyScheduleWithDailySchedules
 import de.metzgore.beansplan.testing.OpenForTesting
 import de.metzgore.beansplan.util.Clock
 import de.metzgore.beansplan.util.NetworkBoundResource
@@ -17,37 +16,39 @@ import javax.inject.Singleton
 
 @OpenForTesting
 @Singleton
-class WeeklyScheduleRepository @Inject constructor(private val api: RbtvScheduleApi, private val dao: WeeklyScheduleDao,
+class WeeklyScheduleRepository @Inject constructor(private val api: RbtvScheduleApi,
+                                                   private val roomDao: ScheduleRoomDao,
                                                    private val
                                                    appExecutors: AppExecutors, private val
-                                                   clock: Clock) : ScheduleRepository<WeeklySchedule> {
+                                                   clock: Clock) {
 
-    private val weeklyScheduleCacheData = MutableLiveData<WeeklySchedule>()
+    lateinit var weeklySchedule: LiveData<WeeklyScheduleWithDailySchedules>
 
-    override fun loadSchedule(forceRefresh: Boolean): LiveData<Resource<WeeklySchedule>> {
-        return object : NetworkBoundResource<WeeklySchedule, WeeklySchedule>(appExecutors,
+    fun loadSchedule(forceRefresh: Boolean):
+            LiveData<Resource<WeeklyScheduleWithDailySchedules>> {
+        return object : NetworkBoundResource<WeeklyScheduleWithDailySchedules, WeeklyScheduleResponse>(appExecutors,
                 forceRefresh) {
-            override fun shouldSave(item: WeeklySchedule): Boolean {
-                val savedSchedule = dao.get()
+            override fun shouldSave(item: WeeklyScheduleResponse): Boolean {
+                val savedSchedule = roomDao.getWeeklyScheduleResponse()
                 return savedSchedule != item
             }
 
-            override fun saveCallResult(item: WeeklySchedule) {
-                //TODO check preSerialize
-                item.timestamp = clock.nowInMillis()
-                dao.save(item)
+            override fun saveCallResult(item: WeeklyScheduleResponse) {
+                roomDao.upsertSchedule(clock, item)
             }
 
-            override fun shouldFetch(data: WeeklySchedule?): Boolean {
-                return forceRefresh || data == null || data.isEmpty
+            override fun shouldFetch(data: WeeklyScheduleWithDailySchedules?): Boolean {
+                return forceRefresh || data == null || data.dailySchedulesWithShows.isEmpty()
             }
 
-            override fun loadFromDb(): LiveData<WeeklySchedule> {
-                weeklyScheduleCacheData.value = dao.get()
-                return weeklyScheduleCacheData
+            override fun loadFromDb(): LiveData<WeeklyScheduleWithDailySchedules> {
+                if (!::weeklySchedule.isInitialized) {
+                    weeklySchedule = roomDao.getWeeklyScheduleWithDailySchedulesDistinct()
+                }
+                return weeklySchedule
             }
 
-            override fun createCall(): LiveData<ApiResponse<WeeklySchedule>> {
+            override fun createCall(): LiveData<ApiResponse<WeeklyScheduleResponse>> {
                 return api.scheduleOfCurrentWeek()
             }
         }.asLiveData()

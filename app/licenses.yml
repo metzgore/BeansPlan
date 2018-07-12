@@ -22,14 +22,6 @@
   url: https://github.com/google/dagger
   year: 2012
 
-- artifact: com.vincentbrison.openlibraries.android:dualcache:+
-  name: Dual Cache
-  copyrightHolder: Vincent Brison
-  license: The Apache Software License, Version 2.0
-  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
-  url: https://github.com/vincentbrison/dualcache
-  year: 2016
-
 - artifact: com.google.code.gson:gson:+
   name: Gson
   copyrightHolder: Google Inc
@@ -37,14 +29,6 @@
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://github.com/google/gson
   year: 2008
-
-- artifact: io.gsonfire:gson-fire:+
-  name: Gson on Fire!
-  copyrightHolder: Julio Viera
-  license: The MIT License
-  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
-  url: http://gsonfire.io
-  year: 2015
 
 - artifact: com.mikepenz:iconics-core:+
   name: iconics-core
@@ -81,6 +65,41 @@
 
 
 #skip licenses
+- artifact: org.jetbrains.kotlin:kotlin-stdlib-common:+
+  name: org.jetbrains.kotlin:kotlin-stdlib-common
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://kotlinlang.org/
+  skip: true
+- artifact: android.arch.persistence:db:+
+  name: Android DB
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/topic/libraries/architecture/index.html
+  skip: true
+- artifact: android.arch.persistence.room:common:+
+  name: Android Room-Common
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/topic/libraries/architecture/index.html
+  skip: true
+- artifact: android.arch.persistence:db-framework:+
+  name: Android Support SQLite - Framework Implementation
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/topic/libraries/architecture/index.html
+  skip: true
+- artifact: android.arch.persistence.room:runtime:+
+  name: Android Room-Runtime
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/topic/libraries/architecture/index.html
+  skip: true
 - artifact: org.threeten:threetenbp:+
   name: ThreeTen backport
   copyrightHolder: #COPYRIGHT_HOLDER#
@@ -111,14 +130,6 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: http://developer.android.com/tools/extras/support-library.html
-- artifact: com.vincentbrison.openlibraries.android:dualcache-serializerinterface:+
-  name: Android Dual Cache
-  skip: true
-  copyrightHolder: Vincent Brison
-  license: The Apache Software License, Version 2.0
-  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
-  url: https://github.com/vincentbrison/android-dual-cache
-  year: 2016
 - artifact: com.jakewharton:disklrucache:+
   name: Disk LRU Cache
   skip: true

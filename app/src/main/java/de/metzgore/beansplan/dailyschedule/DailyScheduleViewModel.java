@@ -1,49 +1,32 @@
 package de.metzgore.beansplan.dailyschedule;
 
-import android.arch.lifecycle.*;
-import de.metzgore.beansplan.data.DailySchedule;
-import de.metzgore.beansplan.data.Resource;
-import de.metzgore.beansplan.data.Status;
-import de.metzgore.beansplan.shared.IScheduleViewModel;
-import de.metzgore.beansplan.shared.ScheduleRepository;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Transformations;
+import android.arch.lifecycle.ViewModel;
+import android.support.annotation.NonNull;
 
-public class DailyScheduleViewModel extends ViewModel implements IScheduleViewModel<DailySchedule> {
+import java.util.Date;
 
-    private final MutableLiveData<Boolean> refresh = new MutableLiveData<>();
-    private final MutableLiveData<Resource<DailySchedule>> schedule = new MutableLiveData<>();
-    private final MediatorLiveData<Resource<DailySchedule>> scheduleMerger = new MediatorLiveData<>();
-    public LiveData<Boolean> isEmpty = Transformations.map(scheduleMerger, schedule -> schedule == null || schedule
-            .getData() == null || schedule.getData().isEmpty());
-    public LiveData<Boolean> isLoading = Transformations.map(scheduleMerger, schedule -> schedule
-            .getStatus() == Status.LOADING);
+import de.metzgore.beansplan.data.room.DailyScheduleWithShows;
 
-    public DailyScheduleViewModel(ScheduleRepository<DailySchedule> scheduleRepo) {
-        LiveData<Resource<DailySchedule>> scheduleFromRepo = Transformations.switchMap(refresh,
-                scheduleRepo::loadSchedule);
-        scheduleMerger.addSource(scheduleFromRepo, scheduleMerger::setValue);
+public class DailyScheduleViewModel extends ViewModel {
+
+    private final MutableLiveData<Date> dateToLoad = new MutableLiveData<>();
+    private final LiveData<DailyScheduleWithShows> schedule;
+    public final LiveData<Boolean> isEmpty;
+
+    public DailyScheduleViewModel(DailyScheduleRepository scheduleRepo) {
+        schedule = Transformations.switchMap(dateToLoad, scheduleRepo::loadScheduleFromCache);
+        isEmpty = Transformations.map(schedule, schedule -> schedule == null || schedule.shows
+                .isEmpty());
     }
 
-    //TODO refactoring?
-    public DailyScheduleViewModel(DailySchedule dailySchedule) {
-        scheduleMerger.addSource(schedule, scheduleMerger::setValue);
-        setSchedule(dailySchedule);
+    public LiveData<DailyScheduleWithShows> getSchedule() {
+        return schedule;
     }
 
-    public LiveData<Resource<DailySchedule>> getSchedule() {
-        return scheduleMerger;
-    }
-
-    @Override
-    public void loadScheduleFromNetwork() {
-        refresh.setValue(true);
-    }
-
-    @Override
-    public void loadSchedule() {
-        refresh.setValue(isEmpty.getValue() == null || isEmpty.getValue());
-    }
-
-    public void setSchedule(DailySchedule dailySchedule) {
-        schedule.setValue(Resource.Companion.success(dailySchedule, false));
+    public void loadSchedule(@NonNull Date date) {
+        dateToLoad.setValue(date);
     }
 }

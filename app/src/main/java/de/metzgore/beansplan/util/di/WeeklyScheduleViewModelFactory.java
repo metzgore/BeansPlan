@@ -2,16 +2,15 @@ package de.metzgore.beansplan.util.di;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
-import de.metzgore.beansplan.data.WeeklySchedule;
-import de.metzgore.beansplan.shared.ScheduleRepository;
+
+import de.metzgore.beansplan.weeklyschedule.WeeklyScheduleRepository;
 import de.metzgore.beansplan.weeklyschedule.WeeklyScheduleViewModel;
 
 public class WeeklyScheduleViewModelFactory implements ViewModelProvider.Factory {
 
-    private final ScheduleRepository<WeeklySchedule> repo;
+    private final WeeklyScheduleRepository repo;
 
-    //TODO unite with DailyScheduleViewModelFactory
-    public WeeklyScheduleViewModelFactory(ScheduleRepository<WeeklySchedule> repo) {
+    public WeeklyScheduleViewModelFactory(WeeklyScheduleRepository repo) {
         this.repo = repo;
     }
 

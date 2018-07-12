@@ -2,29 +2,21 @@ package de.metzgore.beansplan.util.di;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
+
+import de.metzgore.beansplan.dailyschedule.DailyScheduleRepository;
 import de.metzgore.beansplan.dailyschedule.DailyScheduleViewModel;
-import de.metzgore.beansplan.data.DailySchedule;
-import de.metzgore.beansplan.shared.ScheduleRepository;
 
 public class DailyScheduleViewModelFactory implements ViewModelProvider.Factory {
 
-    private ScheduleRepository<DailySchedule> repo;
-    private DailySchedule dailySchedule;
+    private DailyScheduleRepository repo;
 
-    public DailyScheduleViewModelFactory(ScheduleRepository<DailySchedule> repo) {
+    public DailyScheduleViewModelFactory(DailyScheduleRepository repo) {
         this.repo = repo;
-    }
-
-    public DailyScheduleViewModelFactory(DailySchedule dailySchedule) {
-        this.dailySchedule = dailySchedule;
     }
 
     @Override
     @NonNull
     public DailyScheduleViewModel create(@NonNull Class modelClass) {
-        if (dailySchedule != null)
-            return new DailyScheduleViewModel(dailySchedule);
-        else
-            return new DailyScheduleViewModel(repo);
+        return new DailyScheduleViewModel(repo);
     }
 }
