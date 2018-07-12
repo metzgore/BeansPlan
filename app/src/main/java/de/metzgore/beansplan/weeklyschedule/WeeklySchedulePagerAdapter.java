@@ -30,6 +30,7 @@ class WeeklySchedulePagerAdapter extends PagerAdapter {
     private List<Date> dateKeys;
     private FragmentTransaction curTransaction = null;
     private Fragment currentPrimaryItem = null;
+    private Calendar calendar = new GregorianCalendar();
 
     WeeklySchedulePagerAdapter(Context context, FragmentManager mgr) {
         this.context = context;
@@ -67,9 +68,7 @@ class WeeklySchedulePagerAdapter extends PagerAdapter {
     @Override
     public void startUpdate(@NonNull ViewGroup container) {
         if (container.getId() == View.NO_ID) {
-            throw new IllegalStateException("ViewPager with adapter " + this + " requires a view " +
-                    "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + ""
-                    + "" + "" + "id");
+            throw new IllegalStateException("ViewPager with adapter " + this + " requires a view id");
         }
     }
 
@@ -172,7 +171,12 @@ class WeeklySchedulePagerAdapter extends PagerAdapter {
     }
 
     public int getPositionFromDate(Date date) {
-        return dateKeys.indexOf(date);
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return dateKeys.indexOf(calendar.getTime());
     }
 
     public boolean containsScheduleForCurrentDay() {
