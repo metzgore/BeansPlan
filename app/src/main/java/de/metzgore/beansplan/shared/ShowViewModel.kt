@@ -7,7 +7,6 @@ import android.net.Uri
 import android.support.v4.content.ContextCompat
 import android.text.format.DateUtils
 import de.metzgore.beansplan.R
-import de.metzgore.beansplan.dailyschedule.DailyScheduleAdapter
 import de.metzgore.beansplan.data.ShowResponse
 import de.metzgore.beansplan.data.room.Reminder
 import de.metzgore.beansplan.data.room.Show
@@ -15,8 +14,7 @@ import org.apache.commons.lang3.time.DurationFormatUtils
 import java.util.*
 
 class ShowViewModel(private val show: Show, private val reminder: Reminder?, private val listener:
-DailyScheduleAdapter
-.OnDeleteButtonClickListener?) {
+OnReminderButtonClickListener) {
 
     val alpha: Float = if (show.isOver) 0.3f else 1.0f
 

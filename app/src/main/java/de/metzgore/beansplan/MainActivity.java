@@ -27,14 +27,15 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import de.metzgore.beansplan.about.AboutActivity;
-import de.metzgore.beansplan.baseschedule.RefreshableScheduleFragment;
+import de.metzgore.beansplan.baseschedule.BaseFragment;
 import de.metzgore.beansplan.databinding.ActivityMainBinding;
+import de.metzgore.beansplan.reminders.RemindersFragment;
 import de.metzgore.beansplan.settings.SettingsActivity;
 import de.metzgore.beansplan.settings.repository.AppSettings;
 import de.metzgore.beansplan.weeklyschedule.WeeklyScheduleFragment;
 
-public class MainActivity extends AppCompatActivity implements RefreshableScheduleFragment
-        .OnScheduleRefreshedListener, HasSupportFragmentInjector {
+public class MainActivity extends AppCompatActivity implements BaseFragment.OnScheduleRefreshedListener,
+        BaseFragment.OnAppBarUpdatedListener, HasSupportFragmentInjector {
 
     @Inject
     DispatchingAndroidInjector<Fragment> fragmentInjector;
@@ -99,8 +100,7 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
         Fragment scheduleFragment = fragmentManager.findFragmentByTag(CURRENT_FRAGMENT_TAG);
 
         if (scheduleFragment != null) {
-            fragmentManager.beginTransaction().replace(R.id.fragment_container, scheduleFragment,
-                    CURRENT_FRAGMENT_TAG).commit();
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, scheduleFragment, CURRENT_FRAGMENT_TAG).commit();
         } else {
             selectDrawerItem(R.id.nav_weekly_schedule);
         }
@@ -152,6 +152,10 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
                 binding.activityMainNavigationView.setCheckedItem(menuItemId);
                 replaceFragmentIfPossible(WeeklyScheduleFragment.class);
                 break;
+            case R.id.nav_reminders:
+                binding.activityMainNavigationView.setCheckedItem(menuItemId);
+                replaceFragmentIfPossible(RemindersFragment.class);
+                break;
             case R.id.nav_settings:
                 openActivity(SettingsActivity.class);
                 break;
@@ -182,14 +186,12 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
             e.printStackTrace();
         }
 
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment,
-                CURRENT_FRAGMENT_TAG).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment, CURRENT_FRAGMENT_TAG).commit();
     }
 
     private boolean isFragmentAlreadyVisible(Class<? extends Fragment> fragmentClass) {
         Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragment_container);
-        return currentFragment != null && currentFragment.getClass() == fragmentClass &&
-                currentFragment.isVisible();
+        return currentFragment != null && currentFragment.getClass() == fragmentClass && currentFragment.isVisible();
 
     }
 
@@ -200,8 +202,7 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
 
     @Override
     public void onAddToolbarElevation() {
-        ViewCompat.setElevation(binding.activityMainAppbarlayout, getResources().getDimension(R
-                .dimen.toolbar_elevation));
+        ViewCompat.setElevation(binding.activityMainAppbarlayout, getResources().getDimension(R.dimen.toolbar_elevation));
     }
 
     @Override
@@ -215,15 +216,12 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
         } else {
             binding.activityMainUpdatedTextview.setVisibility(View.VISIBLE);
 
-            String lastUpdated = getString(R.string.activity_main_last_updated, getString(R
-                    .string.activity_main_last_updated_now));
+            String lastUpdated = getString(R.string.activity_main_last_updated, getString(R.string.activity_main_last_updated_now));
 
             if (System.currentTimeMillis() - timestamp > DateUtils.MINUTE_IN_MILLIS) {
-                lastUpdated = getString(R.string.activity_main_last_updated, DateUtils
-                        .getRelativeTimeSpanString(timestamp));
-                binding.activityMainUpdatedTextview.setText(getString(R.string
-                        .activity_main_last_updated, DateUtils.getRelativeTimeSpanString
-                        (timestamp)));
+                lastUpdated = getString(R.string.activity_main_last_updated, DateUtils.getRelativeTimeSpanString(timestamp));
+                binding.activityMainUpdatedTextview.setText(getString(R.string.activity_main_last_updated, DateUtils
+                        .getRelativeTimeSpanString(timestamp)));
             }
 
             binding.activityMainUpdatedTextview.setText(lastUpdated);
@@ -232,8 +230,7 @@ public class MainActivity extends AppCompatActivity implements RefreshableSchedu
 
     @Override
     public void onAddPaddingBottom() {
-        int paddingBottom = (int) getResources().getDimension(R.dimen
-                .toolbar_content_padding_bottom);
+        int paddingBottom = (int) getResources().getDimension(R.dimen.toolbar_content_padding_bottom);
         int paddingLeft = (int) getResources().getDimension(R.dimen.toolbar_content_padding_left);
         int paddingRight = (int) getResources().getDimension(R.dimen.toolbar_content_padding_right);
         binding.activityMainUpdatedTextview.setPadding(paddingLeft, 0, paddingRight, paddingBottom);

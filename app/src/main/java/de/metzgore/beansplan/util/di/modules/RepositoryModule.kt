@@ -6,6 +6,7 @@ import de.metzgore.beansplan.AppExecutors
 import de.metzgore.beansplan.api.RbtvScheduleApi
 import de.metzgore.beansplan.dailyschedule.DailyScheduleRepository
 import de.metzgore.beansplan.data.room.ScheduleRoomDao
+import de.metzgore.beansplan.reminders.RemindersRepository
 import de.metzgore.beansplan.util.Clock
 import de.metzgore.beansplan.weeklyschedule.WeeklyScheduleRepository
 import javax.inject.Singleton
@@ -17,6 +18,12 @@ class RepositoryModule {
     @Singleton
     fun providesDailyScheduleRepository(dao: ScheduleRoomDao, appExecutors: AppExecutors): DailyScheduleRepository {
         return DailyScheduleRepository(dao, appExecutors)
+    }
+
+    @Provides
+    @Singleton
+    fun providesRemindersRepository(dao: ScheduleRoomDao, appExecutors: AppExecutors): RemindersRepository {
+        return RemindersRepository(dao, appExecutors)
     }
 
     @Provides

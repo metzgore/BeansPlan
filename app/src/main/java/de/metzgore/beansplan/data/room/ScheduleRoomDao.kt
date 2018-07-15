@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import de.metzgore.beansplan.data.WeeklyScheduleResponse
 import de.metzgore.beansplan.data.room.relations.DailyScheduleWithShows
+import de.metzgore.beansplan.data.room.relations.ShowWithReminder
 import de.metzgore.beansplan.data.room.relations.WeeklyScheduleWithDailySchedules
 import de.metzgore.beansplan.util.Clock
 import de.metzgore.beansplan.util.distinctUntilChanged
@@ -73,6 +74,13 @@ abstract class ScheduleRoomDao {
 
     fun getWeeklyScheduleWithDailySchedulesDistinct():
             LiveData<WeeklyScheduleWithDailySchedules> = getWeeklyScheduleWithDailySchedules()
+            .distinctUntilChanged()
+
+    @Transaction
+    @Query("SELECT * FROM show WHERE reminderId NOT NULL")
+    abstract fun getShowsWithReminders(): LiveData<List<ShowWithReminder>>
+
+    fun getShowsWithRemindersDistict(): LiveData<List<ShowWithReminder>> = getShowsWithReminders()
             .distinctUntilChanged()
 
     @Transaction

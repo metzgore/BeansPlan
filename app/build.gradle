@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-allopen'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.cookpad.android.licensetools'
 
 allOpen {
@@ -195,4 +196,3 @@ project.tasks.whenTaskAdded {
         it.enabled = false
     }
 }
-apply plugin: 'kotlin-android-extensions'

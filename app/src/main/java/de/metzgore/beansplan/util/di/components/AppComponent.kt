@@ -9,7 +9,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [(ClockModule::class), (RepositoryModule::class), (ScheduleDaoModule::class)
     , (ContextModule::class), (MainActivityComponent::class),
-    (WeeklyScheduleFragmentComponent::class), (DailyScheduleFragmentComponent::class),
+    (WeeklyScheduleFragmentComponent::class), (DailyScheduleFragmentComponent::class), (RemindersFragmentComponent::class),
     (SettingsModule::class)])
 interface AppComponent {
     fun inject(app: BeansPlanApp)

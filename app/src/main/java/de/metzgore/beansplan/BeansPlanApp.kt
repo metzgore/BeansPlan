@@ -17,7 +17,7 @@ class BeansPlanApp : Application(), HasActivityInjector {
     @Inject
     lateinit var activityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
 
-    lateinit var appComponent: AppComponent
+    private lateinit var appComponent: AppComponent
 
     override fun onCreate() {
         super.onCreate()

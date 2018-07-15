@@ -1,0 +1,69 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="de.metzgore.beansplan.reminders.RemindersViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="de.metzgore.beansplan.reminders.RemindersFragment">
+
+        <!--<TextView
+            android:id="@+id/fragment_reminders_empty_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/ic_schedule_not_available"
+            android:text="@string/alert_message_no_reminders"
+            android:textSize="24sp"
+            app:visibleGone="@{!safeUnbox(viewModel.isLoading) &amp;&amp; safeUnbox(viewModel.isEmpty)}" />-->
+
+        <TextView
+            android:id="@+id/fragment_reminders_empty_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/ic_schedule_not_available"
+            android:text="@string/alert_message_no_reminders"
+            android:textSize="24sp"
+            android:visibility="gone" />
+
+        <!--<LinearLayout
+            android:id="@+id/fragment_reminders_loading_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:visibleGone="@{safeUnbox(viewModel.isLoading) &amp;&amp; safeUnbox(viewModel.isEmpty)}">
+
+            <ProgressBar
+                android:id="@+id/fragment_reminders_loading_view_progress"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/fragment_reminders_loading_view_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/alert_message_load_reminders"
+                android:textSize="24sp" />
+
+    </LinearLayout>-->
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/fragment_reminders_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/mal_baseline_half"
+            android:scrollbars="vertical"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+    </FrameLayout>
+</layout>

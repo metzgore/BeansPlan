@@ -126,7 +126,7 @@
                         android:layout_height="wrap_content"
                         android:onClick="@{() -> viewModel.saveReminder()}"
                         android:textAlignment="textStart"
-                        app:srcCompat="@drawable/ic_reminder"
+                        app:srcCompat="@drawable/ic_reminder_a50"
                         app:visibleGone="@{viewModel.reminderVisible}" />
 
                     <ImageView

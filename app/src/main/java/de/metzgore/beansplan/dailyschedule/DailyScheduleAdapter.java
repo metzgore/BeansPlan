@@ -15,21 +15,16 @@ import de.metzgore.beansplan.data.room.Reminder;
 import de.metzgore.beansplan.data.room.Show;
 import de.metzgore.beansplan.data.room.relations.ShowWithReminder;
 import de.metzgore.beansplan.databinding.ListItemShowBinding;
+import de.metzgore.beansplan.shared.OnReminderButtonClickListener;
 import de.metzgore.beansplan.shared.ShowViewHolder;
 import de.metzgore.beansplan.shared.ShowViewModel;
 
 public class DailyScheduleAdapter extends RecyclerView.Adapter<ShowViewHolder> {
 
-    public interface OnDeleteButtonClickListener {
-        void onUpsertReminder(Show show, Reminder reminder);
-
-        void deleteReminder(Show show, Reminder reminder);
-    }
-
     private List<ShowWithReminder> shows;
-    private OnDeleteButtonClickListener listener;
+    private OnReminderButtonClickListener listener;
 
-    DailyScheduleAdapter(OnDeleteButtonClickListener listener) {
+    DailyScheduleAdapter(OnReminderButtonClickListener listener) {
         this.listener = listener;
     }
 

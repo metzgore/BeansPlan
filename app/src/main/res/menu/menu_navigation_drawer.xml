@@ -8,6 +8,11 @@
             android:icon="@drawable/ic_today"
             android:title="@string/drawer_item_weekly_schedule" />
 
+        <item
+            android:id="@+id/nav_reminders"
+            android:icon="@drawable/ic_reminder"
+            android:title="@string/drawer_item_reminders" />
+
     </group>
     <group
         android:id="@+id/menu_misc"
