@@ -8,9 +8,9 @@ import android.arch.persistence.room.TypeConverters
         entities = [
             DailySchedule::class,
             Show::class,
-            WeeklySchedule::class],
-        version = 1,
-        exportSchema = false
+            WeeklySchedule::class,
+            Reminder::class],
+        version = 1
 )
 @TypeConverters(RoomConverters::class)
 abstract class BeansPlanDb : RoomDatabase() {

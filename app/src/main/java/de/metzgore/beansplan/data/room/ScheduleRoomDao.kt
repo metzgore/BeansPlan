@@ -3,6 +3,8 @@ package de.metzgore.beansplan.data.room
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import de.metzgore.beansplan.data.WeeklyScheduleResponse
+import de.metzgore.beansplan.data.room.relations.DailyScheduleWithShows
+import de.metzgore.beansplan.data.room.relations.WeeklyScheduleWithDailySchedules
 import de.metzgore.beansplan.util.Clock
 import de.metzgore.beansplan.util.distinctUntilChanged
 import java.util.*
@@ -17,16 +19,16 @@ abstract class ScheduleRoomDao {
     abstract fun update(weeklySchedule: WeeklySchedule): Int
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    abstract fun insertDailySchedules(schedules: List<DailySchedule>): List<Long>
+    abstract fun insertDailySchedules(vararg schedules: DailySchedule): List<Long>
 
     @Update
-    abstract fun updateDailySchedules(schedules: List<DailySchedule>): Int
+    abstract fun updateDailySchedules(vararg schedules: DailySchedule): Int
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    abstract fun insertShows(shows: List<Show>): List<Long>
+    abstract fun insertShows(vararg show: Show): List<Long>
 
     @Update
-    abstract fun updateShows(shows: List<Show>): Int
+    abstract fun updateShows(vararg show: Show): Int
 
     fun upsert(obj: WeeklySchedule) {
         val id = insert(obj)
@@ -36,7 +38,7 @@ abstract class ScheduleRoomDao {
     }
 
     fun upsertDailySchedules(objList: List<DailySchedule>) {
-        val insertResult = insertDailySchedules(objList)
+        val insertResult = insertDailySchedules(*objList.toTypedArray())
         val updateList = mutableListOf<DailySchedule>()
 
         for (i in 0 until insertResult.size) {
@@ -46,12 +48,12 @@ abstract class ScheduleRoomDao {
         }
 
         if (!updateList.isEmpty()) {
-            updateDailySchedules(updateList)
+            updateDailySchedules(*updateList.toTypedArray())
         }
     }
 
     fun upsertShows(objList: List<Show>) {
-        val insertResult = insertShows(objList)
+        val insertResult = insertShows(*objList.toTypedArray())
         val updateList = mutableListOf<Show>()
 
         for (i in 0 until insertResult.size) {
@@ -61,7 +63,7 @@ abstract class ScheduleRoomDao {
         }
 
         if (!updateList.isEmpty()) {
-            updateShows(updateList)
+            updateShows(*updateList.toTypedArray())
         }
     }
 
@@ -88,8 +90,17 @@ abstract class ScheduleRoomDao {
     @Query("DELETE FROM dailyschedule WHERE id NOT IN (:dailyScheduleIds)")
     abstract fun deleteLeftOverDailySchedule(dailyScheduleIds: List<Long>)
 
-    @Query("DELETE FROM show WHERE id NOT IN (:showIds)")
-    abstract fun deleteLeftOverShows(showIds: List<Long>)
+    @Query("UPDATE show SET deleted = 1 WHERE id NOT IN (:showIds)")
+    abstract fun markShowsDeleted(vararg showIds: Long)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun insertReminder(reminder: Reminder): Long
+
+    @Update
+    abstract fun updateReminder(reminder: Reminder): Int
+
+    @Delete
+    abstract fun deleteReminder(reminder: Reminder): Int
 
     @Transaction
     open fun upsertSchedule(clock: Clock, item: WeeklyScheduleResponse) {
@@ -111,13 +122,35 @@ abstract class ScheduleRoomDao {
         item.schedule.forEach { (date, shows) ->
             shows.forEach { show ->
                 showsRoom.add(Show(show.id, date, show.title, show.topic, show.timeStart,
-                        show.timeEnd, show.length, show.game, show.youtubeId, show.type))
+                        show.timeEnd, show.length, show.game, show.youtubeId, show.type, false))
             }
 
         }
         upsertShows(showsRoom)
-        deleteLeftOverShows(showsRoom.map {
+
+        markShowsDeleted(*showsRoom.map {
             it.id
-        })
+        }.toLongArray())
+    }
+
+    @Transaction
+    open fun upsertReminder(show: Show, reminder: Reminder) {
+        val insertResult = insertReminder(reminder)
+
+        if (insertResult == -1L) {
+            updateReminder(reminder)
+        }
+
+        show.reminderId = insertResult
+
+        updateShows(show)
+    }
+
+    @Transaction
+    open fun deleteReminder(show: Show, reminder: Reminder) {
+        show.reminderId = null
+
+        updateShows(show)
+        deleteReminder(reminder)
     }
 }

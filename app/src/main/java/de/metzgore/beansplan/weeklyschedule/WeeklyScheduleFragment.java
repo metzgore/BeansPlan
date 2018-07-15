@@ -28,7 +28,7 @@ import de.metzgore.beansplan.R;
 import de.metzgore.beansplan.baseschedule.RefreshableScheduleFragment;
 import de.metzgore.beansplan.data.Resource;
 import de.metzgore.beansplan.data.Status;
-import de.metzgore.beansplan.data.room.WeeklyScheduleWithDailySchedules;
+import de.metzgore.beansplan.data.room.relations.WeeklyScheduleWithDailySchedules;
 import de.metzgore.beansplan.databinding.FragmentWeeklyScheduleBinding;
 import de.metzgore.beansplan.util.DateFormatter;
 import de.metzgore.beansplan.util.di.WeeklyScheduleViewModelFactory;

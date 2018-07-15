@@ -6,7 +6,12 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import de.metzgore.beansplan.data.Resource
 import de.metzgore.beansplan.data.Status
-import de.metzgore.beansplan.data.room.*
+import de.metzgore.beansplan.data.room.DailySchedule
+import de.metzgore.beansplan.data.room.Show
+import de.metzgore.beansplan.data.room.WeeklySchedule
+import de.metzgore.beansplan.data.room.relations.DailyScheduleWithShows
+import de.metzgore.beansplan.data.room.relations.ShowWithReminder
+import de.metzgore.beansplan.data.room.relations.WeeklyScheduleWithDailySchedules
 import de.metzgore.beansplan.util.ClockImpl
 import java.util.*
 import java.util.concurrent.CountDownLatch
@@ -39,10 +44,12 @@ object LiveDataTestUtil {
 
         scheduleWithShows.dailySchedule = dailyScheduleRoom
 
-        val showsRoom = arrayListOf<Show>()
+        val showsRoom = arrayListOf<ShowWithReminder>()
         dailySchedule.shows.forEach { show ->
-            showsRoom.add(Show(show.id, dailySchedule.date!!, show.title, show.topic, show.timeStart,
-                    show.timeEnd, show.length, show.game, show.youtubeId, show.type))
+            val showWithReminder = ShowWithReminder()
+            showWithReminder.show = Show(show.id, dailySchedule.date!!, show.title, show.topic, show.timeStart,
+                    show.timeEnd, show.length, show.game, show.youtubeId, show.type, false)
+            showsRoom.add(showWithReminder)
         }
 
         scheduleWithShows.shows = showsRoom

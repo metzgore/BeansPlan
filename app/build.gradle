@@ -195,3 +195,4 @@ project.tasks.whenTaskAdded {
         it.enabled = false
     }
 }
+apply plugin: 'kotlin-android-extensions'

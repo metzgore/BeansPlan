@@ -7,7 +7,7 @@ import android.arch.lifecycle.ViewModel;
 
 import de.metzgore.beansplan.data.Resource;
 import de.metzgore.beansplan.data.Status;
-import de.metzgore.beansplan.data.room.WeeklyScheduleWithDailySchedules;
+import de.metzgore.beansplan.data.room.relations.WeeklyScheduleWithDailySchedules;
 
 public class WeeklyScheduleViewModel extends ViewModel {
 

@@ -8,18 +8,32 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.List;
+import java.util.Objects;
 
 import de.metzgore.beansplan.R;
+import de.metzgore.beansplan.data.room.Reminder;
 import de.metzgore.beansplan.data.room.Show;
+import de.metzgore.beansplan.data.room.relations.ShowWithReminder;
 import de.metzgore.beansplan.databinding.ListItemShowBinding;
 import de.metzgore.beansplan.shared.ShowViewHolder;
 import de.metzgore.beansplan.shared.ShowViewModel;
 
 public class DailyScheduleAdapter extends RecyclerView.Adapter<ShowViewHolder> {
 
-    private List<Show> shows;
+    public interface OnDeleteButtonClickListener {
+        void onUpsertReminder(Show show, Reminder reminder);
 
-    public void setShowList(@NonNull final List<Show> showList) {
+        void deleteReminder(Show show, Reminder reminder);
+    }
+
+    private List<ShowWithReminder> shows;
+    private OnDeleteButtonClickListener listener;
+
+    DailyScheduleAdapter(OnDeleteButtonClickListener listener) {
+        this.listener = listener;
+    }
+
+    public void setShowList(@NonNull final List<ShowWithReminder> showList) {
         if (shows == null) {
             shows = showList;
             notifyItemRangeInserted(0, showList.size());
@@ -37,14 +51,27 @@ public class DailyScheduleAdapter extends RecyclerView.Adapter<ShowViewHolder> {
 
                 @Override
                 public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                    return shows.get(oldItemPosition).getId() == showList.get(newItemPosition).getId();
+                    return shows.get(oldItemPosition).show.getId() == showList.get
+                            (newItemPosition).show.getId();
                 }
 
                 @Override
                 public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-                    Show newShow = showList.get(newItemPosition);
-                    Show oldShow = shows.get(oldItemPosition);
-                    return newShow.equals(oldShow);
+                    Show newShow = showList.get(newItemPosition).show;
+                    Show oldShow = shows.get(oldItemPosition).show;
+
+                    Reminder newReminder = null;
+                    Reminder oldReminder = null;
+
+                    if (showList.get(newItemPosition).getReminder() != null) {
+                        newReminder = showList.get(newItemPosition).getReminder().get(0);
+                    }
+
+                    if (shows.get(oldItemPosition).getReminder() != null) {
+                        oldReminder = shows.get(oldItemPosition).getReminder().get(0);
+                    }
+
+                    return newShow.equals(oldShow) && Objects.equals(newReminder, oldReminder);
                 }
             });
             shows = showList;
@@ -55,15 +82,20 @@ public class DailyScheduleAdapter extends RecyclerView.Adapter<ShowViewHolder> {
     @Override
     @NonNull
     public ShowViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ListItemShowBinding binding = DataBindingUtil
-                .inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_show,
-                        parent, false);
+        ListItemShowBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent
+                .getContext()), R.layout.list_item_show, parent, false);
         return new ShowViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ShowViewHolder holder, int position) {
-        holder.bind(new ShowViewModel(shows.get(position)));
+        Reminder reminder = null;
+
+        if (shows.get(position).getReminder() != null) {
+            reminder = shows.get(position).getReminder().get(0);
+        }
+
+        holder.bind(new ShowViewModel(shows.get(position).show, reminder, listener));
     }
 
     @Override

@@ -15,8 +15,8 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun providesDailyScheduleRepository(dao: ScheduleRoomDao): DailyScheduleRepository {
-        return DailyScheduleRepository(dao)
+    fun providesDailyScheduleRepository(dao: ScheduleRoomDao, appExecutors: AppExecutors): DailyScheduleRepository {
+        return DailyScheduleRepository(dao, appExecutors)
     }
 
     @Provides

@@ -7,7 +7,7 @@ import de.metzgore.beansplan.api.RbtvScheduleApi
 import de.metzgore.beansplan.data.Resource
 import de.metzgore.beansplan.data.WeeklyScheduleResponse
 import de.metzgore.beansplan.data.room.ScheduleRoomDao
-import de.metzgore.beansplan.data.room.WeeklyScheduleWithDailySchedules
+import de.metzgore.beansplan.data.room.relations.WeeklyScheduleWithDailySchedules
 import de.metzgore.beansplan.testing.OpenForTesting
 import de.metzgore.beansplan.util.Clock
 import de.metzgore.beansplan.util.NetworkBoundResource

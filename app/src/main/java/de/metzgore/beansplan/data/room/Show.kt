@@ -9,8 +9,14 @@ import java.util.*
         parentColumns = arrayOf("id"),
         childColumns = arrayOf("scheduleId"),
         onDelete = ForeignKey.CASCADE,
-        onUpdate = ForeignKey.CASCADE))],
-        indices = [(Index(value = ["scheduleId"]))])
+        onUpdate = ForeignKey.CASCADE)),
+    (ForeignKey(entity = Reminder::class,
+            parentColumns = arrayOf("id"),
+            childColumns = arrayOf("reminderId"),
+            onUpdate = ForeignKey.CASCADE,
+            onDelete = ForeignKey.CASCADE))],
+        indices = [(Index(value = ["scheduleId"])), (Index(value = ["reminderId"], unique =
+        true))])
 class Show(
         @PrimaryKey
         val id: Long,
@@ -22,8 +28,11 @@ class Show(
         val length: Int,
         val game: String,
         val youtubeId: String,
-        val type: ShowResponse.Type
+        val type: ShowResponse.Type,
+        val deleted: Boolean,
+        var reminderId: Long? = null
 ) {
+
     @Ignore
     private val comparisonDate: Date = Date()
 
@@ -50,6 +59,7 @@ class Show(
         if (type != other.type) return false
         if (isRunning != other.isRunning) return false
         if (isOver != other.isOver) return false
+        if (reminderId != other.reminderId) return false
 
         return true
     }
@@ -67,6 +77,7 @@ class Show(
         result = 31 * result + type.hashCode()
         result = 31 * result + isRunning.hashCode()
         result = 31 * result + isOver.hashCode()
+        result = 31 * result + Objects.hashCode(reminderId)
         return result
     }
 }

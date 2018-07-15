@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="de.metzgore.beansplan">
+    package="de.metzgore.beansplan">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".BeansPlanApp"
@@ -15,8 +15,9 @@
             android:name=".MainActivity"
             android:launchMode="singleTop">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -26,7 +27,7 @@
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.metzgore.beansplan.MainActivity"/>
+                android:value="de.metzgore.beansplan.MainActivity" />
         </activity>
         <activity
             android:name=".about.AboutActivity"
@@ -35,8 +36,13 @@
             android:theme="@style/AppThemeAbout">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.metzgore.beansplan.MainActivity"/>
+                android:value="de.metzgore.beansplan.MainActivity" />
         </activity>
+
+        <receiver
+            android:name=".reminders.NotificationPublisher"
+            android:enabled="true"
+            android:exported="false"></receiver>
     </application>
 
 </manifest>

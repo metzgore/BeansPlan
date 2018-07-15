@@ -1,16 +1,24 @@
 package de.metzgore.beansplan.dailyschedule;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.AlarmManagerCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 
@@ -18,12 +26,15 @@ import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 import de.metzgore.beansplan.R;
-import de.metzgore.beansplan.data.room.DailyScheduleWithShows;
+import de.metzgore.beansplan.data.room.Reminder;
+import de.metzgore.beansplan.data.room.Show;
 import de.metzgore.beansplan.databinding.LayoutScheduleBaseBinding;
+import de.metzgore.beansplan.reminders.NotificationPublisher;
 import de.metzgore.beansplan.shared.UpdatableScheduleFragment;
 import de.metzgore.beansplan.util.di.DailyScheduleViewModelFactory;
 
-public class DailyScheduleFragment extends Fragment implements UpdatableScheduleFragment {
+public class DailyScheduleFragment extends Fragment implements UpdatableScheduleFragment,
+        DailyScheduleAdapter.OnDeleteButtonClickListener {
 
     private static final String TAG = DailyScheduleFragment.class.getSimpleName();
 
@@ -57,7 +68,7 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        dailyScheduleAdapter = new DailyScheduleAdapter();
+        dailyScheduleAdapter = new DailyScheduleAdapter(this);
 
         Bundle args = getArguments();
 
@@ -113,5 +124,15 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
     @Override
     public Date getDateKey() {
         return dateKey;
+    }
+
+    @Override
+    public void onUpsertReminder(Show show, Reminder reminder) {
+        viewModel.upsertReminder(show, reminder);
+    }
+
+    @Override
+    public void deleteReminder(Show show, Reminder reminder) {
+        viewModel.deleteReminder(show, reminder);
     }
 }
