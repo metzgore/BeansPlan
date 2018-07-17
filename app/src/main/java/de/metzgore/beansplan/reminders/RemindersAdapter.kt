@@ -7,14 +7,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import de.metzgore.beansplan.R
 import de.metzgore.beansplan.data.room.Reminder
+import de.metzgore.beansplan.data.room.Show
 import de.metzgore.beansplan.data.room.relations.ShowWithReminder
 import de.metzgore.beansplan.databinding.ListItemReminderBinding
 import de.metzgore.beansplan.shared.OnReminderButtonClickListener
 
-class RemindersAdapter(onReminderButtonClickListener: OnReminderButtonClickListener) : RecyclerView.Adapter<ReminderViewHolder>() {
+class RemindersAdapter(private val viewModel: RemindersViewModel) : RecyclerView.Adapter<ReminderViewHolder>() {
 
     private var showsWithReminder: List<ShowWithReminder>? = null
-    private var listener = onReminderButtonClickListener
 
     fun setShowsWithReminders(showsWithRemindersList: List<ShowWithReminder>) {
         if (showsWithReminder == null) {
@@ -69,6 +69,17 @@ class RemindersAdapter(onReminderButtonClickListener: OnReminderButtonClickListe
     }
 
     override fun onBindViewHolder(holder: ReminderViewHolder, position: Int) {
+        val listener = object : OnReminderButtonClickListener {
+            override fun onUpsertReminder(show: Show, reminder: Reminder) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun deleteReminder(show: Show, reminder: Reminder) {
+                viewModel.triggerDeletionDialog(show.title)
+            }
+
+        }
+
         holder.bind(ReminderItemViewModel(showsWithReminder!![position], listener))
     }
 }

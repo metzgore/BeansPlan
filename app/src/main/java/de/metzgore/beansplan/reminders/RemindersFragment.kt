@@ -14,13 +14,13 @@ import de.metzgore.beansplan.R
 import de.metzgore.beansplan.baseschedule.BaseFragment
 import de.metzgore.beansplan.data.room.Reminder
 import de.metzgore.beansplan.data.room.Show
-import de.metzgore.beansplan.data.room.relations.ShowWithReminder
 import de.metzgore.beansplan.databinding.FragmentRemindersBinding
 import de.metzgore.beansplan.shared.OnReminderButtonClickListener
+import de.metzgore.beansplan.shared.ReminderDeletionDialogFragment
 import de.metzgore.beansplan.util.di.RemindersViewModelFactory
 import javax.inject.Inject
 
-class RemindersFragment : BaseFragment(), OnReminderButtonClickListener {
+class RemindersFragment : BaseFragment(), OnReminderButtonClickListener, ReminderDeletionDialogFragment.ReminderDeletionDialogAction {
     private lateinit var remindersAdapter: RemindersAdapter
     private lateinit var remindersViewModel: RemindersViewModel
 
@@ -35,16 +35,24 @@ class RemindersFragment : BaseFragment(), OnReminderButtonClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        remindersAdapter = RemindersAdapter(this)
-
         remindersViewModel = ViewModelProviders.of(this, RemindersViewModelFactory(repo)).get(RemindersViewModel::class.java)
+
+        remindersAdapter = RemindersAdapter(remindersViewModel)
 
         subscribeUi(remindersViewModel)
     }
 
     private fun subscribeUi(viewModel: RemindersViewModel) {
-        viewModel.reminders.observe(this, Observer<List<ShowWithReminder>> {
+        viewModel.reminders.observe(this, Observer {
             remindersAdapter.setShowsWithReminders(it!!)
+        })
+
+        viewModel.triggerDeletionDialog.observe(this, Observer {
+            it?.getContentIfNotHandled()?.let { title ->
+                val newFragment = ReminderDeletionDialogFragment.newInstance(title)
+                newFragment.setTargetFragment(this, 0)
+                newFragment.show(fragmentManager, "dialog")
+            }
         })
     }
 
@@ -53,7 +61,7 @@ class RemindersFragment : BaseFragment(), OnReminderButtonClickListener {
         val binding = DataBindingUtil.inflate<FragmentRemindersBinding>(inflater, R.layout.fragment_reminders, container, false)
 
         binding.apply {
-            viewModel = viewModel
+            viewModel = remindersViewModel
             setLifecycleOwner(this@RemindersFragment)
         }
 
@@ -77,6 +85,10 @@ class RemindersFragment : BaseFragment(), OnReminderButtonClickListener {
 
     override fun deleteReminder(show: Show, reminder: Reminder) {
         remindersViewModel.deleteReminder(show, reminder)
+    }
+
+    override fun confirmDeletion(text: String) {
+        remindersViewModel.triggerDeletionDialog(text)
     }
 
     companion object {

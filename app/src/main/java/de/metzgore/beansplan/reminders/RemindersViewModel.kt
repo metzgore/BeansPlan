@@ -1,19 +1,29 @@
 package de.metzgore.beansplan.reminders
 
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
 import de.metzgore.beansplan.data.room.Reminder
 import de.metzgore.beansplan.data.room.Show
 import de.metzgore.beansplan.data.room.relations.ShowWithReminder
+import de.metzgore.beansplan.util.archcomponents.Event
 
 class RemindersViewModel(repo: RemindersRepository) : ViewModel() {
 
     private val remindersRepo = repo
+    private val _triggerDeletionDialog = MutableLiveData<Event<String>>()
 
     val reminders: LiveData<List<ShowWithReminder>> = remindersRepo.loadReminders()
     val isEmpty: LiveData<Boolean> = Transformations.map(reminders) { reminders ->
         reminders == null || reminders.isEmpty()
+    }
+
+    val triggerDeletionDialog: LiveData<Event<String>>
+        get() = _triggerDeletionDialog
+
+    fun triggerDeletionDialog(text: String) {
+        _triggerDeletionDialog.value = Event(text)
     }
 
     fun updateReminder(show: Show, reminder: Reminder) {
