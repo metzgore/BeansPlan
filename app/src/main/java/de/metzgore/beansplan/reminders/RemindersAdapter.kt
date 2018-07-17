@@ -71,13 +71,12 @@ class RemindersAdapter(private val viewModel: RemindersViewModel) : RecyclerView
     override fun onBindViewHolder(holder: ReminderViewHolder, position: Int) {
         val listener = object : OnReminderButtonClickListener {
             override fun onUpsertReminder(show: Show, reminder: Reminder) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                viewModel.triggerTimePickerDialog(reminder)
             }
 
             override fun deleteReminder(show: Show, reminder: Reminder) {
                 viewModel.triggerDeletionDialog(show.title)
             }
-
         }
 
         holder.bind(ReminderItemViewModel(showsWithReminder!![position], listener))

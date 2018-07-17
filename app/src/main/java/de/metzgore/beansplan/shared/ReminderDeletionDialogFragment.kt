@@ -33,13 +33,11 @@ class ReminderDeletionDialogFragment : DialogFragment() {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-
         try {
             reminderDeletionDialogAction = targetFragment as ReminderDeletionDialogAction
         } catch (e: ClassCastException) {
             throw ClassCastException(context.toString() + " must implement ReminderDeletionDialogAction")
         }
-
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
