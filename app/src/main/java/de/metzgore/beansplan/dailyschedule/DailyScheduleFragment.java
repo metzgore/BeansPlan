@@ -18,15 +18,11 @@ import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 import de.metzgore.beansplan.R;
-import de.metzgore.beansplan.data.room.Reminder;
-import de.metzgore.beansplan.data.room.Show;
 import de.metzgore.beansplan.databinding.LayoutScheduleBaseBinding;
-import de.metzgore.beansplan.shared.OnReminderButtonClickListener;
 import de.metzgore.beansplan.shared.UpdatableScheduleFragment;
 import de.metzgore.beansplan.util.di.DailyScheduleViewModelFactory;
 
-public class DailyScheduleFragment extends Fragment implements UpdatableScheduleFragment,
-        OnReminderButtonClickListener {
+public class DailyScheduleFragment extends Fragment implements UpdatableScheduleFragment {
 
     private static final String TAG = DailyScheduleFragment.class.getSimpleName();
 
@@ -60,7 +56,7 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        dailyScheduleAdapter = new DailyScheduleAdapter(this);
+        dailyScheduleAdapter = new DailyScheduleAdapter(null);
 
         Bundle args = getArguments();
 
@@ -116,15 +112,5 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
     @Override
     public Date getDateKey() {
         return dateKey;
-    }
-
-    @Override
-    public void onUpsertReminder(Show show, Reminder reminder) {
-        viewModel.upsertReminder(show, reminder);
-    }
-
-    @Override
-    public void deleteReminder(Show show, Reminder reminder) {
-        viewModel.deleteReminder(show, reminder);
     }
 }

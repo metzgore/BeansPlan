@@ -59,8 +59,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:onClick="@{() -> viewModel.updateReminder()}"
-                    android:text="Bearbeiten" />
+                    android:onClick="@{() -> viewModel.upsertReminder()}"
+                    android:text="@string/button_text_edit_reminder" />
 
                 <Button
                     style="@style/Widget.AppCompat.Button.Borderless.Colored"
@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:onClick="@{() -> viewModel.deleteReminder()}"
-                    android:text="Löschen"
+                    android:text="@string/button_text_delete_reminder"
                     android:textColor="@color/red" />
 
             </RelativeLayout>

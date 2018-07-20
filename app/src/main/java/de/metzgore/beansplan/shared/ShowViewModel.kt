@@ -59,7 +59,7 @@ OnReminderButtonClickListener) {
         if (reminder == null) {
             listener?.onUpsertReminder(show, Reminder(timestamp = Date()))
         } else {
-            listener?.deleteReminder(show, reminder)
+            //listener?.deleteReminder(null)
         }
     }
 }

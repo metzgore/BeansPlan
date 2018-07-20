@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -90,7 +92,23 @@ public class DailyScheduleAdapter extends RecyclerView.Adapter<ShowViewHolder> {
             reminder = shows.get(position).getReminder().get(0);
         }
 
-        holder.bind(new ShowViewModel(shows.get(position).show, reminder, listener));
+        holder.bind(new ShowViewModel(shows.get(position).show, reminder, new
+                OnReminderButtonClickListener() {
+            @Override
+            public void onUpsertReminder(@NotNull ShowWithReminder showWithReminder) {
+
+            }
+
+            @Override
+            public void onUpsertReminder(@NotNull Show show, @NotNull Reminder reminder) {
+
+            }
+
+            @Override
+            public void deleteReminder(@NotNull ShowWithReminder showWithReminder) {
+
+            }
+        }));
     }
 
     @Override

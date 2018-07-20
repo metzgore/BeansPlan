@@ -10,7 +10,6 @@ import de.metzgore.beansplan.testing.OpenForTesting
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 @OpenForTesting
 @Singleton
 class RemindersRepository @Inject constructor(private val dao: ScheduleRoomDao, private val
@@ -26,5 +25,13 @@ appExecutors: AppExecutors) {
 
     fun deleteReminder(show: Show, reminder: Reminder) {
         appExecutors.diskIO().execute { dao.deleteReminder(show, reminder) }
+    }
+
+    fun upsertReminder(showWithReminder: ShowWithReminder) {
+        appExecutors.diskIO().execute { dao.upsertReminder(showWithReminder) }
+    }
+
+    fun deleteReminder(showWithReminder: ShowWithReminder) {
+        appExecutors.diskIO().execute { dao.deleteReminder(showWithReminder) }
     }
 }

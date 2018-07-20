@@ -163,10 +163,27 @@ abstract class ScheduleRoomDao {
     }
 
     @Transaction
+    open fun upsertReminder(showWithReminder: ShowWithReminder) {
+        val insertResult = insertReminder(showWithReminder.reminder!![0])
+
+        showWithReminder.show.reminderId = insertResult
+
+        updateShows(showWithReminder.show)
+    }
+
+    @Transaction
     open fun deleteReminder(show: Show, reminder: Reminder) {
         show.reminderId = null
 
         updateShows(show)
         deleteReminder(reminder)
+    }
+
+    @Transaction
+    open fun deleteReminder(showWithReminder: ShowWithReminder) {
+        showWithReminder.show.reminderId = null
+
+        updateShows(showWithReminder.show)
+        deleteReminder(showWithReminder.reminder!![0])
     }
 }

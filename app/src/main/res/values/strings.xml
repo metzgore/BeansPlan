@@ -13,6 +13,8 @@
 
     <string name="alert_message_no_reminders">Keine Erinnerungen vorhanden</string>
     <string name="alert_message_load_reminders">Erinnerungen werden geladen</string>
+    <string name="button_text_edit_reminder">Bearbeiten</string>
+    <string name="button_text_delete_reminder">Löschen</string>
 
     <string name="action_retry">Wiederholen</string>
     <string name="action_refresh">Aktualisieren</string>

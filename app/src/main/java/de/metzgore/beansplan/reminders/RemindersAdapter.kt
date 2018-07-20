@@ -32,7 +32,7 @@ class RemindersAdapter(private val viewModel: RemindersViewModel) : RecyclerView
                 }
 
                 override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                    return showsWithReminder!!.get(oldItemPosition).show.id == showsWithRemindersList[newItemPosition].show.id
+                    return showsWithReminder!![oldItemPosition].show.id == showsWithRemindersList[newItemPosition].show.id
                 }
 
                 override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
@@ -43,7 +43,7 @@ class RemindersAdapter(private val viewModel: RemindersViewModel) : RecyclerView
                     var oldReminder: Reminder? = null
 
                     if (showsWithRemindersList[newItemPosition].reminder != null) {
-                        newReminder = showsWithRemindersList[newItemPosition].reminder!!.get(0)
+                        newReminder = showsWithRemindersList[newItemPosition].reminder!![0]
                     }
 
                     if (showsWithReminder!![oldItemPosition].reminder != null) {
@@ -70,12 +70,16 @@ class RemindersAdapter(private val viewModel: RemindersViewModel) : RecyclerView
 
     override fun onBindViewHolder(holder: ReminderViewHolder, position: Int) {
         val listener = object : OnReminderButtonClickListener {
-            override fun onUpsertReminder(show: Show, reminder: Reminder) {
-                viewModel.triggerTimePickerDialog(reminder)
+            override fun onUpsertReminder(showWithReminder: ShowWithReminder) {
+                viewModel.triggerTimePickerDialog(showWithReminder)
             }
 
-            override fun deleteReminder(show: Show, reminder: Reminder) {
-                viewModel.triggerDeletionDialog(show.title)
+            override fun onUpsertReminder(show: Show, reminder: Reminder) {
+                //viewModel.triggerTimePickerDialog(reminder)
+            }
+
+            override fun deleteReminder(showWithReminder: ShowWithReminder) {
+                viewModel.triggerDeletionDialog(showWithReminder)
             }
         }
 
