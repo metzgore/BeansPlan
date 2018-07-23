@@ -14,7 +14,7 @@ class RemindersViewModel(repo: RemindersRepository) : ViewModel() {
     private val remindersRepo = repo
     private val _triggerDeletionDialog = MutableLiveData<Event<ShowWithReminder>>()
     private val _triggerTimePickerDialog = MutableLiveData<Event<ShowWithReminder>>()
-
+    private val _triggerDeletionOrUpdateDialog = MutableLiveData<Event<ShowWithReminder>>()
     val reminders: LiveData<List<ShowWithReminder>> = remindersRepo.loadReminders()
     val isEmpty: LiveData<Boolean> = Transformations.map(reminders) { reminders ->
         reminders == null || reminders.isEmpty()
@@ -25,6 +25,9 @@ class RemindersViewModel(repo: RemindersRepository) : ViewModel() {
 
     val triggerTimePickerDialog: LiveData<Event<ShowWithReminder>>
         get() = _triggerTimePickerDialog
+
+    val triggerDeletionOrUpdateDialog: LiveData<Event<ShowWithReminder>>
+        get() = _triggerDeletionOrUpdateDialog
 
     fun triggerDeletionDialog(showWithReminder: ShowWithReminder) {
         _triggerDeletionDialog.value = Event(showWithReminder)
@@ -44,5 +47,9 @@ class RemindersViewModel(repo: RemindersRepository) : ViewModel() {
 
     fun triggerTimePickerDialog(showWithReminder: ShowWithReminder) {
         _triggerTimePickerDialog.value = Event(showWithReminder)
+    }
+
+    fun triggerDeletionOrUpdateDialog(showWithReminder: ShowWithReminder) {
+        _triggerDeletionOrUpdateDialog.value = Event(showWithReminder)
     }
 }

@@ -10,7 +10,7 @@ import javax.inject.Singleton
     (ContextModule::class), (MainActivityComponent::class), (WeeklyScheduleFragmentComponent::class),
     (DailyScheduleFragmentComponent::class), (RemindersFragmentComponent::class),
     (ReminderDeletionDialogFragmentComponent::class), (ReminderTimePickerDialogFragmentComponent::class),
-    (SettingsModule::class)])
+    (ReminderDeletionOrUpdateDialogFragmentComponent::class), (SettingsModule::class)])
 interface AppComponent {
     fun inject(app: BeansPlanApp)
 }

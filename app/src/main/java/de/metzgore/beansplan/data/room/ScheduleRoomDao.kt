@@ -77,7 +77,7 @@ abstract class ScheduleRoomDao {
             .distinctUntilChanged()
 
     @Transaction
-    @Query("SELECT * FROM show WHERE reminderId NOT NULL")
+    @Query("SELECT * FROM show WHERE reminderId NOT NULL ORDER BY timeStart")
     abstract fun getShowsWithReminders(): LiveData<List<ShowWithReminder>>
 
     @Transaction

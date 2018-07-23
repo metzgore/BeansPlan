@@ -1,4 +1,4 @@
-package de.metzgore.beansplan.reminders
+package de.metzgore.beansplan.dailyschedule
 
 import android.databinding.DataBindingUtil
 import android.support.v7.util.DiffUtil
@@ -8,17 +8,20 @@ import android.view.ViewGroup
 import de.metzgore.beansplan.R
 import de.metzgore.beansplan.data.room.Reminder
 import de.metzgore.beansplan.data.room.relations.ShowWithReminder
-import de.metzgore.beansplan.databinding.ListItemReminderBinding
+import de.metzgore.beansplan.databinding.ListItemShowBinding
+import de.metzgore.beansplan.reminders.RemindersViewModel
 import de.metzgore.beansplan.shared.OnReminderButtonClickListener
+import de.metzgore.beansplan.shared.ShowViewHolder
+import de.metzgore.beansplan.shared.ShowViewModel
 
-class RemindersAdapter(private val viewModel: RemindersViewModel) : RecyclerView.Adapter<ReminderViewHolder>() {
+class DailyScheduleAdapter(private val viewModel: DailyScheduleViewModel, private val remindersViewModel: RemindersViewModel) : RecyclerView.Adapter<ShowViewHolder>() {
 
     private var showsWithReminder: List<ShowWithReminder>? = null
 
-    fun setShowsWithReminders(showsWithRemindersList: List<ShowWithReminder>) {
+    fun setShowList(showList: List<ShowWithReminder>) {
         if (showsWithReminder == null) {
-            showsWithReminder = showsWithRemindersList
-            notifyItemRangeInserted(0, showsWithRemindersList.size)
+            showsWithReminder = showList
+            notifyItemRangeInserted(0, showList.size)
         } else {
             //TODO use separate class for here and DailyScheduleAdapter
             val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
@@ -27,22 +30,22 @@ class RemindersAdapter(private val viewModel: RemindersViewModel) : RecyclerView
                 }
 
                 override fun getNewListSize(): Int {
-                    return showsWithRemindersList.size
+                    return showList.size
                 }
 
                 override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                    return showsWithReminder!![oldItemPosition].show.id == showsWithRemindersList[newItemPosition].show.id
+                    return showsWithReminder!![oldItemPosition].show.id == showList[newItemPosition].show.id
                 }
 
                 override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                    val newShow = showsWithRemindersList[newItemPosition].show
+                    val newShow = showList[newItemPosition].show
                     val oldShow = showsWithReminder!![oldItemPosition].show
 
                     var newReminder: Reminder? = null
                     var oldReminder: Reminder? = null
 
-                    if (showsWithRemindersList[newItemPosition].reminder != null) {
-                        newReminder = showsWithRemindersList[newItemPosition].reminder!![0]
+                    if (showList[newItemPosition].reminder != null) {
+                        newReminder = showList[newItemPosition].reminder!![0]
                     }
 
                     if (showsWithReminder!![oldItemPosition].reminder != null) {
@@ -52,36 +55,36 @@ class RemindersAdapter(private val viewModel: RemindersViewModel) : RecyclerView
                     return newShow == oldShow && newReminder == oldReminder
                 }
             })
-            showsWithReminder = showsWithRemindersList
+            showsWithReminder = showList
             result.dispatchUpdatesTo(this)
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReminderViewHolder {
-        val binding = DataBindingUtil.inflate<ListItemReminderBinding>(LayoutInflater.from(parent
-                .context), R.layout.list_item_reminder, parent, false)
-        return ReminderViewHolder(binding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowViewHolder {
+        val binding = DataBindingUtil.inflate<ListItemShowBinding>(LayoutInflater.from(parent
+                .context), R.layout.list_item_show, parent, false)
+        return ShowViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: ShowViewHolder, position: Int) {
+        val listener = object : OnReminderButtonClickListener {
+            override fun deleteOrUpdateReminder(showWithReminder: ShowWithReminder) {
+                remindersViewModel.triggerDeletionOrUpdateDialog(showWithReminder)
+            }
+
+            override fun onUpsertReminder(showWithReminder: ShowWithReminder) {
+                remindersViewModel.triggerTimePickerDialog(showWithReminder)
+            }
+
+            override fun deleteReminder(showWithReminder: ShowWithReminder) {
+                // NOOP
+            }
+        }
+
+        holder.bind(ShowViewModel(showsWithReminder!![position], listener))
     }
 
     override fun getItemCount(): Int {
         return showsWithReminder?.size ?: 0
-    }
-
-    override fun onBindViewHolder(holder: ReminderViewHolder, position: Int) {
-        val listener = object : OnReminderButtonClickListener {
-            override fun deleteOrUpdateReminder(showWithReminder: ShowWithReminder) {
-                // NOOP
-            }
-
-            override fun onUpsertReminder(showWithReminder: ShowWithReminder) {
-                viewModel.triggerTimePickerDialog(showWithReminder)
-            }
-
-            override fun deleteReminder(showWithReminder: ShowWithReminder) {
-                viewModel.triggerDeletionDialog(showWithReminder)
-            }
-        }
-
-        holder.bind(ReminderItemViewModel(showsWithReminder!![position], listener))
     }
 }

@@ -14,8 +14,7 @@ import de.metzgore.beansplan.reminders.RemindersViewModel
 import de.metzgore.beansplan.util.di.RemindersViewModelFactory
 import javax.inject.Inject
 
-
-class ReminderDeletionDialogFragment : DialogFragment() {
+class ReminderDeletionOrUpdateDialogFragment : DialogFragment() {
 
     @Inject
     lateinit var repo: RemindersRepository
@@ -26,8 +25,8 @@ class ReminderDeletionDialogFragment : DialogFragment() {
 
 
     companion object {
-        fun newInstance(): ReminderDeletionDialogFragment {
-            return ReminderDeletionDialogFragment()
+        fun newInstance(): ReminderDeletionOrUpdateDialogFragment {
+            return ReminderDeletionOrUpdateDialogFragment()
         }
     }
 
@@ -40,7 +39,7 @@ class ReminderDeletionDialogFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProviders.of(activity!!, RemindersViewModelFactory(repo)).get(RemindersViewModel::class.java)
-        viewModel.triggerDeletionDialog.observe(this, Observer {
+        viewModel.triggerDeletionOrUpdateDialog.observe(this, Observer {
             it?.peekContent()?.let { showWithReminder ->
                 show = showWithReminder
             }
@@ -53,8 +52,9 @@ class ReminderDeletionDialogFragment : DialogFragment() {
         alertDialogBuilder.apply {
             setTitle("Erinnerung löschen")
             setMessage("Möchtest du die Erinnerung wirklich löschen?")
-            setNegativeButton("Nein", null)
-            setPositiveButton("Ja") { _, _ -> viewModel.deleteReminder(show) }
+            setNegativeButton("Bearbeiten") { _, _ -> viewModel.triggerTimePickerDialog(show) }
+            setPositiveButton("Löschen") { _, _ -> viewModel.triggerDeletionDialog(show) }
+            setNeutralButton("Abbrechen", null)
         }
 
         return alertDialogBuilder.create()
