@@ -49,6 +49,7 @@ class ReminderDeletionOrUpdateDialogFragment : DialogFragment() {
     //TODO texts in resource
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val alertDialogBuilder = AlertDialog.Builder(context)
+        //TODO move to strings.xml
         alertDialogBuilder.apply {
             setTitle("Erinnerung löschen")
             setMessage("Möchtest du die Erinnerung wirklich löschen?")

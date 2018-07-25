@@ -61,4 +61,9 @@
     <string name="pref_hide_past_days_summary">Blende vergangene Tage im Wochenplan aus</string>
 
     <string name="fragment_weekly_schedule_subtitle">%s - %s</string>
+
+    <string name="notification_action_youtube">Auf YouTube ansehen</string>
+    <string name="notification_action_twitch">Auf Twitch ansehen</string>
+    <string name="notification_channel_reminder_name">Erinnerungen</string>
+    <string name="notification_channel_reminder_description">Erinnerungen zum Start einer Sendung im Livestream </string>
 </resources>

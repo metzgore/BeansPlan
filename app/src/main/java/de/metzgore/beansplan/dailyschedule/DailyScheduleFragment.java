@@ -20,6 +20,7 @@ import dagger.android.support.AndroidSupportInjection;
 import de.metzgore.beansplan.R;
 import de.metzgore.beansplan.data.room.relations.ShowWithReminder;
 import de.metzgore.beansplan.databinding.LayoutScheduleBaseBinding;
+import de.metzgore.beansplan.notifications.NotificationHelper;
 import de.metzgore.beansplan.reminders.RemindersRepository;
 import de.metzgore.beansplan.reminders.RemindersViewModel;
 import de.metzgore.beansplan.shared.ReminderDeletionDialogFragment;
@@ -121,6 +122,15 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
                                     .getTime());
                     dialog.setTargetFragment(this, 0);
                     dialog.show(getFragmentManager(), "TIME_PICKER_DIALOG");
+                }
+            }
+        });
+
+        remindersViewModel.getReminders().observe(this, showWithReminders -> {
+            if (showWithReminders != null) {
+                for (ShowWithReminder showWithReminder : showWithReminders) {
+                    NotificationHelper.INSTANCE.scheduleNotification(getContext(),
+                            showWithReminder);
                 }
             }
         });

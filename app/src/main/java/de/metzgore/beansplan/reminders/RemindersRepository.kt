@@ -34,4 +34,8 @@ appExecutors: AppExecutors) {
     fun deleteReminder(showWithReminder: ShowWithReminder) {
         appExecutors.diskIO().execute { dao.deleteReminder(showWithReminder) }
     }
+
+    fun deleteReminder(reminderId: Long) {
+        appExecutors.diskIO().execute { dao.deleteReminder(reminderId) }
+    }
 }

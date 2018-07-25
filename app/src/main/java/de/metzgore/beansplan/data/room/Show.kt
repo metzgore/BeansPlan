@@ -12,7 +12,8 @@ import java.util.*
         onUpdate = ForeignKey.CASCADE)),
     (ForeignKey(entity = Reminder::class,
             parentColumns = arrayOf("id"),
-            childColumns = arrayOf("reminderId")))],
+            childColumns = arrayOf("reminderId"),
+            onDelete = ForeignKey.SET_NULL))],
         indices = [(Index(value = ["scheduleId"])), (Index(value = ["reminderId"], unique =
         true))])
 class Show(

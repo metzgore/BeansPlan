@@ -13,6 +13,7 @@ import dagger.android.support.AndroidSupportInjection
 import de.metzgore.beansplan.R
 import de.metzgore.beansplan.baseschedule.BaseFragment
 import de.metzgore.beansplan.databinding.FragmentRemindersBinding
+import de.metzgore.beansplan.notifications.NotificationHelper
 import de.metzgore.beansplan.shared.ReminderDeletionDialogFragment
 import de.metzgore.beansplan.shared.ReminderTimePickerDialogFragment
 import de.metzgore.beansplan.util.di.RemindersViewModelFactory
@@ -43,6 +44,11 @@ class RemindersFragment : BaseFragment() {
     private fun subscribeUi(viewModel: RemindersViewModel) {
         viewModel.reminders.observe(this, Observer {
             remindersAdapter.setShowsWithReminders(it!!)
+
+            for (showWithReminder in it) {
+                NotificationHelper.scheduleNotification(context!!,
+                        showWithReminder)
+            }
         })
 
         viewModel.triggerDeletionDialog.observe(this, Observer {

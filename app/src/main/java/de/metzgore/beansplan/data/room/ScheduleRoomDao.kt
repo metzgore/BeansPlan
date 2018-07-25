@@ -114,6 +114,9 @@ abstract class ScheduleRoomDao {
     @Delete
     abstract fun deleteReminder(reminder: Reminder): Int
 
+    @Query("DELETE FROM reminder WHERE id = :reminderId")
+    abstract fun deleteReminder(reminderId: Long): Int
+
     @Transaction
     open fun upsertSchedule(clock: Clock, item: WeeklyScheduleResponse) {
         val weeklySchedule = WeeklySchedule(timestamp =
