@@ -2,12 +2,9 @@ package de.metzgore.beansplan.notifications
 
 import android.app.Notification
 import android.app.NotificationManager
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import dagger.android.AndroidInjection
 import dagger.android.DaggerBroadcastReceiver
-import dagger.android.support.AndroidSupportInjection
 import de.metzgore.beansplan.reminders.RemindersRepository
 import javax.inject.Inject
 

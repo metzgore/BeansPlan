@@ -1,17 +1,26 @@
 package de.metzgore.beansplan.notifications
 
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
-import android.widget.Toast
+import android.os.AsyncTask
+import dagger.android.DaggerBroadcastReceiver
+import de.metzgore.beansplan.reminders.RemindersRepository
+import javax.inject.Inject
 
-class ReminderBootReceiver : BroadcastReceiver() {
+
+class ReminderBootReceiver : DaggerBroadcastReceiver() {
+
+    @Inject
+    lateinit var reminderRepo: RemindersRepository
 
     override fun onReceive(context: Context, intent: Intent) {
-        Toast.makeText(context, "Boot Completed..!", Toast.LENGTH_LONG).show()
-        Log.d("TEST", "boot completed")
+        super.onReceive(context, intent)
 
-        NotificationHelper.createNotificationChannel(context)
+        AsyncTask.execute {
+            val showWithReminder = reminderRepo.loadReminders()
+            showWithReminder.forEach {
+                NotificationHelper.scheduleNotification(context, it)
+            }
+        }
     }
 }

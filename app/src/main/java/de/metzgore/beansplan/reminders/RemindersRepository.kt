@@ -15,8 +15,12 @@ import javax.inject.Singleton
 class RemindersRepository @Inject constructor(private val dao: ScheduleRoomDao, private val
 appExecutors: AppExecutors) {
 
-    fun loadReminders(): LiveData<List<ShowWithReminder>> {
+    fun loadRemindersAsLiveData(): LiveData<List<ShowWithReminder>> {
         return dao.getShowsWithRemindersDistict()
+    }
+
+    fun loadReminders(): List<ShowWithReminder> {
+        return dao.getShowsWithRemindersAsList()
     }
 
     fun upsertReminder(show: Show, reminder: Reminder) {
