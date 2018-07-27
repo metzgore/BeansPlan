@@ -191,7 +191,7 @@ public class WeeklyScheduleFragment extends BaseFragment {
             binding.fragmentWeeklyScheduleViewPager.setCurrentItem(weeklyScheduleAdapter.getPositionFromDate(selectedDate));
 
             if (schedule.getData().getStartDate() != null && schedule.getData().getEndDate() != null) {
-                String subTitle = getString(R.string.fragment_weekly_schedule_subtitle, DateFormatter.formatDate(getContext(), schedule
+                String subTitle = getString(R.string.hyphen_separated_text, DateFormatter.formatDate(getContext(), schedule
                         .getData().getStartDate()), DateFormatter.formatDate(getContext(), schedule.getData().getEndDate()));
 
                 getOnScheduleRefreshedListener().onSubTitleUpdated(subTitle);

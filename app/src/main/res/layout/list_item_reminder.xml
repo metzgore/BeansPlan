@@ -33,21 +33,25 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{viewModel.title}"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@{viewModel.getHeaderText()}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                tools:text="Show Titel" />
+                tools:text="Show Titel - Show Topic" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{viewModel.getShowTimeFormatted(context)}"
+                android:ellipsize="end"
+                android:text="@{@string/hyphen_separated_text(viewModel.getShowStartTimeFormatted(context),viewModel.getShowEndTimeFormatted(context))}"
                 tools:text="21:00 - 22:00" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{viewModel.getReminderDateTimeFormatted(context)}"
-                tools:text="15. Juli, 19:56" />
+                android:ellipsize="end"
+                android:text="@{@string/reminder_list_item_date(viewModel.getReminderDateTimeFormatted(context))}"
+                tools:text="Erinnerung am 15. Juli, 19:56" />
 
             <RelativeLayout
                 android:layout_width="match_parent"

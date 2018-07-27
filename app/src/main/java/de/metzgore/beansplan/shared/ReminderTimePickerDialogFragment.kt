@@ -17,7 +17,6 @@ import de.metzgore.beansplan.util.di.RemindersViewModelFactory
 import java.util.*
 import javax.inject.Inject
 
-//TODO male generic
 class ReminderTimePickerDialogFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
 
     @Inject

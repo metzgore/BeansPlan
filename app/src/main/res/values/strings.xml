@@ -60,10 +60,20 @@
     <string name="pref_hide_past_days_title">Vergangene Tage ausblenden</string>
     <string name="pref_hide_past_days_summary">Blende vergangene Tage im Wochenplan aus</string>
 
-    <string name="fragment_weekly_schedule_subtitle">%s - %s</string>
+    <string name="hyphen_separated_text">%1$s - %2$s</string>
 
     <string name="notification_action_youtube">Auf YouTube ansehen</string>
     <string name="notification_action_twitch">Auf Twitch ansehen</string>
     <string name="notification_channel_reminder_name">Erinnerungen</string>
     <string name="notification_channel_reminder_description">Erinnerungen zum Start einer Sendung im Livestream </string>
+    <string name="reminder_deletion_dialog_title">Erinnerung löschen</string>
+    <string name="reminder_deletion_dialog_message">Möchtest du die Erinnerung wirklich löschen?</string>
+    <string name="reminder_deletion_dialog_negative">Nein</string>
+    <string name="reminder_deletion_dialog_positive">Ja</string>
+    <string name="reminder_deletion_update_dialog_title">Erinnerung bearbeiten oder löschen</string>
+    <string name="reminder_deletion_update_dialog_message">Möchtest du die Erinnerung bearbeiten oder löschen?</string>
+    <string name="reminder_deletion_update_dialog_negative">Bearbeiten</string>
+    <string name="reminder_deletion_update_dialog_positive">Löschen</string>
+    <string name="reminder_deletion_update_dialog_neutral">Abbrechen</string>
+    <string name="reminder_list_item_date">Erinnerung am %1$s</string>
 </resources>
