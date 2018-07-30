@@ -52,6 +52,7 @@ object NotificationHelper {
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
                 .setContentIntent(pendingIntent)
+                .setWhen(showWithReminder.reminder!![0].timestamp.time)
                 .setCategory(NotificationCompat.CATEGORY_REMINDER)
                 .addAction(R.drawable.ic_youtube, context.getString(R.string.notification_action_youtube),
                         PendingIntent.getActivity(context, 1, youtubeIntent, 0))
