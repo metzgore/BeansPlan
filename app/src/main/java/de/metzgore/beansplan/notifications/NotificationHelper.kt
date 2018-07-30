@@ -51,6 +51,7 @@ object NotificationHelper {
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setContentIntent(pendingIntent)
                 .setWhen(showWithReminder.reminder!![0].timestamp.time)
                 .setCategory(NotificationCompat.CATEGORY_REMINDER)

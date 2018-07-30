@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--TODO strings in resources-->
+    <PreferenceCategory
+        android:key="pref_key_storage_settings_27_and_below"
+        android:title="Benachrichtigungen">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/pref_key_notification_vibrate"
+            android:title="Vibration" />
+
+        <Preference
+            android:key="@string/pref_key_notification_tone"
+            android:title="Benachrichtigungston" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

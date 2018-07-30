@@ -2,4 +2,6 @@
 <resources>
     <string name="pref_key_hide_past_shows" translatable="false">pref_key_hide_past_shows</string>
     <string name="pref_key_hide_past_days" translatable="false">pref_key_hide_past_days</string>
+    <string name="pref_key_notification_vibrate" translatable="false">pref_key_notification_vibrate</string>
+    <string name="pref_key_notification_tone" translatable="false">pref_key_notification_tone</string>
 </resources>
