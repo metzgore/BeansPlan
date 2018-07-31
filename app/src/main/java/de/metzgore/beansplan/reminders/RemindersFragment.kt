@@ -14,6 +14,7 @@ import de.metzgore.beansplan.R
 import de.metzgore.beansplan.baseschedule.BaseFragment
 import de.metzgore.beansplan.databinding.FragmentRemindersBinding
 import de.metzgore.beansplan.notifications.NotificationHelper
+import de.metzgore.beansplan.settings.repository.AppSettings
 import de.metzgore.beansplan.shared.ReminderDeletionDialogFragment
 import de.metzgore.beansplan.shared.ReminderTimePickerDialogFragment
 import de.metzgore.beansplan.util.di.RemindersViewModelFactory
@@ -25,6 +26,9 @@ class RemindersFragment : BaseFragment() {
 
     @Inject
     lateinit var repo: RemindersRepository
+
+    @Inject
+    lateinit var appSettings: AppSettings
 
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
@@ -46,8 +50,7 @@ class RemindersFragment : BaseFragment() {
             remindersAdapter.setShowsWithReminders(it!!)
 
             for (showWithReminder in it) {
-                NotificationHelper.scheduleNotification(context!!,
-                        showWithReminder)
+                NotificationHelper.scheduleNotification(context!!, appSettings, showWithReminder)
             }
         })
 

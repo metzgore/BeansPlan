@@ -36,6 +36,11 @@ public class AppSettingsImp implements AppSettings {
         putStringPreference(R.string.pref_key_notification_tone, uri);
     }
 
+    @Override
+    public boolean shouldVibrateOnNotification() {
+        return getBooleanPreference(R.string.pref_key_notification_vibrate, true);
+    }
+
     private boolean getBooleanPreference(final int keyResourceId, final boolean defaultValue) {
         boolean value = defaultValue;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);

@@ -31,6 +31,16 @@
 
     <string name="activity_settings_title">Einstellungen</string>
 
+    <string name="pref_reminder_category_title">Erinnerungen</string>
+    <string name="pref_notification_settings_title">Benachrichtigungseinstellungen</string>
+    <string name="pref_notification_vibration_title">Vibration bei Benachrichtigung</string>
+    <string name="pref_notification_ringtone_title">Benachrichtigungston</string>
+    <string name="pref_notification_ringtone_summary_silent">Kein Benachrichtigungston</string>
+    <string name="pref_hide_past_shows_title">Vergangene Sendungen ausblenden</string>
+    <string name="pref_hide_past_shows_summary">Blende vergangene Sendungen im Tages- und Wochenplan aus</string>
+    <string name="pref_hide_past_days_title">Vergangene Tage ausblenden</string>
+    <string name="pref_hide_past_days_summary">Blende vergangene Tage im Wochenplan aus</string>
+
     <string name="activity_about_title">Über &appname;</string>
     <string name="activity_about_version">Version</string>
     <string name="activity_about_description">&appname; ist ein Fan-Projekt von einem Bohnenfan für Bohnenfans.\nDie App zeigt den aktuellen Tages- und Wochenplan für den Internetsender &rbtv;."</string>
@@ -53,12 +63,6 @@
     <string name="activity_about_rbtv_twitch">&rbtv; auf Twitch</string>
     <string name="activity_about_rbtv_playstore">Offizielle Pocket Beans App für Android</string>
     <string name="activity_about_misc_data_url">Sendeplandaten</string>
-
-    <string name="pref_hide_past_shows_title">Vergangene Sendungen ausblenden</string>
-    <string name="pref_hide_past_shows_summary">Blende vergangene Sendungen im Tages- und Wochenplan aus</string>
-
-    <string name="pref_hide_past_days_title">Vergangene Tage ausblenden</string>
-    <string name="pref_hide_past_days_summary">Blende vergangene Tage im Wochenplan aus</string>
 
     <string name="hyphen_separated_text">%1$s - %2$s</string>
 

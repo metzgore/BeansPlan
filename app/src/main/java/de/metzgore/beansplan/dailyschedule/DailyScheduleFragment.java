@@ -23,6 +23,7 @@ import de.metzgore.beansplan.databinding.LayoutScheduleBaseBinding;
 import de.metzgore.beansplan.notifications.NotificationHelper;
 import de.metzgore.beansplan.reminders.RemindersRepository;
 import de.metzgore.beansplan.reminders.RemindersViewModel;
+import de.metzgore.beansplan.settings.repository.AppSettings;
 import de.metzgore.beansplan.shared.ReminderDeletionDialogFragment;
 import de.metzgore.beansplan.shared.ReminderDeletionOrUpdateDialogFragment;
 import de.metzgore.beansplan.shared.ReminderTimePickerDialogFragment;
@@ -46,6 +47,9 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
 
     @Inject
     RemindersRepository remindersRepo;
+
+    @Inject
+    AppSettings appSettings;
 
     public static Fragment newInstance(Date date) {
         DailyScheduleFragment fragment = new DailyScheduleFragment();
@@ -129,8 +133,7 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
         remindersViewModel.getReminders().observe(this, showWithReminders -> {
             if (showWithReminders != null) {
                 for (ShowWithReminder showWithReminder : showWithReminders) {
-                    NotificationHelper.INSTANCE.scheduleNotification(getContext(),
-                            showWithReminder);
+                    NotificationHelper.INSTANCE.scheduleNotification(getContext(), appSettings, showWithReminder);
                 }
             }
         });

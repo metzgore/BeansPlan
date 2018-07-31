@@ -8,5 +8,7 @@ public interface AppSettings {
 
     String getRingtonePreferenceValue();
 
-    void setRingtonePreferenceValue(String s);
+    void setRingtonePreferenceValue(String ringtoneUri);
+
+    boolean shouldVibrateOnNotification();
 }

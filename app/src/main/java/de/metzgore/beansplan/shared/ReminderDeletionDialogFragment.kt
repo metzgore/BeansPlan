@@ -13,6 +13,7 @@ import de.metzgore.beansplan.data.room.relations.ShowWithReminder
 import de.metzgore.beansplan.notifications.NotificationHelper
 import de.metzgore.beansplan.reminders.RemindersRepository
 import de.metzgore.beansplan.reminders.RemindersViewModel
+import de.metzgore.beansplan.settings.repository.AppSettings
 import de.metzgore.beansplan.util.di.RemindersViewModelFactory
 import javax.inject.Inject
 
@@ -21,6 +22,9 @@ class ReminderDeletionDialogFragment : DialogFragment() {
 
     @Inject
     lateinit var repo: RemindersRepository
+
+    @Inject
+    lateinit var appSettings: AppSettings
 
     private lateinit var show: ShowWithReminder
 
@@ -57,7 +61,7 @@ class ReminderDeletionDialogFragment : DialogFragment() {
             setNegativeButton(getString(R.string.reminder_deletion_dialog_negative), null)
             setPositiveButton(getString(R.string.reminder_deletion_dialog_positive)) { _, _ ->
                 viewModel.deleteReminder(show)
-                NotificationHelper.unscheduleNotification(context, show)
+                NotificationHelper.unscheduleNotification(context, appSettings, show)
             }
         }
 

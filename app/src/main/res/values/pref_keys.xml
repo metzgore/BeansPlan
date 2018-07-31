@@ -4,4 +4,7 @@
     <string name="pref_key_hide_past_days" translatable="false">pref_key_hide_past_days</string>
     <string name="pref_key_notification_vibrate" translatable="false">pref_key_notification_vibrate</string>
     <string name="pref_key_notification_tone" translatable="false">pref_key_notification_tone</string>
+    <string name="pref_key_storage_settings_27_and_below" translatable="false">pref_key_storage_settings_27_and_below</string>
+    <string name="pref_key_storage_settings_28_and_greater" translatable="false">pref_key_storage_settings_28_and_greater</string>
+    <string name="pref_key_open_notification_settings" translatable="false">pref_key_open_notification_settings</string>
 </resources>

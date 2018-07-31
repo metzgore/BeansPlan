@@ -65,6 +65,14 @@
 
 
 #skip licenses
+# Libraries not listed in licenses.yml:
+- artifact: com.android.support:preference-v7:+
+  name: Android Support Preference v7
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+  skip: true
 - artifact: org.jetbrains.kotlin:kotlin-stdlib-common:+
   name: org.jetbrains.kotlin:kotlin-stdlib-common
   copyrightHolder: #COPYRIGHT_HOLDER#
