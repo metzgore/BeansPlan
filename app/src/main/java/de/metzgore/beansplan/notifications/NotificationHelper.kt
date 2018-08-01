@@ -26,13 +26,13 @@ object NotificationHelper {
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = context.getString(R.string.notification_channel_reminder_name)
-            val description = context.getString(R.string.notification_channel_reminder_description)
             val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel(REMINDER_CHANNEL_ID, name, importance)
-            channel.description = description
-            channel.enableLights(true)
-            channel.enableVibration(true)
-            channel.setShowBadge(false)
+            val channel = NotificationChannel(REMINDER_CHANNEL_ID, name, importance).apply {
+                description = context.getString(R.string.notification_channel_reminder_description)
+                enableLights(true)
+                enableVibration(true)
+                setShowBadge(false)
+            }
 
             val notificationManager = context.getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
@@ -47,7 +47,8 @@ object NotificationHelper {
         val builder = NotificationCompat.Builder(context, REMINDER_CHANNEL_ID).apply {
             setSmallIcon(R.drawable.ic_notification)
             setContentTitle("${showWithReminder.show.title} - ${showWithReminder.show.topic}")
-            setContentText(DateUtils.formatDateTime(context, showWithReminder.show.timeStart.time, DateUtils.FORMAT_SHOW_TIME))
+            setContentText(context.getString(R.string.notification_content_text,
+                    DateUtils.formatDateTime(context, showWithReminder.show.timeStart.time, DateUtils.FORMAT_SHOW_TIME)))
             setAutoCancel(true)
             priority = NotificationCompat.PRIORITY_MAX
             setSound(Uri.parse(appSettings.ringtonePreferenceValue))

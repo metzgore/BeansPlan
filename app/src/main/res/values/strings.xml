@@ -66,6 +66,7 @@
 
     <string name="hyphen_separated_text">%1$s - %2$s</string>
 
+    <string name="notification_content_text">Beginnt %1$s</string>
     <string name="notification_action_youtube">Auf YouTube ansehen</string>
     <string name="notification_action_twitch">Auf Twitch ansehen</string>
     <string name="notification_channel_reminder_name">Erinnerungen</string>
