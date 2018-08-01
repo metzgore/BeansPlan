@@ -32,7 +32,7 @@ object NotificationHelper {
             channel.description = description
             channel.enableLights(true)
             channel.enableVibration(true)
-            channel.setShowBadge(true)
+            channel.setShowBadge(false)
 
             val notificationManager = context.getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
@@ -56,8 +56,7 @@ object NotificationHelper {
             setCategory(NotificationCompat.CATEGORY_REMINDER)
             addAction(R.drawable.ic_youtube, context.getString(R.string.notification_action_youtube),
                     PendingIntent.getActivity(context, 1, youtubeIntent, 0))
-            //TODO use twitch icon
-            addAction(R.drawable.ic_youtube, context.getString(R.string.notification_action_twitch),
+            addAction(R.drawable.ic_twitch_notification, context.getString(R.string.notification_action_twitch),
                     PendingIntent.getActivity(context, 2, twitchIntent, 0))
             if (appSettings.shouldVibrateOnNotification()) {
                 setVibrate(longArrayOf(0, 250, 250, 250))

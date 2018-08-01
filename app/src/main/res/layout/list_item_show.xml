@@ -134,7 +134,7 @@
                         android:layout_height="wrap_content"
                         android:onClick="@{() -> viewModel.openVideo(context)}"
                         android:textAlignment="textEnd"
-                        app:srcCompat="@drawable/ic_youtube"
+                        app:srcCompat="@drawable/ic_youtube_a50"
                         app:visibleGone="@{viewModel.onYoutube}" />
                 </LinearLayout>
             </LinearLayout>
