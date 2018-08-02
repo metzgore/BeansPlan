@@ -6,26 +6,15 @@ import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
 import de.metzgore.beansplan.data.room.relations.DailyScheduleWithShows
 import de.metzgore.beansplan.data.room.relations.ShowWithReminder
-import de.metzgore.beansplan.util.archcomponents.Event
 import java.util.*
 
 class DailyScheduleViewModel(private val repo: DailyScheduleRepository) : ViewModel() {
 
     private val dateToLoad = MutableLiveData<Date>()
-    private val _triggerDeletionDialog = MutableLiveData<Event<ShowWithReminder>>()
-    private val _triggerTimePickerDialog = MutableLiveData<Event<ShowWithReminder>>()
     val schedule: LiveData<DailyScheduleWithShows> = Transformations.switchMap(dateToLoad) { repo.loadScheduleFromCache(it) }
     val isEmpty: LiveData<Boolean> = Transformations.map(schedule) { schedule ->
         schedule == null || schedule.shows.isEmpty()
     }
-
-    val triggerDeletionDialog: LiveData<Event<ShowWithReminder>>
-        get() = _triggerDeletionDialog
-
-    val triggerTimePickerDialog: LiveData<Event<ShowWithReminder>>
-        get() = _triggerTimePickerDialog
-
-
 
     fun loadSchedule(date: Date) {
         dateToLoad.value = date
@@ -37,13 +26,5 @@ class DailyScheduleViewModel(private val repo: DailyScheduleRepository) : ViewMo
 
     fun deleteReminder(showWithReminder: ShowWithReminder) {
         repo.deleteReminder(showWithReminder)
-    }
-
-    fun triggerTimePickerDialog(showWithReminder: ShowWithReminder) {
-        _triggerTimePickerDialog.value = Event(showWithReminder)
-    }
-
-    fun triggerDeletionDialog(showWithReminder: ShowWithReminder) {
-        _triggerDeletionDialog.value = Event(showWithReminder)
     }
 }
