@@ -4,8 +4,6 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
-import de.metzgore.beansplan.data.room.Reminder
-import de.metzgore.beansplan.data.room.Show
 import de.metzgore.beansplan.data.room.relations.ShowWithReminder
 import de.metzgore.beansplan.util.archcomponents.Event
 
@@ -31,10 +29,6 @@ class RemindersViewModel(repo: RemindersRepository) : ViewModel() {
 
     fun triggerDeletionDialog(showWithReminder: ShowWithReminder) {
         _triggerDeletionDialog.value = Event(showWithReminder)
-    }
-
-    fun deleteReminder(show: Show, reminder: Reminder) {
-        remindersRepo.deleteReminder(show, reminder)
     }
 
     fun upsertReminder(showWithReminder: ShowWithReminder) {

@@ -2,9 +2,7 @@ package de.metzgore.beansplan.reminders
 
 import android.arch.lifecycle.LiveData
 import de.metzgore.beansplan.AppExecutors
-import de.metzgore.beansplan.data.room.Reminder
 import de.metzgore.beansplan.data.room.ScheduleRoomDao
-import de.metzgore.beansplan.data.room.Show
 import de.metzgore.beansplan.data.room.relations.ShowWithReminder
 import de.metzgore.beansplan.testing.OpenForTesting
 import javax.inject.Inject
@@ -21,14 +19,6 @@ appExecutors: AppExecutors) {
 
     fun loadReminders(): List<ShowWithReminder> {
         return dao.getShowsWithRemindersAsList()
-    }
-
-    fun upsertReminder(show: Show, reminder: Reminder) {
-        appExecutors.diskIO().execute { dao.upsertReminder(show, reminder) }
-    }
-
-    fun deleteReminder(show: Show, reminder: Reminder) {
-        appExecutors.diskIO().execute { dao.deleteReminder(show, reminder) }
     }
 
     fun upsertReminder(showWithReminder: ShowWithReminder) {
