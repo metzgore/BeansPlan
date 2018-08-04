@@ -82,7 +82,7 @@ abstract class ScheduleRoomDao {
 
     @Transaction
     @Query("SELECT * FROM show WHERE reminderId NOT NULL")
-    abstract fun getShowsWithRemindersAsList(): List<ShowWithReminder>
+    abstract fun getShowsWithRemindersSync(): List<ShowWithReminder>
 
     fun getShowsWithRemindersDistict(): LiveData<List<ShowWithReminder>> = getShowsWithReminders()
             .distinctUntilChanged()
@@ -134,7 +134,7 @@ abstract class ScheduleRoomDao {
         })
 
         // preserve reminders
-        val showsWithReminder = getShowsWithRemindersAsList()
+        val showsWithReminder = getShowsWithRemindersSync()
 
         val showsRoom = arrayListOf<Show>()
         item.schedule.forEach { (date, shows) ->

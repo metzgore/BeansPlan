@@ -21,7 +21,7 @@ class ReminderBootReceiver : DaggerBroadcastReceiver() {
         super.onReceive(context, intent)
 
         AsyncTask.execute {
-            val showWithReminder = reminderRepo.loadReminders()
+            val showWithReminder = reminderRepo.loadRemindersSync()
             showWithReminder.forEach {
                 NotificationHelper.scheduleNotification(context, appSettings, it)
             }
