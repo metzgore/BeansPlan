@@ -7,13 +7,12 @@ import android.arch.lifecycle.ViewModel
 import de.metzgore.beansplan.data.room.relations.ShowWithReminder
 import de.metzgore.beansplan.util.archcomponents.Event
 
-class RemindersViewModel(repo: RemindersRepository) : ViewModel() {
+class RemindersViewModel(private val repo: RemindersRepository) : ViewModel() {
 
-    private val remindersRepo = repo
     private val _triggerDeletionDialog = MutableLiveData<Event<ShowWithReminder>>()
     private val _triggerTimePickerDialog = MutableLiveData<Event<ShowWithReminder>>()
     private val _triggerDeletionOrUpdateDialog = MutableLiveData<Event<ShowWithReminder>>()
-    val reminders: LiveData<List<ShowWithReminder>> = remindersRepo.loadReminders()
+    val reminders: LiveData<List<ShowWithReminder>> = repo.loadReminders()
     val isEmpty: LiveData<Boolean> = Transformations.map(reminders) { reminders ->
         reminders == null || reminders.isEmpty()
     }
@@ -31,19 +30,19 @@ class RemindersViewModel(repo: RemindersRepository) : ViewModel() {
         _triggerDeletionDialog.value = Event(showWithReminder)
     }
 
-    fun upsertReminder(showWithReminder: ShowWithReminder) {
-        remindersRepo.upsertReminder(showWithReminder)
-    }
-
-    fun deleteReminder(showWithReminder: ShowWithReminder) {
-        remindersRepo.deleteReminder(showWithReminder)
-    }
-
     fun triggerTimePickerDialog(showWithReminder: ShowWithReminder) {
         _triggerTimePickerDialog.value = Event(showWithReminder)
     }
 
     fun triggerDeletionOrUpdateDialog(showWithReminder: ShowWithReminder) {
         _triggerDeletionOrUpdateDialog.value = Event(showWithReminder)
+    }
+
+    fun upsertReminder(showWithReminder: ShowWithReminder) {
+        repo.upsertReminder(showWithReminder)
+    }
+
+    fun deleteReminder(showWithReminder: ShowWithReminder) {
+        repo.deleteReminder(showWithReminder)
     }
 }

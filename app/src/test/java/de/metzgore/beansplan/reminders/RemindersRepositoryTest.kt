@@ -26,7 +26,7 @@ class RemindersRepositoryTest {
 
     @Test
     fun loadReminders() {
-        `when`(scheduleDao.getShowsWithReminders()).thenReturn(LiveDataTestUtil.createShowWithReminderLiveData())
+        `when`(scheduleDao.getShowsWithReminders()).thenReturn(LiveDataTestUtil.createFilledShowWithReminderLiveData())
 
         repo.loadReminders()
         verify(scheduleDao).getShowsWithReminders()

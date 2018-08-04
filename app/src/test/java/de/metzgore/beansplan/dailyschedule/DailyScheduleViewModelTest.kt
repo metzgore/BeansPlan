@@ -36,7 +36,6 @@ class DailyScheduleViewModelTest {
     @Test
     fun testLoadDailySchedule() {
         dailyScheduleViewModel.schedule.observeForever(mock())
-        dailyScheduleViewModel.isEmpty.observeForever(mock())
 
         val date = Date()
 

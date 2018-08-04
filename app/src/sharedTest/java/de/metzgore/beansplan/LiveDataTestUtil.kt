@@ -78,13 +78,20 @@ object LiveDataTestUtil {
         return liveData
     }
 
-    fun createShowWithReminderLiveData(): LiveData<List<ShowWithReminder>> {
+    fun createFilledShowWithReminderLiveData(): LiveData<List<ShowWithReminder>> {
         val showWithReminder = ShowWithReminder()
         showWithReminder.show = Show(1, Date(), "", "", Date(), Date(), 0, "", "", ShowResponse.Type.LIVE, false, 1)
         showWithReminder.reminder = listOf(Reminder(1, Date()))
 
         val liveData = MutableLiveData<List<ShowWithReminder>>()
         liveData.value = listOf(showWithReminder)
+
+        return liveData
+    }
+
+    fun createEmptyShowWithReminderLiveData(): LiveData<List<ShowWithReminder>> {
+        val liveData = MutableLiveData<List<ShowWithReminder>>()
+        liveData.value = emptyList()
 
         return liveData
     }
