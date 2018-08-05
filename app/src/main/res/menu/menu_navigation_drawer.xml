@@ -5,7 +5,7 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_weekly_schedule"
-            android:icon="@drawable/ic_today"
+            android:icon="@drawable/ic_calendar"
             android:title="@string/drawer_item_weekly_schedule" />
 
         <item
