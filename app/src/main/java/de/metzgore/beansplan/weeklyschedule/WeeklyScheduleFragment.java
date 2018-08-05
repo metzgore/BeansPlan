@@ -3,6 +3,7 @@ package de.metzgore.beansplan.weeklyschedule;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,7 +20,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -30,6 +33,7 @@ import de.metzgore.beansplan.data.Resource;
 import de.metzgore.beansplan.data.Status;
 import de.metzgore.beansplan.data.room.relations.WeeklyScheduleWithDailySchedules;
 import de.metzgore.beansplan.databinding.FragmentWeeklyScheduleBinding;
+import de.metzgore.beansplan.util.BadgeDrawableUtil;
 import de.metzgore.beansplan.util.DateFormatter;
 import de.metzgore.beansplan.util.di.WeeklyScheduleViewModelFactory;
 
@@ -136,6 +140,13 @@ public class WeeklyScheduleFragment extends BaseFragment {
 
         if (!weeklyScheduleAdapter.containsScheduleForCurrentDay())
             menu.removeItem(R.id.action_today);
+        else {
+            MenuItem item = menu.findItem(R.id.action_today);
+            LayerDrawable icon = (LayerDrawable) item.getIcon();
+
+            BadgeDrawableUtil.INSTANCE.setNumber(getContext(), icon, Calendar.getInstance(Locale
+                    .getDefault()).get(Calendar.DAY_OF_MONTH));
+        }
     }
 
     @Override

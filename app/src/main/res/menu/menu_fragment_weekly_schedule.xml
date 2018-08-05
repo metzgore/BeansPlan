@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/action_today"
-        android:icon="@drawable/ic_today"
+        android:icon="@drawable/ic_calendar_with_day"
         android:title="@string/action_today"
         app:showAsAction="ifRoom"/>
 
