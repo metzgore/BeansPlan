@@ -128,7 +128,7 @@ public class WeeklyScheduleFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
 
-        int currentDay = Calendar.getInstance(Locale.getDefault()).get(Calendar.DAY_OF_MONTH)
+        int currentDay = Calendar.getInstance(Locale.getDefault()).get(Calendar.DAY_OF_MONTH);
 
         if (getActivity() != null && currentDay != dayOfMonth) {
             dayOfMonth = currentDay;
