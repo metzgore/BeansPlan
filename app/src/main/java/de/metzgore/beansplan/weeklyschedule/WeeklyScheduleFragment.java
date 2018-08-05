@@ -49,6 +49,7 @@ public class WeeklyScheduleFragment extends BaseFragment {
     private Date selectedDate;
     private WeeklyScheduleViewModel viewModel;
     private boolean scheduleContainsCurrentDay;
+    private int dayOfMonth = 0;
 
     @Inject
     WeeklyScheduleRepository repo;
@@ -72,6 +73,8 @@ public class WeeklyScheduleFragment extends BaseFragment {
         } else {
             selectedDate = new Date();
         }
+
+        dayOfMonth = Calendar.getInstance(Locale.getDefault()).get(Calendar.DAY_OF_MONTH);
 
         setHasOptionsMenu(true);
 
@@ -124,6 +127,14 @@ public class WeeklyScheduleFragment extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        int currentDay = Calendar.getInstance(Locale.getDefault()).get(Calendar.DAY_OF_MONTH)
+
+        if (getActivity() != null && currentDay != dayOfMonth) {
+            dayOfMonth = currentDay;
+            getActivity().invalidateOptionsMenu();
+        }
+
         viewModel.loadSchedule();
     }
 
@@ -144,8 +155,7 @@ public class WeeklyScheduleFragment extends BaseFragment {
             MenuItem item = menu.findItem(R.id.action_today);
             LayerDrawable icon = (LayerDrawable) item.getIcon();
 
-            BadgeDrawableUtil.INSTANCE.setNumber(getContext(), icon, Calendar.getInstance(Locale
-                    .getDefault()).get(Calendar.DAY_OF_MONTH));
+            BadgeDrawableUtil.INSTANCE.setNumber(getContext(), icon, dayOfMonth);
         }
     }
 
