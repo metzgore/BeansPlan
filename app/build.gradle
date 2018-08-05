@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-allopen'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.cookpad.android.licensetools'
 
 allOpen {
@@ -19,6 +20,12 @@ android {
         versionCode 2
         versionName "1.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas".toString())
+            }
+        }
     }
 
     signingConfigs {
@@ -158,6 +165,7 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$support_version"
     implementation "com.android.support:support-v4:$support_version"
     implementation "com.android.support:design:$support_version"
+    implementation "com.android.support:preference-v7:$support_version"
 
     implementation 'com.google.code.gson:gson:2.8.2'
 

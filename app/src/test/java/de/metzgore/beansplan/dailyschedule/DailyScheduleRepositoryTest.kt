@@ -4,15 +4,17 @@ import android.arch.core.executor.testing.InstantTaskExecutorRule
 import de.metzgore.beansplan.LiveDataTestUtil
 import de.metzgore.beansplan.data.room.ScheduleRoomDao
 import de.metzgore.beansplan.mock
+import de.metzgore.beansplan.utils.InstantAppExecutors
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.*
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.verify
 import java.util.*
 
 class DailyScheduleRepositoryTest {
 
     private val scheduleDao = mock<ScheduleRoomDao>()
-    private val repo = DailyScheduleRepository(scheduleDao)
+    private val repo = DailyScheduleRepository(scheduleDao, InstantAppExecutors())
 
     @Rule
     @JvmField

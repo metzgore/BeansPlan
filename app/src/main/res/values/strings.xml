@@ -11,6 +11,11 @@
     <string name="alert_message_no_daily_schedule">Tagesplan nicht vorhanden</string>
     <string name="alert_message_load_weekly_schedule">Wochenplan wird geladen</string>
 
+    <string name="alert_message_no_reminders">Keine Erinnerungen vorhanden</string>
+    <string name="alert_message_load_reminders">Erinnerungen werden geladen</string>
+    <string name="button_text_edit_reminder">Bearbeiten</string>
+    <string name="button_text_delete_reminder">Löschen</string>
+
     <string name="action_retry">Wiederholen</string>
     <string name="action_refresh">Aktualisieren</string>
     <string name="action_today">Heute</string>
@@ -20,10 +25,21 @@
     <string name="drawer_close">Close navigation drawer</string>
 
     <string name="drawer_item_weekly_schedule">Wochenplan</string>
+    <string name="drawer_item_reminders">Erinnerungen</string>
     <string name="drawer_item_setting">Einstellungen</string>
     <string name="drawer_item_about">Über</string>
 
     <string name="activity_settings_title">Einstellungen</string>
+
+    <string name="pref_reminder_category_title">Erinnerungen</string>
+    <string name="pref_notification_settings_title">Benachrichtigungseinstellungen</string>
+    <string name="pref_notification_vibration_title">Vibration bei Benachrichtigung</string>
+    <string name="pref_notification_ringtone_title">Benachrichtigungston</string>
+    <string name="pref_notification_ringtone_summary_silent">Kein Benachrichtigungston</string>
+    <string name="pref_hide_past_shows_title">Vergangene Sendungen ausblenden</string>
+    <string name="pref_hide_past_shows_summary">Blende vergangene Sendungen im Tages- und Wochenplan aus</string>
+    <string name="pref_hide_past_days_title">Vergangene Tage ausblenden</string>
+    <string name="pref_hide_past_days_summary">Blende vergangene Tage im Wochenplan aus</string>
 
     <string name="activity_about_title">Über &appname;</string>
     <string name="activity_about_version">Version</string>
@@ -48,11 +64,21 @@
     <string name="activity_about_rbtv_playstore">Offizielle Pocket Beans App für Android</string>
     <string name="activity_about_misc_data_url">Sendeplandaten</string>
 
-    <string name="pref_hide_past_shows_title">Vergangene Sendungen ausblenden</string>
-    <string name="pref_hide_past_shows_summary">Blende vergangene Sendungen im Tages- und Wochenplan aus</string>
+    <string name="hyphen_separated_text">%1$s - %2$s</string>
 
-    <string name="pref_hide_past_days_title">Vergangene Tage ausblenden</string>
-    <string name="pref_hide_past_days_summary">Blende vergangene Tage im Wochenplan aus</string>
-
-    <string name="fragment_weekly_schedule_subtitle">%s - %s</string>
+    <string name="notification_content_text">Beginnt %1$s</string>
+    <string name="notification_action_youtube">Auf YouTube ansehen</string>
+    <string name="notification_action_twitch">Auf Twitch ansehen</string>
+    <string name="notification_channel_reminder_name">Erinnerungen</string>
+    <string name="notification_channel_reminder_description">Erinnerungen zum Start einer Sendung im Livestream </string>
+    <string name="reminder_deletion_dialog_title">Erinnerung löschen</string>
+    <string name="reminder_deletion_dialog_message">Möchtest du die Erinnerung wirklich löschen?</string>
+    <string name="reminder_deletion_dialog_negative">Nein</string>
+    <string name="reminder_deletion_dialog_positive">Ja</string>
+    <string name="reminder_deletion_update_dialog_title">Erinnerung bearbeiten oder löschen</string>
+    <string name="reminder_deletion_update_dialog_message">Möchtest du die Erinnerung bearbeiten oder löschen?</string>
+    <string name="reminder_deletion_update_dialog_negative">Bearbeiten</string>
+    <string name="reminder_deletion_update_dialog_positive">Löschen</string>
+    <string name="reminder_deletion_update_dialog_neutral">Abbrechen</string>
+    <string name="reminder_list_item_date">Erinnerung am %1$s</string>
 </resources>

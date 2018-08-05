@@ -5,8 +5,15 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import de.metzgore.beansplan.data.Resource
+import de.metzgore.beansplan.data.ShowResponse
 import de.metzgore.beansplan.data.Status
-import de.metzgore.beansplan.data.room.*
+import de.metzgore.beansplan.data.room.DailySchedule
+import de.metzgore.beansplan.data.room.Reminder
+import de.metzgore.beansplan.data.room.Show
+import de.metzgore.beansplan.data.room.WeeklySchedule
+import de.metzgore.beansplan.data.room.relations.DailyScheduleWithShows
+import de.metzgore.beansplan.data.room.relations.ShowWithReminder
+import de.metzgore.beansplan.data.room.relations.WeeklyScheduleWithDailySchedules
 import de.metzgore.beansplan.util.ClockImpl
 import java.util.*
 import java.util.concurrent.CountDownLatch
@@ -39,10 +46,12 @@ object LiveDataTestUtil {
 
         scheduleWithShows.dailySchedule = dailyScheduleRoom
 
-        val showsRoom = arrayListOf<Show>()
+        val showsRoom = arrayListOf<ShowWithReminder>()
         dailySchedule.shows.forEach { show ->
-            showsRoom.add(Show(show.id, dailySchedule.date!!, show.title, show.topic, show.timeStart,
-                    show.timeEnd, show.length, show.game, show.youtubeId, show.type))
+            val showWithReminder = ShowWithReminder()
+            showWithReminder.show = Show(show.id, dailySchedule.date!!, show.title, show.topic, show.timeStart,
+                    show.timeEnd, show.length, show.game, show.youtubeId, show.type, false)
+            showsRoom.add(showWithReminder)
         }
 
         scheduleWithShows.shows = showsRoom
@@ -65,6 +74,24 @@ object LiveDataTestUtil {
 
         val liveData = MutableLiveData<DailyScheduleWithShows>()
         liveData.value = scheduleWithShows
+
+        return liveData
+    }
+
+    fun createFilledShowWithReminderLiveData(): LiveData<List<ShowWithReminder>> {
+        val showWithReminder = ShowWithReminder()
+        showWithReminder.show = Show(1, Date(), "", "", Date(), Date(), 0, "", "", ShowResponse.Type.LIVE, false, 1)
+        showWithReminder.reminder = listOf(Reminder(1, Date()))
+
+        val liveData = MutableLiveData<List<ShowWithReminder>>()
+        liveData.value = listOf(showWithReminder)
+
+        return liveData
+    }
+
+    fun createEmptyShowWithReminderLiveData(): LiveData<List<ShowWithReminder>> {
+        val liveData = MutableLiveData<List<ShowWithReminder>>()
+        liveData.value = emptyList()
 
         return liveData
     }

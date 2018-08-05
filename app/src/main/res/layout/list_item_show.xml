@@ -113,14 +113,31 @@
                     android:textColor="@color/colorAccent"
                     tools:text="PREMIERE" />
 
-                <ImageView
-                    android:id="@+id/list_view_item_show_youtube_image_view"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="@{v -> viewModel.openVideo(context)}"
-                    android:textAlignment="textEnd"
-                    app:srcCompat="@drawable/ic_youtube"
-                    app:visibleInvisible="@{viewModel.onYoutube}" />
+                    android:orientation="horizontal"
+                    tools:ignore="RtlHardcoded">
+
+                    <ImageView
+                        android:id="@+id/list_view_item_show_youtube_image_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{() -> viewModel.openVideo(context)}"
+                        android:textAlignment="textEnd"
+                        app:srcCompat="@drawable/ic_youtube_a50"
+                        app:visibleGone="@{viewModel.onYoutube}" />
+
+                    <ImageView
+                        android:id="@+id/list_view_item_show_reminder_image_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:onClick="@{() -> viewModel.saveReminder()}"
+                        android:textAlignment="textStart"
+                        app:srcCompat="@drawable/ic_reminder_a50"
+                        app:visibleGone="@{viewModel.reminderVisible}" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </FrameLayout>

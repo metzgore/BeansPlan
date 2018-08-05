@@ -3,6 +3,7 @@ package de.metzgore.beansplan.settings.repository;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 
 import de.metzgore.beansplan.R;
 
@@ -22,6 +23,22 @@ public class AppSettingsImp implements AppSettings {
     @Override
     public boolean shouldHidePastDays() {
         return getBooleanPreference(R.string.pref_key_hide_past_days, false);
+    }
+
+    @Override
+    public String getRingtonePreferenceValue() {
+        return getStringPreference(R.string.pref_key_notification_tone, Settings.System
+                .DEFAULT_NOTIFICATION_URI.toString());
+    }
+
+    @Override
+    public void setRingtonePreferenceValue(String uri) {
+        putStringPreference(R.string.pref_key_notification_tone, uri);
+    }
+
+    @Override
+    public boolean shouldVibrateOnNotification() {
+        return getBooleanPreference(R.string.pref_key_notification_vibrate, true);
     }
 
     private boolean getBooleanPreference(final int keyResourceId, final boolean defaultValue) {

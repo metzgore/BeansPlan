@@ -18,10 +18,18 @@ import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 import de.metzgore.beansplan.R;
-import de.metzgore.beansplan.data.room.DailyScheduleWithShows;
+import de.metzgore.beansplan.data.room.relations.ShowWithReminder;
 import de.metzgore.beansplan.databinding.LayoutScheduleBaseBinding;
+import de.metzgore.beansplan.notifications.NotificationHelper;
+import de.metzgore.beansplan.reminders.RemindersRepository;
+import de.metzgore.beansplan.reminders.RemindersViewModel;
+import de.metzgore.beansplan.settings.repository.AppSettings;
+import de.metzgore.beansplan.shared.ReminderDeletionDialogFragment;
+import de.metzgore.beansplan.shared.ReminderDeletionOrUpdateDialogFragment;
+import de.metzgore.beansplan.shared.ReminderTimePickerDialogFragment;
 import de.metzgore.beansplan.shared.UpdatableScheduleFragment;
 import de.metzgore.beansplan.util.di.DailyScheduleViewModelFactory;
+import de.metzgore.beansplan.util.di.RemindersViewModelFactory;
 
 public class DailyScheduleFragment extends Fragment implements UpdatableScheduleFragment {
 
@@ -32,9 +40,16 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
     private Date dateKey;
     private DailyScheduleAdapter dailyScheduleAdapter;
     private DailyScheduleViewModel viewModel;
+    private RemindersViewModel remindersViewModel;
 
     @Inject
     DailyScheduleRepository repo;
+
+    @Inject
+    RemindersRepository remindersRepo;
+
+    @Inject
+    AppSettings appSettings;
 
     public static Fragment newInstance(Date date) {
         DailyScheduleFragment fragment = new DailyScheduleFragment();
@@ -57,8 +72,6 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        dailyScheduleAdapter = new DailyScheduleAdapter();
-
         Bundle args = getArguments();
 
         if (args != null) {
@@ -70,13 +83,58 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
         viewModel = ViewModelProviders.of(this, new DailyScheduleViewModelFactory(repo)).get
                 (DailyScheduleViewModel.class);
 
-        subscribeUi(viewModel);
+        remindersViewModel = ViewModelProviders.of(getActivity(), new RemindersViewModelFactory
+                (remindersRepo)).get(RemindersViewModel.class);
+
+        dailyScheduleAdapter = new DailyScheduleAdapter(viewModel, remindersViewModel);
+
+        subscribeUi(viewModel, remindersViewModel);
     }
 
-    private void subscribeUi(DailyScheduleViewModel viewModel) {
+    private void subscribeUi(DailyScheduleViewModel viewModel, RemindersViewModel
+            remindersViewModel) {
         viewModel.getSchedule().observe(this, schedule -> {
             if (schedule != null) {
                 dailyScheduleAdapter.setShowList(schedule.sortedShows());
+            }
+        });
+
+        remindersViewModel.getTriggerDeletionOrUpdateDialog().observe(this, showWithReminder -> {
+            if (showWithReminder != null && showWithReminder.getContentIfNotHandled() != null) {
+                ReminderDeletionOrUpdateDialogFragment dialog =
+                        ReminderDeletionOrUpdateDialogFragment.Companion.newInstance();
+                dialog.setTargetFragment(this, 0);
+                dialog.show(getFragmentManager(), "DELETION_OR_UPDATE_DIALOG");
+            }
+        });
+
+        remindersViewModel.getTriggerDeletionDialog().observe(this, showWithReminder -> {
+            if (showWithReminder != null && showWithReminder.getContentIfNotHandled() != null) {
+                ReminderDeletionDialogFragment dialog = ReminderDeletionDialogFragment.Companion
+                        .newInstance();
+                dialog.setTargetFragment(this, 0);
+                dialog.show(getFragmentManager(), "DELETION_DIALOG");
+            }
+        });
+
+        remindersViewModel.getTriggerTimePickerDialog().observe(this, showWithReminder -> {
+            if (showWithReminder != null) {
+                ShowWithReminder content = showWithReminder.getContentIfNotHandled();
+                if (content != null) {
+                    ReminderTimePickerDialogFragment dialog = ReminderTimePickerDialogFragment
+                            .Companion.newInstance(content.getReminder().get(0).getTimestamp()
+                                    .getTime());
+                    dialog.setTargetFragment(this, 0);
+                    dialog.show(getFragmentManager(), "TIME_PICKER_DIALOG");
+                }
+            }
+        });
+
+        remindersViewModel.getReminders().observe(this, showWithReminders -> {
+            if (showWithReminders != null) {
+                for (ShowWithReminder showWithReminder : showWithReminders) {
+                    NotificationHelper.INSTANCE.scheduleNotification(getContext(), appSettings, showWithReminder);
+                }
             }
         });
     }

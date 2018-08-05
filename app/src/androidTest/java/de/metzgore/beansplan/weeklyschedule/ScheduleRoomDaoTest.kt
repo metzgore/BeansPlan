@@ -3,9 +3,12 @@ package de.metzgore.beansplan.weeklyschedule
 import TestUtils
 import de.metzgore.beansplan.DbTest
 import de.metzgore.beansplan.LiveDataTestUtil.getValue
+import de.metzgore.beansplan.data.ShowResponse
 import de.metzgore.beansplan.data.room.DailySchedule
+import de.metzgore.beansplan.data.room.Reminder
 import de.metzgore.beansplan.data.room.Show
 import de.metzgore.beansplan.data.room.WeeklySchedule
+import de.metzgore.beansplan.data.room.relations.ShowWithReminder
 import de.metzgore.beansplan.util.Clock
 import io.mockk.every
 import io.mockk.mockk
@@ -17,7 +20,7 @@ import java.util.*
 
 class ScheduleRoomDaoTest : DbTest() {
 
-    val clock = mockk<Clock>()
+    private val clock = mockk<Clock>()
 
     @Test
     fun insertAndReadWeeklySchedule() {
@@ -84,7 +87,7 @@ class ScheduleRoomDaoTest : DbTest() {
             dailySchedules.add(DailySchedule(date, weeklySchedule.id))
         }
 
-        db.scheduleDao().insertDailySchedules(dailySchedules)
+        db.scheduleDao().insertDailySchedules(*dailySchedules.toTypedArray())
 
         rawSchedule.dateKeys.forEach { date ->
             val loaded = getValue(db.scheduleDao().getDailyScheduleWithShows(date))
@@ -145,12 +148,12 @@ class ScheduleRoomDaoTest : DbTest() {
         rawSchedule.schedule.forEach { (date, shows) ->
             shows.forEach { show ->
                 showsRoom.add(Show(show.id, date, show.title, show.topic, show.timeStart,
-                        show.timeEnd, show.length, show.game, show.youtubeId, show.type))
+                        show.timeEnd, show.length, show.game, show.youtubeId, show.type, false))
             }
 
         }
 
-        db.scheduleDao().insertShows(showsRoom)
+        db.scheduleDao().insertShows(*showsRoom.toTypedArray())
 
         rawSchedule.dateKeys.forEach { date ->
             val loaded = getValue(db.scheduleDao().getDailyScheduleWithShows(date))
@@ -179,12 +182,12 @@ class ScheduleRoomDaoTest : DbTest() {
         rawSchedule.schedule.forEach { (date, shows) ->
             shows.forEach { show ->
                 showsRoom.add(Show(show.id, date, show.title, show.topic, show.timeStart,
-                        show.timeEnd, show.length, show.game, show.youtubeId, show.type))
+                        show.timeEnd, show.length, show.game, show.youtubeId, show.type, false))
             }
 
         }
 
-        db.scheduleDao().insertShows(showsRoom)
+        db.scheduleDao().insertShows(*showsRoom.toTypedArray())
 
         rawSchedule.dateKeys.forEach { date ->
             val loaded = getValue(db.scheduleDao().getDailyScheduleWithShows(date))
@@ -210,12 +213,12 @@ class ScheduleRoomDaoTest : DbTest() {
         rawSchedule.schedule.forEach { (date, shows) ->
             shows.forEach { show ->
                 showsRoom.add(Show(show.id, date, show.title, show.topic, show.timeStart,
-                        show.timeEnd, show.length, show.game, show.youtubeId, show.type))
+                        show.timeEnd, show.length, show.game, show.youtubeId, show.type, false))
             }
 
         }
 
-        db.scheduleDao().insertShows(showsRoom)
+        db.scheduleDao().insertShows(*showsRoom.toTypedArray())
 
         rawSchedule.dateKeys.forEach { date ->
             val loaded = getValue(db.scheduleDao().getDailyScheduleWithShows(date))
@@ -228,7 +231,7 @@ class ScheduleRoomDaoTest : DbTest() {
     }
 
     @Test
-    fun upsertAndMultipleWeeklySchedules() {
+    fun upsertAndReadMultipleWeeklySchedules() {
         every { clock.nowInMillis() } returns 1L
 
         var rawSchedule = TestUtils.createWeeklyScheduleOneWeek()
@@ -426,5 +429,171 @@ class ScheduleRoomDaoTest : DbTest() {
                 .dailySchedulesWithShows[13]))
         assertThat(updatedDailySchedule, `is`(notNullValue()))
         assertThat(updatedDailySchedule.shows.size, `is`(4))
+    }
+
+    @Test
+    fun testMarkShowDeleted() {
+        every { clock.nowInMillis() } returns 1L
+
+        val rawSchedule = TestUtils.createWeeklyScheduleOneWeek()
+
+        db.scheduleDao().upsertSchedule(clock, rawSchedule)
+
+        val showResponse = rawSchedule.schedule[rawSchedule.dateKeys[0]]!!.removeAt(0)
+
+        every { clock.nowInMillis() } returns 2L
+
+        db.scheduleDao().upsertSchedule(clock, rawSchedule)
+
+        val loaded = getValue(db.scheduleDao().getWeeklyScheduleWithDailySchedules())
+
+        assertThat(loaded, `is`(notNullValue()))
+
+        val dailySchedule = getValue(db.scheduleDao().getDailyScheduleWithShows(loaded
+                .dailySchedulesWithShows[0]))
+        assertThat(dailySchedule, `is`(notNullValue()))
+        dailySchedule.shows.forEach {
+            if (it.show.id == showResponse.id) {
+                assertThat(it.show.deleted, `is`(true))
+            } else {
+                assertThat(it.show.deleted, `is`(false))
+            }
+        }
+    }
+
+    @Test
+    fun testInsertAndReadReminder() {
+        val timestamp = 1L
+        val date = Date()
+
+        val rawSchedule = TestUtils.createWeeklyScheduleOneWeek()
+        val weeklySchedule = WeeklySchedule(timestamp = timestamp, weeklyScheduleRaw = rawSchedule)
+        val show = Show(1, date, "", "", Date(), Date(), 0, "", "", ShowResponse.Type.LIVE, false, 1)
+
+
+        db.scheduleDao().insert(WeeklySchedule(timestamp = timestamp, weeklyScheduleRaw = rawSchedule))
+        db.scheduleDao().insertDailySchedules(DailySchedule(date, weeklySchedule.id))
+        db.scheduleDao().insertShows(Show(1, date, "", "", Date(), Date(), 0, "", "", ShowResponse.Type.LIVE, false))
+
+        val showWithReminder = ShowWithReminder()
+        showWithReminder.show = show
+        showWithReminder.reminder = listOf(Reminder(1, date))
+
+        db.scheduleDao().upsertReminder(showWithReminder)
+
+        var loaded = getValue(db.scheduleDao().getShowsWithReminders())
+
+        assertThat(loaded, notNullValue())
+        assertThat(loaded.size, `is`(1))
+
+        var loadedShowWithReminder = loaded[0]
+
+        assertThat(loadedShowWithReminder.show.id, `is`(1L))
+        assertThat(loadedShowWithReminder.reminder, notNullValue())
+        assertThat(loadedShowWithReminder.reminder!!.size, `is`(1))
+
+        var reminder = loadedShowWithReminder.reminder!![0]
+
+        assertThat(reminder.id, `is`(1L))
+        assertThat(reminder.timestamp, `is`(date))
+
+        //update reminder
+
+        val updatedDate = Date()
+        showWithReminder.reminder = listOf(Reminder(1, updatedDate))
+
+        db.scheduleDao().upsertReminder(showWithReminder)
+
+        loaded = getValue(db.scheduleDao().getShowsWithReminders())
+
+        assertThat(loaded, notNullValue())
+        assertThat(loaded.size, `is`(1))
+
+        loadedShowWithReminder = loaded[0]
+
+        assertThat(loadedShowWithReminder.show.id, `is`(1L))
+        assertThat(loadedShowWithReminder.reminder, notNullValue())
+        assertThat(loadedShowWithReminder.reminder!!.size, `is`(1))
+
+        reminder = loadedShowWithReminder.reminder!![0]
+
+        assertThat(reminder.id, `is`(1L))
+        assertThat(reminder.timestamp, `is`(updatedDate))
+    }
+
+    @Test
+    fun testDeleteReminderByObject() {
+        val timestamp = 1L
+        val date = Date()
+
+        val rawSchedule = TestUtils.createWeeklyScheduleOneWeek()
+        val weeklySchedule = WeeklySchedule(timestamp = timestamp, weeklyScheduleRaw = rawSchedule)
+
+
+        db.scheduleDao().insert(WeeklySchedule(timestamp = timestamp, weeklyScheduleRaw = rawSchedule))
+        db.scheduleDao().insertDailySchedules(DailySchedule(date, weeklySchedule.id))
+        db.scheduleDao().insertReminder(Reminder(1, date))
+        db.scheduleDao().insertShows(Show(1, date, "", "", Date(), Date(), 0, "", "", ShowResponse.Type.LIVE, false, 1))
+
+        var loaded = getValue(db.scheduleDao().getShowsWithReminders())
+
+        assertThat(loaded, notNullValue())
+        assertThat(loaded.size, `is`(1))
+
+        val showWithReminder = loaded[0]
+
+        assertThat(showWithReminder.show.id, `is`(1L))
+        assertThat(showWithReminder.reminder, notNullValue())
+        assertThat(showWithReminder.reminder!!.size, `is`(1))
+
+        val reminder = showWithReminder.reminder!![0]
+
+        assertThat(reminder.id, `is`(1L))
+        assertThat(reminder.timestamp, `is`(date))
+
+        db.scheduleDao().deleteReminder(showWithReminder)
+
+        loaded = getValue(db.scheduleDao().getShowsWithReminders())
+
+        assertThat(loaded, notNullValue())
+        assertThat(loaded.size, `is`(0))
+    }
+
+    @Test
+    fun testDeleteReminderById() {
+        val timestamp = 1L
+        val date = Date()
+
+        val rawSchedule = TestUtils.createWeeklyScheduleOneWeek()
+        val weeklySchedule = WeeklySchedule(timestamp = timestamp, weeklyScheduleRaw = rawSchedule)
+
+
+        db.scheduleDao().insert(WeeklySchedule(timestamp = timestamp, weeklyScheduleRaw = rawSchedule))
+        db.scheduleDao().insertDailySchedules(DailySchedule(date, weeklySchedule.id))
+        db.scheduleDao().insertReminder(Reminder(1, date))
+        db.scheduleDao().insertShows(Show(1, date, "", "", Date(), Date(), 0, "", "", ShowResponse.Type.LIVE, false, 1))
+
+        var loaded = getValue(db.scheduleDao().getShowsWithReminders())
+
+        assertThat(loaded, notNullValue())
+        assertThat(loaded.size, `is`(1))
+
+        val showWithReminder = loaded[0]
+
+        assertThat(showWithReminder.show.id, `is`(1L))
+        assertThat(showWithReminder.reminder, notNullValue())
+        assertThat(showWithReminder.reminder!!.size, `is`(1))
+
+        val reminder = showWithReminder.reminder!![0]
+
+        assertThat(reminder.id, `is`(1L))
+        assertThat(reminder.timestamp, `is`(date))
+
+        db.scheduleDao().deleteReminder(reminder.id)
+
+        loaded = getValue(db.scheduleDao().getShowsWithReminders())
+
+        assertThat(loaded, notNullValue())
+        assertThat(loaded.size, `is`(0))
     }
 }

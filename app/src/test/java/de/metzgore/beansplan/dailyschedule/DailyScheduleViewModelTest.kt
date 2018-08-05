@@ -4,7 +4,7 @@ import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import de.metzgore.beansplan.LiveDataTestUtil
-import de.metzgore.beansplan.data.room.DailyScheduleWithShows
+import de.metzgore.beansplan.data.room.relations.DailyScheduleWithShows
 import de.metzgore.beansplan.mock
 import org.hamcrest.CoreMatchers.*
 import org.junit.Assert.assertThat
@@ -36,7 +36,6 @@ class DailyScheduleViewModelTest {
     @Test
     fun testLoadDailySchedule() {
         dailyScheduleViewModel.schedule.observeForever(mock())
-        dailyScheduleViewModel.isEmpty.observeForever(mock())
 
         val date = Date()
 
