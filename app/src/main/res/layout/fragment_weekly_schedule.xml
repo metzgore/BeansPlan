@@ -1,12 +1,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewModel"
-            type="de.metzgore.beansplan.weeklyschedule.WeeklyScheduleViewModel"/>
+            type="de.metzgore.beansplan.weeklyschedule.WeeklyScheduleViewModel" />
     </data>
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -27,7 +27,7 @@
                 android:drawableTop="@drawable/ic_schedule_not_available"
                 android:text="@string/alert_message_no_weekly_schedule"
                 android:textSize="24sp"
-                app:visibleGone="@{!safeUnbox(viewModel.isLoading) &amp;&amp; safeUnbox(viewModel.isEmpty)}"/>
+                app:visibleGone="@{!safeUnbox(viewModel.isLoading) &amp;&amp; safeUnbox(viewModel.isEmpty)}" />
 
             <LinearLayout
                 android:id="@+id/fragment_weekly_schedule_loading_view"
@@ -41,7 +41,7 @@
                     android:id="@+id/fragment_weekly_schedule_loading_view_progress"
                     style="?android:attr/progressBarStyleLarge"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/fragment_weekly_schedule_loading_view_text"
@@ -49,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/alert_message_load_weekly_schedule"
-                    android:textSize="24sp"/>
+                    android:textSize="24sp" />
 
             </LinearLayout>
 
@@ -71,7 +71,7 @@
                     app:tabIndicatorHeight="2dp"
                     app:tabMode="scrollable"
                     app:tabSelectedTextColor="@color/white"
-                    app:tabTextColor="@color/white"/>
+                    app:tabTextColor="@color/white" />
             </android.support.v4.view.ViewPager>
         </FrameLayout>
     </android.support.v4.widget.SwipeRefreshLayout>

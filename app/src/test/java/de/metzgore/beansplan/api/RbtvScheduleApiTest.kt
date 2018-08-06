@@ -2,8 +2,7 @@ package de.metzgore.beansplan.api
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import de.metzgore.beansplan.LiveDataTestUtil.getValue
-import de.metzgore.beansplan.data.DailySchedule
-import de.metzgore.beansplan.data.WeeklySchedule
+import de.metzgore.beansplan.data.WeeklyScheduleResponse
 import de.metzgore.beansplan.util.LiveDataCallAdapterFactory
 import de.metzgore.beansplan.util.di.Injector
 import okhttp3.mockwebserver.MockResponse
@@ -57,7 +56,7 @@ class RbtvScheduleApiTest {
         val request = mockWebServer.takeRequest()
         assertThat(request.path, `is`("/api/1.0/schedule/schedule.json"))
 
-        assertThat<WeeklySchedule>(weeklySchedule, notNullValue())
+        assertThat<WeeklyScheduleResponse>(weeklySchedule, notNullValue())
         assertThat(weeklySchedule.isEmpty, `is`(false))
 
         assertThat(weeklySchedule.size, `is`(7))
@@ -68,25 +67,9 @@ class RbtvScheduleApiTest {
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
 
-        //test startDate
-
-        assertThat(DateUtils.truncatedEquals(weeklySchedule.startDate!!, calendar.time, Calendar.YEAR), `is`(true))
-        assertThat(DateUtils.truncatedEquals(weeklySchedule.startDate!!, calendar.time, Calendar.MONTH), `is`(true))
-        assertThat(DateUtils.truncatedEquals(weeklySchedule.startDate!!, calendar.time, Calendar.DAY_OF_MONTH), `is`(true))
-
-        //test endDate
-
-        calendar.set(Calendar.DAY_OF_MONTH, 13)
-
-        assertThat(DateUtils.truncatedEquals(weeklySchedule.endDate!!, calendar.time, Calendar.YEAR), `is`(true))
-        assertThat(DateUtils.truncatedEquals(weeklySchedule.endDate!!, calendar.time, Calendar.MONTH), `is`(true))
-        assertThat(DateUtils.truncatedEquals(weeklySchedule.endDate!!, calendar.time, Calendar.DAY_OF_MONTH), `is`(true))
-
         // test dateKeys
 
         val dateKeys = weeklySchedule.dateKeys
-
-        calendar.set(Calendar.DAY_OF_MONTH, 7)
 
         dateKeys.forEach {
             assertThat(DateUtils.truncatedEquals(it, calendar.time, Calendar.YEAR), `is`(true))
@@ -95,30 +78,6 @@ class RbtvScheduleApiTest {
 
             calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1)
         }
-    }
-
-    @Test
-    fun scheduleOfDay() {
-        enqueueResponse("daily_schedule_09_05_18.json")
-        val dailySchedule = (getValue(service.scheduleOfDay(2018, "05", "09")) as ApiSuccessResponse).body
-
-        val request = mockWebServer.takeRequest()
-        assertThat(request.path, `is`("/api/1.0/schedule/2018/05/09.json"))
-
-        assertThat<DailySchedule>(dailySchedule, notNullValue())
-        assertThat(dailySchedule.isEmpty, `is`(false))
-
-        val calendar = GregorianCalendar()
-        calendar.set(2018, Calendar.MAY, 9)
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-
-        assertThat(DateUtils.truncatedEquals(dailySchedule.date!!, calendar.time, Calendar.YEAR), `is`(true))
-        assertThat(DateUtils.truncatedEquals(dailySchedule.date!!, calendar.time, Calendar.MONTH), `is`(true))
-        assertThat(DateUtils.truncatedEquals(dailySchedule.date!!, calendar.time, Calendar.DAY_OF_MONTH), `is`(true))
-
-        assertThat(dailySchedule.shows.size, `is`(20))
     }
 
     private fun enqueueResponse(fileName: String, headers: Map<String, String> = emptyMap()) {

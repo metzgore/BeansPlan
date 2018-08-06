@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewModel"
-            type="de.metzgore.beansplan.shared.ShowViewModel"/>
+            type="de.metzgore.beansplan.shared.ShowViewModel" />
     </data>
 
     <FrameLayout
@@ -38,7 +38,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@{viewModel.getStartTimeFormatted(context)}"
-                    tools:text="Start"/>
+                    tools:text="Start" />
 
                 <TextView
                     android:id="@+id/list_item_show_time_dash"
@@ -46,8 +46,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="-"
-                    tools:text="-"
-                    tools:ignore="HardcodedText" />
+                    tools:ignore="HardcodedText"
+                    tools:text="-" />
 
                 <TextView
                     android:id="@+id/list_item_show_end_text_view"
@@ -55,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@{viewModel.getEndTimeFormatted(context)}"
-                    tools:text="End"/>
+                    tools:text="End" />
 
             </LinearLayout>
 
@@ -76,7 +76,7 @@
                     android:lines="1"
                     android:text="@{viewModel.title}"
                     android:textStyle="bold"
-                    tools:text="Title"/>
+                    tools:text="Title" />
 
                 <TextView
                     android:id="@+id/list_item_show_topic_text_view"
@@ -86,8 +86,7 @@
                     android:maxLines="2"
                     android:minLines="1"
                     android:text="@{viewModel.topic}"
-                    tools:text="Topic"/>
-
+                    tools:text="Topic" />
             </LinearLayout>
 
             <LinearLayout
@@ -103,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:text="@{viewModel.lengthFormatted}"
                     android:textAlignment="textEnd"
-                    tools:text="12 h 10 min"/>
+                    tools:text="12 h 10 min" />
 
                 <TextView
                     android:id="@+id/list_item_show_type_text_view"
@@ -112,16 +111,33 @@
                     android:text="@{viewModel.typeFormatted}"
                     android:textAlignment="textEnd"
                     android:textColor="@color/colorAccent"
-                    tools:text="PREMIERE"/>
+                    tools:text="PREMIERE" />
 
-                <ImageView
-                    android:id="@+id/list_view_item_show_youtube_image_view"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAlignment="textEnd"
-                    app:srcCompat="@drawable/ic_youtube"
-                    app:visibleInvisible="@{viewModel.onYoutube}"/>
+                    android:orientation="horizontal"
+                    tools:ignore="RtlHardcoded">
 
+                    <ImageView
+                        android:id="@+id/list_view_item_show_youtube_image_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{() -> viewModel.openVideo(context)}"
+                        android:textAlignment="textEnd"
+                        app:srcCompat="@drawable/ic_youtube_a50"
+                        app:visibleGone="@{viewModel.onYoutube}" />
+
+                    <ImageView
+                        android:id="@+id/list_view_item_show_reminder_image_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:onClick="@{() -> viewModel.saveReminder()}"
+                        android:textAlignment="textStart"
+                        app:srcCompat="@drawable/ic_reminder_a50"
+                        app:visibleGone="@{viewModel.reminderVisible}" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </FrameLayout>

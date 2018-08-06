@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="de.metzgore.beansplan">
+    package="de.metzgore.beansplan">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".BeansPlanApp"
@@ -15,8 +17,9 @@
             android:name=".MainActivity"
             android:launchMode="singleTop">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -26,7 +29,7 @@
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.metzgore.beansplan.MainActivity"/>
+                android:value="de.metzgore.beansplan.MainActivity" />
         </activity>
         <activity
             android:name=".about.AboutActivity"
@@ -35,8 +38,25 @@
             android:theme="@style/AppThemeAbout">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.metzgore.beansplan.MainActivity"/>
+                android:value="de.metzgore.beansplan.MainActivity" />
         </activity>
+
+        <receiver
+            android:name=".notifications.NotificationPublisher"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".notifications.ReminderBootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <!--<action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />-->
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <!-- For HTC devices -->
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="@string/pref_key_storage_settings_28_and_greater"
+        android:title="@string/pref_reminder_category_title">
+
+        <Preference
+            android:key="@string/pref_key_open_notification_settings"
+            android:title="@string/pref_notification_settings_title" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -2,7 +2,9 @@
 <resources>
     <string name="pref_key_hide_past_shows" translatable="false">pref_key_hide_past_shows</string>
     <string name="pref_key_hide_past_days" translatable="false">pref_key_hide_past_days</string>
-    <string name="pref_key_select_default_schedule" translatable="false">pref_key_select_default_plan</string>
-    <string name="pref_key_remember_last_opened_schedule" translatable="false">pref_key_remember_last_open_schedule</string>
-    <string name="pref_key_last_opened_schedule_id">pref_key_last_opened_schedule_id</string>
+    <string name="pref_key_notification_vibrate" translatable="false">pref_key_notification_vibrate</string>
+    <string name="pref_key_notification_tone" translatable="false">pref_key_notification_tone</string>
+    <string name="pref_key_storage_settings_27_and_below" translatable="false">pref_key_storage_settings_27_and_below</string>
+    <string name="pref_key_storage_settings_28_and_greater" translatable="false">pref_key_storage_settings_28_and_greater</string>
+    <string name="pref_key_open_notification_settings" translatable="false">pref_key_open_notification_settings</string>
 </resources>

@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-allopen'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.cookpad.android.licensetools'
 
 allOpen {
@@ -19,6 +20,12 @@ android {
         versionCode 2
         versionName "1.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas".toString())
+            }
+        }
     }
 
     signingConfigs {
@@ -39,7 +46,6 @@ android {
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-
         }
     }
 
@@ -143,23 +149,25 @@ dependencies {
     testImplementation "org.mockito:mockito-core:$mockito_version"
 
     //Android tests
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    androidTestImplementation('com.schibsted.spain:barista:2.4.0') {
+    androidTestImplementation('com.schibsted.spain:barista:2.5.0') {
         exclude group: 'com.android.support'
         exclude group: 'org.jetbrains.kotlin' // Only if you already use Kotlin in your project
     }
     androidTestImplementation "android.arch.core:core-testing:$arch_components_version"
     androidTestImplementation "org.mockito:mockito-core:$mockito_version"
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:$okhttp3_version"
+    androidTestImplementation 'io.mockk:mockk-android:1.8.6'
 
     //Support libs
     implementation "com.android.support:appcompat-v7:$support_version"
     implementation "com.android.support:support-v4:$support_version"
     implementation "com.android.support:design:$support_version"
+    implementation "com.android.support:preference-v7:$support_version"
 
-    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.google.code.gson:gson:2.8.5'
 
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
@@ -167,10 +175,8 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.7'
 
     implementation "android.arch.lifecycle:extensions:$arch_components_version"
-
-    implementation 'com.vincentbrison.openlibraries.android:dualcache:3.1.1'
-
-    implementation 'io.gsonfire:gson-fire:1.8.3'
+    implementation "android.arch.persistence.room:runtime:$arch_components_version"
+    kapt "android.arch.persistence.room:compiler:$arch_components_version"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
@@ -180,7 +186,7 @@ dependencies {
 
     implementation 'com.github.daniel-stoneuk:material-about-library:2.3.0'
 
-    implementation "com.mikepenz:iconics-core:3.0.3@aar"
+    implementation 'com.mikepenz:iconics-core:3.0.4@aar'
 
     implementation 'com.mikepenz:community-material-typeface:2.0.46.1@aar'
 

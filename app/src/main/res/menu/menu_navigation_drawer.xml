@@ -4,13 +4,14 @@
         android:id="@+id/menu_schedules"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_daily_schedule"
-            android:icon="@drawable/ic_today"
-            android:title="@string/drawer_item_daily_schedule"/>
-        <item
             android:id="@+id/nav_weekly_schedule"
-            android:icon="@drawable/ic_today"
-            android:title="@string/drawer_item_weekly_schedule"/>
+            android:icon="@drawable/ic_calendar"
+            android:title="@string/drawer_item_weekly_schedule" />
+
+        <item
+            android:id="@+id/nav_reminders"
+            android:icon="@drawable/ic_reminder"
+            android:title="@string/drawer_item_reminders" />
 
     </group>
     <group
@@ -19,10 +20,10 @@
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings"
-            android:title="@string/drawer_item_setting"/>
+            android:title="@string/drawer_item_setting" />
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_info"
-            android:title="@string/drawer_item_about"/>
+            android:title="@string/drawer_item_about" />
     </group>
 </menu>

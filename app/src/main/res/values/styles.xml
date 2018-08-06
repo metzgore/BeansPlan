@@ -4,6 +4,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
     <style name="AppThemeAbout" parent="Theme.Mal.Light">
@@ -14,9 +15,9 @@
         <item name="mal_toolbarPopupTheme">@style/AppTheme.PopupOverlay</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="AppTheme.Launcher">
         <item name="android:windowBackground">@drawable/launch_screen</item>

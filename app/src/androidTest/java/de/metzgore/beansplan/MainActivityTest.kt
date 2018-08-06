@@ -27,42 +27,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun displayDefaultDailySchedule() {
-        preferencesEditor.putBoolean(context.getString(R.string.pref_key_remember_last_opened_schedule), false)
-        preferencesEditor.putString(context.getString(R.string.pref_key_select_default_schedule), context.getString(R.string.fragment_daily_schedule_id))
-        preferencesEditor.commit()
-
-        activityTestRule.launchActivity(null)
-
-        assertDisplayed(R.string.drawer_item_daily_schedule)
-    }
-
-    @Test
     fun displayDefaultWeeklySchedule() {
-        preferencesEditor.putBoolean(context.getString(R.string.pref_key_remember_last_opened_schedule), false)
-        preferencesEditor.putString(context.getString(R.string.pref_key_select_default_schedule), context.getString(R.string.fragment_weekly_schedule_id))
-        preferencesEditor.commit()
-
-        activityTestRule.launchActivity(null)
-
-        assertDisplayed(R.string.drawer_item_weekly_schedule)
-    }
-
-    @Test
-    fun displayLastOpenedSchedule() {
-        preferencesEditor.putBoolean(context.getString(R.string.pref_key_remember_last_opened_schedule), true)
-        preferencesEditor.putString(context.getString(R.string.pref_key_last_opened_schedule_id), context.getString(R.string.fragment_daily_schedule_id))
-        preferencesEditor.commit()
-
-        activityTestRule.launchActivity(null)
-
-        assertDisplayed(R.string.drawer_item_daily_schedule)
-
-        activityTestRule.activity.finish()
-
-        preferencesEditor.putString(context.getString(R.string.pref_key_last_opened_schedule_id), context.getString(R.string.fragment_weekly_schedule_id))
-        preferencesEditor.commit()
-
         activityTestRule.launchActivity(null)
 
         assertDisplayed(R.string.drawer_item_weekly_schedule)

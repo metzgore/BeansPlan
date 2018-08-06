@@ -1,0 +1,81 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="de.metzgore.beansplan.reminders.ReminderItemViewModel" />
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/mal_baseline_half"
+        android:layout_marginRight="@dimen/mal_baseline_half"
+        android:layout_marginTop="@dimen/mal_baseline_half"
+        android:paddingBottom="@dimen/mal_baseline"
+        android:paddingLeft="@dimen/mal_baseline_half"
+        android:paddingRight="@dimen/mal_baseline_half"
+        android:paddingTop="@dimen/mal_baseline"
+        app:cardCornerRadius="@dimen/mal_card_radius"
+        app:cardElevation="@dimen/mal_card_elevation">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/mal_baseline"
+            android:paddingRight="@dimen/mal_baseline"
+            android:paddingTop="@dimen/mal_baseline">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@{viewModel.getHeaderText()}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                tools:text="Show Titel - Show Topic" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:text="@{@string/hyphen_separated_text(viewModel.getShowStartTimeFormatted(context),viewModel.getShowEndTimeFormatted(context))}"
+                tools:text="21:00 - 22:00" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:text="@{@string/reminder_list_item_date(viewModel.getReminderDateTimeFormatted(context))}"
+                tools:text="Erinnerung am 15. Juli, 19:56" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:onClick="@{() -> viewModel.upsertReminder()}"
+                    android:text="@string/button_text_edit_reminder" />
+
+                <Button
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:onClick="@{() -> viewModel.deleteReminder()}"
+                    android:text="@string/button_text_delete_reminder"
+                    android:textColor="@color/red" />
+
+            </RelativeLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</layout>

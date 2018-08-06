@@ -2,31 +2,29 @@ package de.metzgore.beansplan.weeklyschedule
 
 import TestUtils
 import android.arch.core.executor.testing.InstantTaskExecutorRule
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import de.metzgore.beansplan.LiveDataTestUtil
 import de.metzgore.beansplan.api.ApiSuccessResponse
 import de.metzgore.beansplan.api.RbtvScheduleApi
 import de.metzgore.beansplan.data.Resource
-import de.metzgore.beansplan.data.WeeklySchedule
+import de.metzgore.beansplan.data.WeeklyScheduleResponse
+import de.metzgore.beansplan.data.room.ScheduleRoomDao
+import de.metzgore.beansplan.data.room.relations.WeeklyScheduleWithDailySchedules
 import de.metzgore.beansplan.mock
-import de.metzgore.beansplan.shared.WeeklyScheduleDao
 import de.metzgore.beansplan.util.ApiUtil
 import de.metzgore.beansplan.util.Clock
 import de.metzgore.beansplan.utils.InstantAppExecutors
-import org.hamcrest.CoreMatchers
-import org.hamcrest.MatcherAssert
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.ArgumentCaptor
-import org.mockito.Mockito
 import org.mockito.Mockito.*
 import java.util.*
 
 class WeeklyScheduleRepositoryTest {
 
-    private val scheduleDao = mock(WeeklyScheduleDao::class.java)
-    private val rbtvService = mock(RbtvScheduleApi::class.java)
-    private val clock = mock(Clock::class.java)
+    private val scheduleDao = mock<ScheduleRoomDao>()
+    private val rbtvService = mock<RbtvScheduleApi>()
+    private val clock = mock<Clock>()
     private val repo = WeeklyScheduleRepository(rbtvService, scheduleDao, InstantAppExecutors(), clock)
 
     @Rule
@@ -35,113 +33,173 @@ class WeeklyScheduleRepositoryTest {
 
     @Test
     fun loadSchedule() {
+        `when`(scheduleDao.getWeeklyScheduleWithDailySchedules()).thenReturn(LiveDataTestUtil
+                .createFilledWeeklyScheduleWithDailySchedulesLiveData())
+
         repo.loadSchedule(false)
-        verify(scheduleDao).get()
+        verify(scheduleDao).getWeeklyScheduleWithDailySchedules()
     }
 
     @Test
     fun dontGoToNetwork() {
-        val cacheData = TestUtils.createWeeklySchedule()
-        `when`(scheduleDao!!.get()).thenReturn(cacheData)
+        `when`(scheduleDao.getWeeklyScheduleWithDailySchedules()).thenReturn(LiveDataTestUtil
+                .createFilledWeeklyScheduleWithDailySchedulesLiveData())
 
-        val schedule = WeeklySchedule()
-        val call = ApiUtil.successCall(schedule)
-
-        `when`(rbtvService!!.scheduleOfCurrentWeek()).thenReturn(call)
-        val observer = mock<Observer<Resource<WeeklySchedule>>>()
+        val observer = mock<Observer<Resource<WeeklyScheduleWithDailySchedules>>>()
 
         repo.loadSchedule(false).observeForever(observer)
         verify(rbtvService, never()).scheduleOfCurrentWeek()
+    }
+
+
+    @Test
+    fun goToNetworkNotForcedWhenScheduleNull() {
+        val dbData = MutableLiveData<WeeklyScheduleWithDailySchedules>()
+        `when`(scheduleDao.getWeeklyScheduleWithDailySchedules()).thenReturn(dbData)
+        val schedule = WeeklyScheduleResponse()
+        val call = ApiUtil.successCall(schedule)
+        `when`(rbtvService.scheduleOfCurrentWeek()).thenReturn(call)
+        val observer = mock<Observer<Resource<WeeklyScheduleWithDailySchedules>>>()
+
+        repo.loadSchedule(false).observeForever(observer)
+        verify(rbtvService, never()).scheduleOfCurrentWeek()
+
+        val nullSchedule = null
+        `when`(scheduleDao.getWeeklyScheduleWithDailySchedules()).thenReturn(nullSchedule)
+        dbData.value = null
+        verify(rbtvService, times(1)).scheduleOfCurrentWeek()
     }
 
     @Test
-    fun goToNetworkNotForced() {
-        val cacheData = TestUtils.createWeeklySchedule()
-        `when`(scheduleDao!!.get()).thenReturn(cacheData)
-
-        val schedule = WeeklySchedule()
+    fun goToNetworkNotForcedWhenScheduleEmpty() {
+        val dbData = MutableLiveData<WeeklyScheduleWithDailySchedules>()
+        `when`(scheduleDao.getWeeklyScheduleWithDailySchedules()).thenReturn(dbData)
+        val schedule = WeeklyScheduleResponse()
         val call = ApiUtil.successCall(schedule)
-
-        `when`(rbtvService!!.scheduleOfCurrentWeek()).thenReturn(call)
-        val observer = mock<Observer<Resource<WeeklySchedule>>>()
+        `when`(rbtvService.scheduleOfCurrentWeek()).thenReturn(call)
+        val observer = mock<Observer<Resource<WeeklyScheduleWithDailySchedules>>>()
 
         repo.loadSchedule(false).observeForever(observer)
         verify(rbtvService, never()).scheduleOfCurrentWeek()
 
-        `when`(scheduleDao.get()).thenReturn(null)
-        repo.loadSchedule(false).observeForever(observer)
+        val emptyScheduleLiveData = MutableLiveData<WeeklyScheduleWithDailySchedules>()
+        val weeklyScheduleWithDailySchedules = WeeklyScheduleWithDailySchedules()
+        weeklyScheduleWithDailySchedules.dailySchedulesWithShows = emptyList()
+        emptyScheduleLiveData.value = weeklyScheduleWithDailySchedules
+        `when`(scheduleDao.getWeeklyScheduleWithDailySchedules()).thenReturn(emptyScheduleLiveData)
+        dbData.value = null
         verify(rbtvService, times(1)).scheduleOfCurrentWeek()
-
-        `when`(scheduleDao.get()).thenReturn(WeeklySchedule())
-        repo.loadSchedule(false).observeForever(observer)
-        verify(rbtvService, times(2)).scheduleOfCurrentWeek()
     }
+
 
     @Test
     fun goToNetworkForced() {
-        val cacheData = TestUtils.createWeeklySchedule()
-        Mockito.`when`(scheduleDao!!.get()).thenReturn(cacheData)
+        val dbData = MutableLiveData<WeeklyScheduleWithDailySchedules>()
+        `when`(scheduleDao.getWeeklyScheduleWithDailySchedules()).thenReturn(dbData)
 
-        val schedule = WeeklySchedule()
+        val schedule = WeeklyScheduleResponse()
         val call = ApiUtil.successCall(schedule)
 
-        `when`(rbtvService!!.scheduleOfCurrentWeek()).thenReturn(call)
-        val observer = mock<Observer<Resource<WeeklySchedule>>>()
+        `when`(rbtvService.scheduleOfCurrentWeek()).thenReturn(call)
+        val observer = mock<Observer<Resource<WeeklyScheduleWithDailySchedules>>>()
 
         repo.loadSchedule(true).observeForever(observer)
+        dbData.value = null
         verify(rbtvService, times(1)).scheduleOfCurrentWeek()
+    }
 
-        `when`(scheduleDao.get()).thenReturn(null)
-        repo.loadSchedule(true).observeForever(observer)
-        verify(rbtvService, times(2)).scheduleOfCurrentWeek()
+    @Test
+    fun goToNetworkForcedWithEmptySchedule() {
+        val dbData = MutableLiveData<WeeklyScheduleWithDailySchedules>()
+        `when`(scheduleDao.getWeeklyScheduleWithDailySchedules()).thenReturn(dbData)
 
-        `when`(scheduleDao.get()).thenReturn(WeeklySchedule())
+        val schedule = WeeklyScheduleResponse()
+        val call = ApiUtil.successCall(schedule)
+
+        `when`(rbtvService.scheduleOfCurrentWeek()).thenReturn(call)
+        val observer = mock<Observer<Resource<WeeklyScheduleWithDailySchedules>>>()
+
+        val weeklyScheduleWithDailySchedules = WeeklyScheduleWithDailySchedules()
+        weeklyScheduleWithDailySchedules.dailySchedulesWithShows = emptyList()
+
         repo.loadSchedule(true).observeForever(observer)
-        verify(rbtvService, times(3)).scheduleOfCurrentWeek()
+        dbData.value = weeklyScheduleWithDailySchedules
+        verify(rbtvService, times(1)).scheduleOfCurrentWeek()
+    }
+
+    @Test
+    fun goToNetworkForcedWithNotEmptySchedule() {
+        val dbData = MutableLiveData<WeeklyScheduleWithDailySchedules>()
+        `when`(scheduleDao.getWeeklyScheduleWithDailySchedules()).thenReturn(dbData)
+
+        val schedule = WeeklyScheduleResponse()
+        val call = ApiUtil.successCall(schedule)
+
+        `when`(rbtvService.scheduleOfCurrentWeek()).thenReturn(call)
+        val observer = mock<Observer<Resource<WeeklyScheduleWithDailySchedules>>>()
+
+        val weeklyScheduleWithDailySchedules = WeeklyScheduleWithDailySchedules()
+        weeklyScheduleWithDailySchedules.dailySchedulesWithShows = listOf(Date())
+
+        repo.loadSchedule(true).observeForever(observer)
+        dbData.value = weeklyScheduleWithDailySchedules
+        verify(rbtvService, times(1)).scheduleOfCurrentWeek()
+    }
+
+    @Test
+    fun saveItemWhenCacheEmpty() {
+        val schedule = WeeklyScheduleResponse()
+        val call = ApiUtil.successCall(schedule)
+
+        `when`(rbtvService.scheduleOfCurrentWeek()).thenReturn(call)
+        val weeklyScheduleResponse = (LiveDataTestUtil.getValue(rbtvService.scheduleOfCurrentWeek()) as ApiSuccessResponse).body
+        val observer = mock<Observer<Resource<WeeklyScheduleWithDailySchedules>>>()
+
+        `when`(scheduleDao.getWeeklyScheduleWithDailySchedules()).thenReturn(LiveDataTestUtil
+                .createFilledWeeklyScheduleWithDailySchedulesLiveData())
+
+        //cache is null, save should be called once
+        `when`(scheduleDao.getWeeklyScheduleResponse()).thenReturn(null)
+
+        repo.loadSchedule(true).observeForever(observer)
+        verify(scheduleDao, times(1)).upsertSchedule(clock, weeklyScheduleResponse)
+    }
+
+    @Test
+    fun dontSaveItemWhenCacheAndNetworkSame() {
+        val schedule = WeeklyScheduleResponse()
+        val call = ApiUtil.successCall(schedule)
+
+        `when`(rbtvService.scheduleOfCurrentWeek()).thenReturn(call)
+        val weeklyScheduleResponse = (LiveDataTestUtil.getValue(rbtvService.scheduleOfCurrentWeek()) as ApiSuccessResponse).body
+        val observer = mock<Observer<Resource<WeeklyScheduleWithDailySchedules>>>()
+
+        `when`(scheduleDao.getWeeklyScheduleWithDailySchedules()).thenReturn(LiveDataTestUtil
+                .createFilledWeeklyScheduleWithDailySchedulesLiveData())
+
+        //cache and network are same, don't call save
+        `when`(scheduleDao.getWeeklyScheduleResponse()).thenReturn(weeklyScheduleResponse)
+
+        repo.loadSchedule(true).observeForever(observer)
+        verify(scheduleDao, never()).upsertSchedule(clock, weeklyScheduleResponse)
     }
 
     @Test
     fun saveItemWhenCacheAndNetworkAreDifferent() {
-        `when`(clock.nowInMillis()).thenReturn(1)
-
-        val schedule = WeeklySchedule()
-        val call = ApiUtil.successCall(schedule)
-
-        val updatedSchedule = TestUtils.createWeeklySchedule()
+        val updatedSchedule = TestUtils.createWeeklyScheduleOneWeek()
         val updatedCall = ApiUtil.successCall(updatedSchedule)
 
-        val calendar = GregorianCalendar()
-        calendar.time = Date()
-
-        `when`(rbtvService!!.scheduleOfCurrentWeek()).thenReturn(call)
-        val dailySchedule = (LiveDataTestUtil.getValue(rbtvService.scheduleOfCurrentWeek()) as ApiSuccessResponse).body
-        val observer = mock<Observer<Resource<WeeklySchedule>>>()
-        val argument = ArgumentCaptor.forClass(WeeklySchedule::class.java)
-
-        //cache is null, save should be called once
-        `when`(scheduleDao!!.get()).thenReturn(null)
-
-        repo.loadSchedule(true).observeForever(observer)
-        verify(scheduleDao, times(1)).save(argument.capture())
-        MatcherAssert.assertThat(argument.value, CoreMatchers.`is`(dailySchedule))
-        MatcherAssert.assertThat(argument.value.timestamp, CoreMatchers.`is`(1L))
-
-        //data in cache is the same as data from network, save should still be only called once
-        `when`(scheduleDao.get()).thenReturn(dailySchedule)
-
-        repo.loadSchedule(true).observeForever(observer)
-        verify(scheduleDao, times(1)).save(argument.capture())
-        MatcherAssert.assertThat(argument.value, CoreMatchers.`is`(dailySchedule))
-        MatcherAssert.assertThat(argument.value.timestamp, CoreMatchers.`is`(1L))
-
-        //data in cache is different from the data from network, save should be called second time
-        `when`(clock.nowInMillis()).thenReturn(2)
         `when`(rbtvService.scheduleOfCurrentWeek()).thenReturn(updatedCall)
-        `when`(scheduleDao.get()).thenReturn(dailySchedule)
+        val weeklyScheduleResponse = (LiveDataTestUtil.getValue(rbtvService.scheduleOfCurrentWeek()) as ApiSuccessResponse).body
+        val observer = mock<Observer<Resource<WeeklyScheduleWithDailySchedules>>>()
+
+        `when`(scheduleDao.getWeeklyScheduleWithDailySchedules()).thenReturn(LiveDataTestUtil
+                .createFilledWeeklyScheduleWithDailySchedulesLiveData())
+
+        //cache and network are different, save should be called once
+        `when`(scheduleDao.getWeeklyScheduleResponse()).thenReturn(WeeklyScheduleResponse())
 
         repo.loadSchedule(true).observeForever(observer)
-        verify(scheduleDao, times(2)).save(argument.capture())
-        MatcherAssert.assertThat(argument.value, CoreMatchers.`is`(updatedSchedule))
-        MatcherAssert.assertThat(argument.value.timestamp, CoreMatchers.`is`(2L))
+        verify(scheduleDao, times(1)).upsertSchedule(clock, weeklyScheduleResponse)
     }
 }
