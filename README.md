@@ -2,30 +2,34 @@
 
 # Beans Plan [![Build Status](https://travis-ci.org/metzgore/BeansPlan.svg?branch=master)](https://travis-ci.org/metzgore/BeansPlan)
 
-**Beans Plan** is an Android app which downloads and shows the daily and weekly schedules of the online streaming station [Rocketbeans TV](https://www.rocketbeans.tv/).
+**Beans Plan** is an Android app which downloads and shows the weekly schedule of the online streaming station [Rocketbeans TV](https://www.rocketbeans.tv/).
 The schedule data is used from <http://api.rbtv.rodney.io>.
+You can add reminders for future shows so you never miss a live show again.
 
 </br>
 
 ## Screenshots
-Daily schedule
-
-<img src="/screenshots/screenshot_daily_schedule_phone.png" width="40%">
-
 Weekly schedule
 
 <img src="/screenshots/screenshot_weekly_schedule_phone.png" width="40%">
 
+Reminders
+
+<img src="/screenshots/screenshot_reminders_phone.png" width="40%">
+
 ## Used patterns and libraries
-The app utilizes MVVM pattern, Android LiveData, ViewModel, Data Binding, and various libraries, including:
+The app utilizes MVVM pattern, Android LiveData, ViewModel, Room, Data Binding, and various libraries, including:
 * [Retrofit](https://square.github.io/retrofit/)
 * [Dagger](https://google.github.io/dagger/)
 * [Gson](https://github.com/google/gson)
 * [commons-lang](https://github.com/apache/commons-lang)
 
 ## Current Features
-* Download and show daily and weekly schedules
-* Cache schedules for offline usage
+* Download and show weekly schedule
+* Cache schedule for offline usage
+* Add reminders for future shows
+* Open Youtube and Twitch streams directly through reminder notification
+* Open YouTube VODs of shows by clicking on the YouTube icon in the schedule
 * Go to current day in weekly schedule
 * Highlight current running show
 

@@ -44,9 +44,14 @@ object NotificationHelper {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
+        val contentTitle = if (!showWithReminder.show.topic.isEmpty())
+            "${showWithReminder.show.title} - ${showWithReminder.show.topic}"
+        else
+            showWithReminder.show.title
+
         val builder = NotificationCompat.Builder(context, REMINDER_CHANNEL_ID).apply {
             setSmallIcon(R.drawable.ic_notification)
-            setContentTitle("${showWithReminder.show.title} - ${showWithReminder.show.topic}")
+            setContentTitle(contentTitle)
             setContentText(context.getString(R.string.notification_content_text,
                     DateUtils.formatDateTime(context, showWithReminder.show.timeStart.time, DateUtils.FORMAT_SHOW_TIME)))
             setAutoCancel(true)
