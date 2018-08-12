@@ -35,8 +35,14 @@ OnReminderButtonClickListener?) {
             if (showWithReminder.show.length > 3600) "H 'h' mm 'min'" else "m 'min'")
 
     fun getBackground(context: Context): Drawable? {
-        return if (showWithReminder.show.isRunning) ContextCompat.getDrawable(context, R.drawable.border_current_show) else
-            null
+        if (showWithReminder.show.isRunning)
+            return ContextCompat.getDrawable(context, R.drawable.border_current_show)
+
+        return when (showWithReminder.show.type) {
+            ShowResponse.Type.LIVE -> ContextCompat.getDrawable(context, R.drawable.border_live_show)
+            ShowResponse.Type.PREMIERE -> ContextCompat.getDrawable(context, R.drawable.border_premiere_show)
+            else -> null
+        }
     }
 
     fun getStartTimeFormatted(context: Context): String {
