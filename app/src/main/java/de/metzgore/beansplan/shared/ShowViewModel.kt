@@ -45,6 +45,14 @@ OnReminderButtonClickListener?) {
         }
     }
 
+    fun getTypeTextColor(context: Context): Int {
+        return when (showWithReminder.show.type) {
+            ShowResponse.Type.LIVE -> ContextCompat.getColor(context, R.color.live)
+            ShowResponse.Type.PREMIERE -> ContextCompat.getColor(context, R.color.premiere)
+            else -> 0
+        }
+    }
+
     fun getStartTimeFormatted(context: Context): String {
         return DateUtils.formatDateTime(context, showWithReminder.show.timeStart.time, DateUtils.FORMAT_SHOW_TIME)
     }
