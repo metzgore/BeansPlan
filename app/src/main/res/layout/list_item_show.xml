@@ -110,7 +110,7 @@
                     android:layout_height="wrap_content"
                     android:text="@{viewModel.typeFormatted}"
                     android:textAlignment="textEnd"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@{viewModel.getTypeTextColor(context)}"
                     tools:text="PREMIERE" />
 
                 <LinearLayout
