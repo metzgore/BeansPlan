@@ -10,7 +10,6 @@ import de.metzgore.beansplan.R
 import de.metzgore.beansplan.data.ShowResponse
 import de.metzgore.beansplan.data.room.Reminder
 import de.metzgore.beansplan.data.room.relations.ShowWithReminder
-import org.apache.commons.lang3.time.DurationFormatUtils
 
 class ShowViewModel(private val showWithReminder: ShowWithReminder, private val listener:
 OnReminderButtonClickListener?) {
@@ -23,33 +22,34 @@ OnReminderButtonClickListener?) {
 
     val isOnYoutube: Boolean = !showWithReminder.show.youtubeId.isBlank()
 
-    val reminderVisible = !showWithReminder.show.isOver && !showWithReminder.show.isRunning
+    val isReminderIconVisible = !showWithReminder.show.isOver && !showWithReminder.show.isRunning
 
     val typeFormatted: String = when (showWithReminder.show.type) {
-        ShowResponse.Type.LIVE, ShowResponse.Type.PREMIERE -> showWithReminder.show.type.toString()
+        ShowResponse.Type.LIVE -> "LIVE"
+        ShowResponse.Type.PREMIERE -> "NEU"
         ShowResponse.Type.NONE -> ""
     }
 
-    val lengthFormatted: String = DurationFormatUtils.formatDuration((showWithReminder.show.length * 1000)
-            .toLong(),
-            if (showWithReminder.show.length > 3600) "H 'h' mm 'min'" else "m 'min'")
-
-    fun getBackground(context: Context): Drawable? {
-        if (showWithReminder.show.isRunning)
-            return ContextCompat.getDrawable(context, R.drawable.border_current_show)
-
+    fun getTypeFormatted(context: Context): String {
         return when (showWithReminder.show.type) {
-            ShowResponse.Type.LIVE -> ContextCompat.getDrawable(context, R.drawable.border_live_show)
-            ShowResponse.Type.PREMIERE -> ContextCompat.getDrawable(context, R.drawable.border_premiere_show)
-            else -> null
+            ShowResponse.Type.LIVE -> context.getString(R.string.show_type_live)
+            ShowResponse.Type.PREMIERE -> context.getString(R.string.show_type_premiere)
+            ShowResponse.Type.NONE -> ""
         }
     }
 
-    fun getTypeTextColor(context: Context): Int {
+    fun getBackground(context: Context): Drawable? {
+        return if (showWithReminder.show.isRunning)
+            ContextCompat.getDrawable(context, R.drawable.border_current_show)
+        else
+            null
+    }
+
+    fun getTypeBackground(context: Context): Drawable? {
         return when (showWithReminder.show.type) {
-            ShowResponse.Type.LIVE -> ContextCompat.getColor(context, R.color.live)
-            ShowResponse.Type.PREMIERE -> ContextCompat.getColor(context, R.color.premiere)
-            else -> 0
+            ShowResponse.Type.LIVE -> ContextCompat.getDrawable(context, R.drawable.background_show_type_live)
+            ShowResponse.Type.PREMIERE -> ContextCompat.getDrawable(context, R.drawable.background_show_type_premiere)
+            else -> null
         }
     }
 

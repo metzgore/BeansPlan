@@ -89,34 +89,33 @@
                     tools:text="Topic" />
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="74dp"
                 android:layout_height="match_parent"
                 android:gravity="right"
-                android:orientation="vertical"
                 tools:ignore="RtlHardcoded">
 
                 <TextView
-                    android:id="@+id/list_item_show_length_text_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@{viewModel.lengthFormatted}"
-                    android:textAlignment="textEnd"
-                    tools:text="12 h 10 min" />
-
-                <TextView
                     android:id="@+id/list_item_show_type_text_view"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{viewModel.typeFormatted}"
-                    android:textAlignment="textEnd"
-                    android:textColor="@{viewModel.getTypeTextColor(context)}"
-                    tools:text="PREMIERE" />
+                    android:layout_alignParentTop="true"
+                    android:paddingLeft="4dp"
+                    android:textSize="12sp"
+                    android:paddingRight="4dp"
+                    android:text="@{viewModel.getTypeFormatted(context)}"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:background="@{viewModel.getTypeBackground(context)}"
+                    tools:text="NEU" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_alignParentBottom="true"
                     tools:ignore="RtlHardcoded">
 
                     <ImageView
@@ -136,9 +135,9 @@
                         android:onClick="@{() -> viewModel.saveReminder()}"
                         android:textAlignment="textStart"
                         app:srcCompat="@drawable/ic_reminder_a50"
-                        app:visibleGone="@{viewModel.reminderVisible}" />
+                        app:visibleGone="@{viewModel.isReminderIconVisible}" />
                 </LinearLayout>
-            </LinearLayout>
+            </RelativeLayout>
         </LinearLayout>
     </FrameLayout>
 </layout>
