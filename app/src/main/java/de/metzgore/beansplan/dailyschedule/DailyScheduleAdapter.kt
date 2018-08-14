@@ -52,7 +52,8 @@ class DailyScheduleAdapter(private val remindersViewModel: RemindersViewModel) :
                         oldReminder = showsWithReminder!![oldItemPosition].reminder!![0]
                     }
 
-                    if (newReminder != oldReminder) {
+                    //TODO move somewhere else
+                    /*if (newReminder != oldReminder) {
                         if (oldReminder == null && newReminder != null) {
                             remindersViewModel.triggerReminderInserted()
                         } else if (oldReminder != null && newReminder == null) {
@@ -60,7 +61,7 @@ class DailyScheduleAdapter(private val remindersViewModel: RemindersViewModel) :
                         } else {
                             remindersViewModel.triggerReminderUpdated()
                         }
-                    }
+                    }*/
 
                     return newShow == oldShow && newReminder == oldReminder
                 }

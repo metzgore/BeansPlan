@@ -36,7 +36,7 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:text="@{viewModel.getHeaderText()}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textStyle="bold"
                 tools:text="Show Titel - Show Topic" />
 
             <TextView
@@ -64,7 +64,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:onClick="@{() -> viewModel.upsertReminder()}"
-                    android:text="@string/button_text_edit_reminder" />
+                    android:text="@string/button_text_edit_reminder"
+                    android:textColor="@color/colorAccent" />
 
                 <Button
                     style="@style/Widget.AppCompat.Button.Borderless.Colored"
