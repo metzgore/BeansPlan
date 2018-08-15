@@ -40,9 +40,9 @@ OnReminderButtonClickListener?) {
 
     fun getReminderIcon(context: Context): Drawable {
         return if (showWithReminder.reminder?.get(0) == null) {
-            ContextCompat.getDrawable(context, R.drawable.ic_alarm_add)!!
+            ContextCompat.getDrawable(context, R.drawable.ic_reminder_add)!!
         } else {
-            ContextCompat.getDrawable(context, R.drawable.ic_alarm_on)!!
+            ContextCompat.getDrawable(context, R.drawable.ic_reminder_available)!!
         }
     }
 
