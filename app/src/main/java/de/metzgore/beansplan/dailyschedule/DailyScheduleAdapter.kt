@@ -14,7 +14,7 @@ import de.metzgore.beansplan.shared.OnReminderButtonClickListener
 import de.metzgore.beansplan.shared.ShowViewHolder
 import de.metzgore.beansplan.shared.ShowViewModel
 
-class DailyScheduleAdapter(private val viewModel: DailyScheduleViewModel, private val remindersViewModel: RemindersViewModel) : RecyclerView.Adapter<ShowViewHolder>() {
+class DailyScheduleAdapter(private val remindersViewModel: RemindersViewModel) : RecyclerView.Adapter<ShowViewHolder>() {
 
     private var showsWithReminder: List<ShowWithReminder>? = null
 
@@ -51,6 +51,17 @@ class DailyScheduleAdapter(private val viewModel: DailyScheduleViewModel, privat
                     if (showsWithReminder!![oldItemPosition].reminder != null) {
                         oldReminder = showsWithReminder!![oldItemPosition].reminder!![0]
                     }
+
+                    //TODO move somewhere else
+                    /*if (newReminder != oldReminder) {
+                        if (oldReminder == null && newReminder != null) {
+                            remindersViewModel.triggerReminderInserted()
+                        } else if (oldReminder != null && newReminder == null) {
+                            remindersViewModel.triggerReminderDeleted()
+                        } else {
+                            remindersViewModel.triggerReminderUpdated()
+                        }
+                    }*/
 
                     return newShow == oldShow && newReminder == oldReminder
                 }

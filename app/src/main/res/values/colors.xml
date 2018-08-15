@@ -5,7 +5,7 @@
     <color name="colorPrimaryLight">#eceff1</color>
     <color name="colorAccent">#009688</color>
     <color name="white">#FFFFFF</color>
-    <color name="red">#D50000</color>
+    <color name="red">#FF0000</color>
     <color name="live">#DB5E91</color>
     <color name="premiere">#1893B2</color>
 </resources>

@@ -38,6 +38,14 @@ OnReminderButtonClickListener?) {
         }
     }
 
+    fun getReminderIcon(context: Context): Drawable {
+        return if (showWithReminder.reminder?.get(0) == null) {
+            ContextCompat.getDrawable(context, R.drawable.ic_reminder_add)!!
+        } else {
+            ContextCompat.getDrawable(context, R.drawable.ic_reminder_available)!!
+        }
+    }
+
     fun getBackground(context: Context): Drawable? {
         return if (showWithReminder.show.isRunning)
             ContextCompat.getDrawable(context, R.drawable.border_current_show)

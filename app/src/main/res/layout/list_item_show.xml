@@ -89,55 +89,50 @@
                     tools:text="Topic" />
             </LinearLayout>
 
-            <RelativeLayout
-                android:layout_width="74dp"
+            <LinearLayout
+                android:minWidth="40dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="right"
+                android:orientation="vertical"
                 tools:ignore="RtlHardcoded">
 
                 <TextView
                     android:id="@+id/list_item_show_type_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
+                    android:background="@{viewModel.getTypeBackground(context)}"
                     android:paddingLeft="4dp"
-                    android:textSize="12sp"
                     android:paddingRight="4dp"
                     android:text="@{viewModel.getTypeFormatted(context)}"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"
                     android:textAlignment="center"
+                    android:textAllCaps="true"
                     android:textColor="@color/white"
-                    android:background="@{viewModel.getTypeBackground(context)}"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
                     tools:text="NEU" />
 
-                <LinearLayout
+                <ImageView
+                    android:id="@+id/list_view_item_show_youtube_image_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_alignParentBottom="true"
-                    tools:ignore="RtlHardcoded">
+                    android:onClick="@{() -> viewModel.openVideo(context)}"
+                    android:textAlignment="textStart"
+                    android:tint="@color/red"
+                    app:srcCompat="@drawable/ic_youtube"
+                    app:visibleInvisible="@{viewModel.onYoutube}" />
 
-                    <ImageView
-                        android:id="@+id/list_view_item_show_youtube_image_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:onClick="@{() -> viewModel.openVideo(context)}"
-                        android:textAlignment="textEnd"
-                        app:srcCompat="@drawable/ic_youtube_a50"
-                        app:visibleGone="@{viewModel.onYoutube}" />
-
-                    <ImageView
-                        android:id="@+id/list_view_item_show_reminder_image_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:onClick="@{() -> viewModel.saveReminder()}"
-                        android:textAlignment="textStart"
-                        app:srcCompat="@drawable/ic_reminder_a50"
-                        app:visibleGone="@{viewModel.isReminderIconVisible}" />
-                </LinearLayout>
-            </RelativeLayout>
+                <ImageView
+                    android:id="@+id/list_view_item_show_reminder_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:onClick="@{() -> viewModel.saveReminder()}"
+                    android:src="@{viewModel.getReminderIcon(context)}"
+                    android:textAlignment="textEnd"
+                    android:tint="@color/colorAccent"
+                    app:visibleInvisible="@{viewModel.isReminderIconVisible}" />
+            </LinearLayout>
         </LinearLayout>
     </FrameLayout>
 </layout>
