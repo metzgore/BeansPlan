@@ -8,7 +8,7 @@ import de.metzgore.beansplan.reminders.RemindersRepository
 import de.metzgore.beansplan.settings.repository.AppSettings
 import javax.inject.Inject
 
-
+//TODO update class name
 class ReminderBootReceiver : DaggerBroadcastReceiver() {
 
     @Inject
@@ -17,6 +17,7 @@ class ReminderBootReceiver : DaggerBroadcastReceiver() {
     @Inject
     lateinit var appSettings: AppSettings
 
+    //TODO check actions
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
 

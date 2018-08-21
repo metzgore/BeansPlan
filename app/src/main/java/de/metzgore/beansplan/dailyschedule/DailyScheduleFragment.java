@@ -11,6 +11,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.Date;
 
@@ -86,7 +87,7 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
         remindersViewModel = ViewModelProviders.of(getActivity(), new RemindersViewModelFactory
                 (remindersRepo)).get(RemindersViewModel.class);
 
-        dailyScheduleAdapter = new DailyScheduleAdapter(viewModel, remindersViewModel);
+        dailyScheduleAdapter = new DailyScheduleAdapter(remindersViewModel);
 
         subscribeUi(viewModel, remindersViewModel);
     }
@@ -133,8 +134,27 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
         remindersViewModel.getReminders().observe(this, showWithReminders -> {
             if (showWithReminders != null) {
                 for (ShowWithReminder showWithReminder : showWithReminders) {
-                    NotificationHelper.INSTANCE.scheduleNotification(getContext(), appSettings, showWithReminder);
+                    NotificationHelper.INSTANCE.scheduleNotification(getContext(), appSettings,
+                            showWithReminder);
                 }
+            }
+        });
+
+        remindersViewModel.getTriggerReminderInserted().observe(this, triggered -> {
+            if (triggered != null && triggered.getContentIfNotHandled() != null) {
+                Toast.makeText(getContext(), "Erinnerungen angelegt", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        remindersViewModel.getTriggerReminderDeleted().observe(this, triggered -> {
+            if (triggered != null && triggered.getContentIfNotHandled() != null) {
+                Toast.makeText(getContext(), "Erinnerungen gelöscht", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        remindersViewModel.getTriggerReminderUpdated().observe(this, triggered -> {
+            if (triggered != null && triggered.getContentIfNotHandled() != null) {
+                Toast.makeText(getContext(), "Erinnerungen aktualisiert", Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -81,4 +81,7 @@
     <string name="reminder_deletion_update_dialog_positive">Löschen</string>
     <string name="reminder_deletion_update_dialog_neutral">Abbrechen</string>
     <string name="reminder_list_item_date">Erinnerung am %1$s</string>
+
+    <string name="show_type_live">Live</string>
+    <string name="show_type_premiere">Neu</string>
 </resources>
