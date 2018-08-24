@@ -85,7 +85,7 @@ object NotificationHelper {
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, showWithReminder.reminder!![0].id)
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, buildNotification(context, appSettings, showWithReminder))
         return PendingIntent.getBroadcast(context, showWithReminder.reminder!![0].id.toInt(),
-                notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT)
+                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     fun unscheduleNotification(context: Context, appSettings: AppSettings, showWithReminder: ShowWithReminder) {
