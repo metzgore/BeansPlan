@@ -6,13 +6,13 @@
   url: http://commons.apache.org/proper/commons-lang/
   year: 2001-2017
 
-- artifact: com.mikepenz:community-material-typeface:+
-  name: community-material-typeface
+- artifact: com.mikepenz:material-design-iconic-typeface:+
+  name: Android-Iconics Material-Design-Iconic Typeface Library
   copyrightHolder: Mike Penz
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://github.com/mikepenz/Android-Iconics
-  year: 2018
+  year: 2019
 
 - artifact: com.google.dagger:dagger:+
   name: Dagger 2
@@ -36,7 +36,7 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://github.com/mikepenz/Android-Iconics
-  year: 2018
+  year: 2019
 
 - artifact: com.github.daniel-stoneuk:material-about-library:+
   name: material-about-library
