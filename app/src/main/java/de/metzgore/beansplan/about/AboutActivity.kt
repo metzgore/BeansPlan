@@ -78,7 +78,7 @@ class AboutActivity : MaterialAboutActivity() {
                 },
                 getString(R.string.activity_about_misc_data_url),
                 true,
-                Uri.parse("http://api.rbtv.rodney.io/")
+                Uri.parse("https://github.com/rocketbeans/rbtv-apidoc")
         ))
 
         appCardBuilder.addItem(MaterialAboutActionItem.Builder().apply {
