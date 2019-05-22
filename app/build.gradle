@@ -129,7 +129,7 @@ android {
     productFlavors {
         prod {
             dimension "default"
-            buildConfigField 'String', 'HOST', '"http://api.rbtv.rodney.io/"'
+            buildConfigField 'String', 'HOST', '"https://api.rocketbeans.tv/"'
         }
 
         mockedServer {

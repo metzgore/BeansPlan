@@ -5,6 +5,6 @@ import de.metzgore.beansplan.data.WeeklyScheduleResponse
 import retrofit2.http.GET
 
 interface RbtvScheduleApi {
-    @GET("/api/1.0/schedule/schedule.json")
+    @GET("/v1/schedule/legacy/weekdays")
     fun scheduleOfCurrentWeek(): LiveData<ApiResponse<WeeklyScheduleResponse>>
 }
