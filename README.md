@@ -3,7 +3,7 @@
 # Beans Plan [![Build Status](https://travis-ci.org/metzgore/BeansPlan.svg?branch=master)](https://travis-ci.org/metzgore/BeansPlan)
 
 **Beans Plan** is an Android app which downloads and shows the weekly schedule of the online streaming station [Rocketbeans TV](https://www.rocketbeans.tv/).
-The schedule data is used from <http://api.rbtv.rodney.io>.
+The schedule data is used from the official RBTV api. You can find the docs here: [here](<https://github.com/rocketbeans/rbtv-apidoc>).
 You can add reminders for future shows so you never miss a live show again.
 
 </br>
@@ -35,9 +35,7 @@ The app utilizes MVVM pattern, Android LiveData, ViewModel, Room, Data Binding, 
 
 ## Planned features
 * Customization options (e.g. hide past shows)
-* Android Wear app
 * Widget
-* App Short Cuts
 * Filter by program type
 * Detail view for shows
 * Possibly dark theme
