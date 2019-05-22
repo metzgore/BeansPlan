@@ -9,9 +9,9 @@ notifications:
 
 env:
   global:
-  - ANDROID_API=27
+  - ANDROID_API=28
   - ANDROID_EMULATOR_API=21
-  - ANDROID_BUILD_TOOLS=27.0.3
+  - ANDROID_BUILD_TOOLS=28.0.3
 
 before_install:
 - openssl aes-256-cbc -K $encrypted_28bdaaf761f5_key -iv $encrypted_28bdaaf761f5_iv
