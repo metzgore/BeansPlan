@@ -9,8 +9,8 @@ import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem
 import com.danielstone.materialaboutlibrary.items.MaterialAboutTitleItem
 import com.danielstone.materialaboutlibrary.model.MaterialAboutCard
 import com.danielstone.materialaboutlibrary.model.MaterialAboutList
-import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
 import de.metzgore.beansplan.R
 
 class AboutActivity : MaterialAboutActivity() {
@@ -44,7 +44,7 @@ class AboutActivity : MaterialAboutActivity() {
 
         appCardBuilder.addItem(ConvenienceBuilder.createVersionActionItem(c,
                 IconicsDrawable(c).apply {
-                    icon(CommunityMaterial.Icon.cmd_information)
+                    icon(MaterialDesignIconic.Icon.gmi_info)
                     color(ContextCompat.getColor(c, colorIcon))
                     sizeDp(18)
                 },
@@ -53,7 +53,7 @@ class AboutActivity : MaterialAboutActivity() {
 
         appCardBuilder.addItem(ConvenienceBuilder.createRateActionItem(c,
                 IconicsDrawable(c).apply {
-                    icon(CommunityMaterial.Icon.cmd_star)
+                    icon(MaterialDesignIconic.Icon.gmi_star)
                     color(ContextCompat.getColor(c, colorIcon))
                     sizeDp(18)
                 },
@@ -72,7 +72,7 @@ class AboutActivity : MaterialAboutActivity() {
 
         appCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
                 IconicsDrawable(c).apply {
-                    icon(CommunityMaterial.Icon.cmd_earth)
+                    icon(MaterialDesignIconic.Icon.gmi_view_web)
                     color(ContextCompat.getColor(c, colorIcon))
                     sizeDp(18)
                 },
@@ -84,7 +84,7 @@ class AboutActivity : MaterialAboutActivity() {
         appCardBuilder.addItem(MaterialAboutActionItem.Builder().apply {
             text(R.string.activity_about_open_source_licenses_title)
             icon(IconicsDrawable(c).apply {
-                icon(CommunityMaterial.Icon.cmd_book)
+                icon(MaterialDesignIconic.Icon.gmi_book)
                 color(ContextCompat.getColor(c, colorIcon))
                 sizeDp(18)
             })
@@ -112,7 +112,7 @@ class AboutActivity : MaterialAboutActivity() {
         meCardBuilder.addItem(MaterialAboutActionItem.Builder().apply {
             text("Nico Riemer")
             icon(IconicsDrawable(c).apply {
-                icon(CommunityMaterial.Icon.cmd_account)
+                icon(MaterialDesignIconic.Icon.gmi_account)
                 color(ContextCompat.getColor(c, colorIcon))
                 sizeDp(18)
             })
@@ -120,7 +120,7 @@ class AboutActivity : MaterialAboutActivity() {
 
         meCardBuilder.addItem(ConvenienceBuilder.createEmailItem(c,
                 IconicsDrawable(c).apply {
-                    icon(CommunityMaterial.Icon.cmd_email)
+                    icon(MaterialDesignIconic.Icon.gmi_email)
                     color(ContextCompat.getColor(c, colorIcon))
                     sizeDp(18)
                 },
@@ -132,7 +132,7 @@ class AboutActivity : MaterialAboutActivity() {
         meCardBuilder.addItem(MaterialAboutActionItem.Builder().apply {
             text(R.string.activity_about_me_github)
             icon(IconicsDrawable(c).apply {
-                icon(CommunityMaterial.Icon.cmd_github_circle)
+                icon(MaterialDesignIconic.Icon.gmi_github)
                 color(ContextCompat.getColor(c, colorIcon))
                 sizeDp(18)
             })
@@ -142,7 +142,7 @@ class AboutActivity : MaterialAboutActivity() {
         meCardBuilder.addItem(MaterialAboutActionItem.Builder().apply {
             text(R.string.activity_about_me_twitter)
             icon(IconicsDrawable(c).apply {
-                icon(CommunityMaterial.Icon.cmd_twitter)
+                icon(MaterialDesignIconic.Icon.gmi_twitter)
                 color(ContextCompat.getColor(c, colorIcon))
                 sizeDp(18)
             })
@@ -159,7 +159,7 @@ class AboutActivity : MaterialAboutActivity() {
 
         rbtvCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
                 IconicsDrawable(c).apply {
-                    icon(CommunityMaterial.Icon.cmd_earth)
+                    icon(MaterialDesignIconic.Icon.gmi_view_web)
                     color(ContextCompat.getColor(c, colorIcon))
                     sizeDp(18)
                 },
@@ -170,7 +170,7 @@ class AboutActivity : MaterialAboutActivity() {
 
         rbtvCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
                 IconicsDrawable(c).apply {
-                    icon(CommunityMaterial.Icon.cmd_youtube_play)
+                    icon(MaterialDesignIconic.Icon.gmi_youtube_play)
                     color(ContextCompat.getColor(c, colorIcon))
                     sizeDp(18)
                 },
@@ -181,7 +181,7 @@ class AboutActivity : MaterialAboutActivity() {
 
         rbtvCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
                 IconicsDrawable(c).apply {
-                    icon(CommunityMaterial.Icon.cmd_youtube_play)
+                    icon(MaterialDesignIconic.Icon.gmi_youtube_play)
                     color(ContextCompat.getColor(c, colorIcon))
                     sizeDp(18)
                 },
@@ -192,7 +192,7 @@ class AboutActivity : MaterialAboutActivity() {
 
         rbtvCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
                 IconicsDrawable(c).apply {
-                    icon(CommunityMaterial.Icon.cmd_youtube_play)
+                    icon(MaterialDesignIconic.Icon.gmi_youtube_play)
                     color(ContextCompat.getColor(c, colorIcon))
                     sizeDp(18)
                 },
@@ -203,7 +203,7 @@ class AboutActivity : MaterialAboutActivity() {
 
         rbtvCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
                 IconicsDrawable(c).apply {
-                    icon(CommunityMaterial.Icon.cmd_twitch)
+                    icon(MaterialDesignIconic.Icon.gmi_twitch)
                     color(ContextCompat.getColor(c, colorIcon))
                     sizeDp(18)
                 },
@@ -214,7 +214,7 @@ class AboutActivity : MaterialAboutActivity() {
 
         rbtvCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
                 IconicsDrawable(c).apply {
-                    icon(CommunityMaterial.Icon.cmd_facebook)
+                    icon(MaterialDesignIconic.Icon.gmi_facebook)
                     color(ContextCompat.getColor(c, colorIcon))
                     sizeDp(18)
                 },
@@ -225,7 +225,7 @@ class AboutActivity : MaterialAboutActivity() {
 
         rbtvCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
                 IconicsDrawable(c).apply {
-                    icon(CommunityMaterial.Icon.cmd_twitter)
+                    icon(MaterialDesignIconic.Icon.gmi_twitter)
                     color(ContextCompat.getColor(c, colorIcon))
                     sizeDp(18)
                 },
@@ -236,24 +236,13 @@ class AboutActivity : MaterialAboutActivity() {
 
         rbtvCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
                 IconicsDrawable(c).apply {
-                    icon(CommunityMaterial.Icon.cmd_instagram)
+                    icon(MaterialDesignIconic.Icon.gmi_instagram)
                     color(ContextCompat.getColor(c, colorIcon))
                     sizeDp(18)
                 },
                 getString(R.string.activity_about_rbtv_instagram),
                 false,
                 Uri.parse("https://www.instagram.com/rocketbeans.tv/?hl=de")))
-                .build()
-
-        rbtvCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
-                IconicsDrawable(c).apply {
-                    icon(CommunityMaterial.Icon.cmd_google_play)
-                    color(ContextCompat.getColor(c, colorIcon))
-                    sizeDp(18)
-                },
-                getString(R.string.activity_about_rbtv_playstore),
-                false,
-                Uri.parse("https://play.google.com/store/apps/details?id=tv.rocketbeans.pocketbeans")))
                 .build()
 
         return rbtvCardBuilder
