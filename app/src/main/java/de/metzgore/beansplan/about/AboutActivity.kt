@@ -88,7 +88,7 @@ class AboutActivity : MaterialAboutActivity() {
                 color(ContextCompat.getColor(c, colorIcon))
                 sizeDp(18)
             })
-            setOnClickAction({
+            setOnClickAction {
                 val fm = supportFragmentManager
                 val ft = fm.beginTransaction()
                 val prev = fm.findFragmentByTag(OssLicenseDialog.TAG)
@@ -98,7 +98,7 @@ class AboutActivity : MaterialAboutActivity() {
                 ft.addToBackStack(null)
 
                 OssLicenseDialog().show(ft, OssLicenseDialog.TAG)
-            })
+            }
         }.build())
 
         return appCardBuilder
