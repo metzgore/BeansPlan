@@ -203,6 +203,17 @@ class AboutActivity : MaterialAboutActivity() {
 
         rbtvCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
                 IconicsDrawable(c).apply {
+                    icon(MaterialDesignIconic.Icon.gmi_youtube_play)
+                    color(ContextCompat.getColor(c, colorIcon))
+                    sizeDp(18)
+                },
+                getString(R.string.activity_about_rbtv_kinoplus),
+                false,
+                Uri.parse("https://www.youtube.com/channel/UCSPhBkVTeztDGsz9-rdsNvw")))
+                .build()
+
+        rbtvCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
+                IconicsDrawable(c).apply {
                     icon(MaterialDesignIconic.Icon.gmi_twitch)
                     color(ContextCompat.getColor(c, colorIcon))
                     sizeDp(18)
