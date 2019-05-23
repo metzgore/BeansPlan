@@ -88,7 +88,7 @@ class AboutActivity : MaterialAboutActivity() {
                 color(ContextCompat.getColor(c, colorIcon))
                 sizeDp(18)
             })
-            setOnClickAction({
+            setOnClickAction {
                 val fm = supportFragmentManager
                 val ft = fm.beginTransaction()
                 val prev = fm.findFragmentByTag(OssLicenseDialog.TAG)
@@ -98,7 +98,7 @@ class AboutActivity : MaterialAboutActivity() {
                 ft.addToBackStack(null)
 
                 OssLicenseDialog().show(ft, OssLicenseDialog.TAG)
-            })
+            }
         }.build())
 
         return appCardBuilder
@@ -199,6 +199,17 @@ class AboutActivity : MaterialAboutActivity() {
                 getString(R.string.activity_about_rbtv_haengi_youtube),
                 false,
                 Uri.parse("https://www.youtube.com/channel/UCkfDws3roWo1GaA3pZUzfIQ")))
+                .build()
+
+        rbtvCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
+                IconicsDrawable(c).apply {
+                    icon(MaterialDesignIconic.Icon.gmi_youtube_play)
+                    color(ContextCompat.getColor(c, colorIcon))
+                    sizeDp(18)
+                },
+                getString(R.string.activity_about_rbtv_kinoplus),
+                false,
+                Uri.parse("https://www.youtube.com/channel/UCSPhBkVTeztDGsz9-rdsNvw")))
                 .build()
 
         rbtvCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,

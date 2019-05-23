@@ -61,6 +61,7 @@
     <string name="activity_about_rbtv_gaming_youtube">&rbtv; Gaming auf YouTube</string>
     <string name="activity_about_rbtv_haengi_youtube">&rbtv; Hängi auf YouTube</string>
     <string name="activity_about_rbtv_twitch">&rbtv; auf Twitch</string>
+    <string name="activity_about_rbtv_kinoplus">Kino+ auf YouTube</string>
     <string name="activity_about_misc_data_url">Sendeplandaten</string>
 
     <string name="hyphen_separated_text">%1$s - %2$s</string>
