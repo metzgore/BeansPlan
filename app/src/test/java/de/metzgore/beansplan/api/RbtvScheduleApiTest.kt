@@ -54,7 +54,7 @@ class RbtvScheduleApiTest {
         val weeklySchedule = (getValue(service.scheduleOfCurrentWeek()) as ApiSuccessResponse).body
 
         val request = mockWebServer.takeRequest()
-        assertThat(request.path, `is`("/api/1.0/schedule/schedule.json"))
+        assertThat(request.path, `is`("/v1/schedule/legacy/weekdays"))
 
         assertThat<WeeklyScheduleResponse>(weeklySchedule, notNullValue())
         assertThat(weeklySchedule.isEmpty, `is`(false))

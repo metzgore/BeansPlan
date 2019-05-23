@@ -6,13 +6,13 @@
   url: http://commons.apache.org/proper/commons-lang/
   year: 2001-2017
 
-- artifact: com.mikepenz:community-material-typeface:+
-  name: community-material-typeface
+- artifact: com.mikepenz:material-design-iconic-typeface:+
+  name: Android-Iconics Material-Design-Iconic Typeface Library
   copyrightHolder: Mike Penz
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://github.com/mikepenz/Android-Iconics
-  year: 2018
+  year: 2019
 
 - artifact: com.google.dagger:dagger:+
   name: Dagger 2
@@ -36,7 +36,7 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://github.com/mikepenz/Android-Iconics
-  year: 2018
+  year: 2019
 
 - artifact: com.github.daniel-stoneuk:material-about-library:+
   name: material-about-library
@@ -399,10 +399,124 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: http://developer.android.com/tools/extras/support-library.html
+  skip: true
 - artifact: android.arch.lifecycle:livedata-core:+
   name: Android Lifecycle LiveData Core
-  skip: true
   copyrightHolder: Google Inc.
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://developer.android.com/topic/libraries/architecture/index.html
+  skip: true
+- artifact: com.android.support:documentfile:+
+  name: Android Support Library Document File
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+  skip: true
+- artifact: com.android.support:viewpager:+
+  name: Android Support Library View Pager
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+  skip: true
+- artifact: com.android.support:customview:+
+  name: Android Support Library Custom View
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+  skip: true
+- artifact: com.android.support:localbroadcastmanager:+
+  name: Android Support Library Local Broadcast Manager
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+  skip: true
+- artifact: com.android.support:versionedparcelable:+
+  name: VersionedParcelable and friends
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+  skip: true
+- artifact: com.android.support:slidingpanelayout:+
+  name: Android Support Library Sliding Pane Layout
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+  skip: true
+- artifact: com.android.support:interpolator:+
+  name: Android Support Library Interpolators
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+  skip: true
+- artifact: com.android.support:cursoradapter:+
+  name: Android Support Library Cursor Adapter
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+  skip: true
+- artifact: com.android.support:loader:+
+  name: Android Support Library loader
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+  skip: true
+- artifact: org.jetbrains.kotlin:kotlin-android-extensions-runtime:+
+  name: org.jetbrains.kotlin:kotlin-android-extensions-runtime
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://kotlinlang.org/
+  skip: true
+- artifact: com.android.support:drawerlayout:+
+  name: Android Support Library Drawer Layout
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+  skip: true
+- artifact: com.android.support:print:+
+  name: Android Support Library Print
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+  skip: true
+- artifact: com.android.support:swiperefreshlayout:+
+  name: Android Support Library Custom View
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+  skip: true
+- artifact: com.android.support:collections:+
+  name: Android Support Library collections
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+  skip: true
+- artifact: com.android.support:coordinatorlayout:+
+  name: Android Support Library Coordinator Layout
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+  skip: true
+- artifact: com.android.support:asynclayoutinflater:+
+  name: Android Support Library Async Layout Inflater
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://developer.android.com/tools/extras/support-library.html
+  skip: true
+
