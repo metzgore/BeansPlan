@@ -1,7 +1,7 @@
 package de.metzgore.beansplan.util.di
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import de.metzgore.beansplan.reminders.RemindersRepository
 import de.metzgore.beansplan.reminders.RemindersViewModel
 

@@ -1,7 +1,7 @@
 package de.metzgore.beansplan.util.di;
 
-import android.arch.lifecycle.ViewModelProvider;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.annotation.NonNull;
 
 import de.metzgore.beansplan.weeklyschedule.WeeklyScheduleRepository;
 import de.metzgore.beansplan.weeklyschedule.WeeklyScheduleViewModel;

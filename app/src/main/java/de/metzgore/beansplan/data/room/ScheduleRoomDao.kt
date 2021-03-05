@@ -1,7 +1,7 @@
 package de.metzgore.beansplan.data.room
 
-import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.*
+import androidx.lifecycle.LiveData
+import androidx.room.*
 import de.metzgore.beansplan.data.WeeklyScheduleResponse
 import de.metzgore.beansplan.data.room.relations.DailyScheduleWithShows
 import de.metzgore.beansplan.data.room.relations.ShowWithReminder
@@ -142,7 +142,7 @@ abstract class ScheduleRoomDao {
                 val reminder = showsWithReminder.firstOrNull { it.show.id == show.id }
 
                 showsRoom.add(Show(show.id, date, show.title, show.topic, show.timeStart,
-                        show.timeEnd, show.length, show.game, show.youtubeId, show.type, false, reminder?.reminder?.get(0)?.id))
+                        show.timeEnd, show.length, show.game, show.youtubeId, show.type, false, reminder?.reminder?.id))
             }
         }
         upsertShows(showsRoom)
@@ -154,7 +154,7 @@ abstract class ScheduleRoomDao {
 
     @Transaction
     open fun upsertReminder(showWithReminder: ShowWithReminder) {
-        val insertResult = insertReminder(showWithReminder.reminder!![0])
+        val insertResult = insertReminder(showWithReminder.reminder!!)
 
         showWithReminder.show.reminderId = insertResult
 
@@ -166,6 +166,6 @@ abstract class ScheduleRoomDao {
         showWithReminder.show.reminderId = null
 
         updateShows(showWithReminder.show)
-        deleteReminder(showWithReminder.reminder!![0])
+        deleteReminder(showWithReminder.reminder!!)
     }
 }

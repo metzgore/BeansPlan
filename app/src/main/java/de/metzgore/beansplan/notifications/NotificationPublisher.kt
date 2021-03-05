@@ -8,7 +8,6 @@ import dagger.android.DaggerBroadcastReceiver
 import de.metzgore.beansplan.reminders.RemindersRepository
 import javax.inject.Inject
 
-
 class NotificationPublisher : DaggerBroadcastReceiver() {
 
     @Inject
@@ -24,7 +23,7 @@ class NotificationPublisher : DaggerBroadcastReceiver() {
         super.onReceive(context, intent)
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        val notification = intent.getParcelableExtra(NOTIFICATION) as Notification
+        val notification = intent.getParcelableExtra<Notification>(NOTIFICATION)
         val id = intent.getLongExtra(NOTIFICATION_ID, 0)
         notificationManager.notify(TAG, id.toInt(), notification)
 

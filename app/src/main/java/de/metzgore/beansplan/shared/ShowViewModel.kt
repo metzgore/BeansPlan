@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.support.v4.content.ContextCompat
 import android.text.format.DateUtils
+import androidx.core.content.ContextCompat
 import de.metzgore.beansplan.R
 import de.metzgore.beansplan.data.ShowResponse
 import de.metzgore.beansplan.data.room.Reminder
@@ -39,7 +39,7 @@ OnReminderButtonClickListener?) {
     }
 
     fun getReminderIcon(context: Context): Drawable {
-        return if (showWithReminder.reminder?.get(0) == null) {
+        return if (showWithReminder.reminder == null) {
             ContextCompat.getDrawable(context, R.drawable.ic_reminder_add)!!
         } else {
             ContextCompat.getDrawable(context, R.drawable.ic_reminder_available)!!
@@ -77,10 +77,8 @@ OnReminderButtonClickListener?) {
     }
 
     fun saveReminder() {
-        if (showWithReminder.reminder?.get(0) == null) {
-            val newShowWithReminder = ShowWithReminder()
-            newShowWithReminder.show = showWithReminder.show
-            newShowWithReminder.reminder = listOf(Reminder(timestamp = showWithReminder.show.timeStart))
+        if (showWithReminder.reminder == null) {
+            val newShowWithReminder = ShowWithReminder(showWithReminder.show, Reminder(timestamp = showWithReminder.show.timeStart))
             listener?.onUpsertReminder(newShowWithReminder)
         } else {
             listener?.deleteOrUpdateReminder(showWithReminder)

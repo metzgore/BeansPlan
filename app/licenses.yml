@@ -351,13 +351,6 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: http://developer.android.com/tools/extras/support-library.html
-- artifact: com.squareup.leakcanary:leakcanary-android-no-op:+
-  name: No op LeakCanary for Android
-  skip: true
-  copyrightHolder: #COPYRIGHT_HOLDER#
-  license: The Apache Software License, Version 2.0
-  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
-  url: http://github.com/square/leakcanary/
 - artifact: com.android.support:support-core-ui:+
   name: Android Support Library core UI
   skip: true
@@ -469,13 +462,6 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
   url: http://developer.android.com/tools/extras/support-library.html
-  skip: true
-- artifact: org.jetbrains.kotlin:kotlin-android-extensions-runtime:+
-  name: org.jetbrains.kotlin:kotlin-android-extensions-runtime
-  copyrightHolder: #COPYRIGHT_HOLDER#
-  license: The Apache License, Version 2.0
-  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
-  url: https://kotlinlang.org/
   skip: true
 - artifact: com.android.support:drawerlayout:+
   name: Android Support Library Drawer Layout

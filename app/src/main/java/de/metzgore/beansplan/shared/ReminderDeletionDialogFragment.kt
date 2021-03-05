@@ -2,11 +2,11 @@ package de.metzgore.beansplan.shared
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import dagger.android.support.AndroidSupportInjection
 import de.metzgore.beansplan.R
 import de.metzgore.beansplan.data.room.relations.ShowWithReminder
@@ -18,7 +18,7 @@ import de.metzgore.beansplan.util.di.RemindersViewModelFactory
 import javax.inject.Inject
 
 
-class ReminderDeletionDialogFragment : DialogFragment() {
+class ReminderDeletionDialogFragment : androidx.fragment.app.DialogFragment() {
 
     @Inject
     lateinit var repo: RemindersRepository
@@ -37,7 +37,7 @@ class ReminderDeletionDialogFragment : DialogFragment() {
         }
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }

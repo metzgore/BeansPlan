@@ -1,6 +1,6 @@
 package de.metzgore.beansplan.api
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import de.metzgore.beansplan.LiveDataTestUtil.getValue
 import de.metzgore.beansplan.data.WeeklyScheduleResponse
 import de.metzgore.beansplan.util.LiveDataCallAdapterFactory

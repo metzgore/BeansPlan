@@ -7,12 +7,15 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
-    <style name="AppThemeAbout" parent="Theme.Mal.Light">
+    <style name="AppThemeAbout" parent="Theme.MaterialComponents.Light">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="mal_toolbarTheme">@style/AppTheme.AppBarOverlay</item>
-        <item name="mal_toolbarPopupTheme">@style/AppTheme.PopupOverlay</item>
+        <item name="toolbarStyle">@style/MyToolbar</item>
+    </style>
+
+    <style name="MyToolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="titleTextColor">@color/white</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

@@ -2,21 +2,23 @@ package de.metzgore.beansplan;
 
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateUtils;
 import android.view.MenuItem;
 import android.view.View;
+
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.core.view.ViewCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
+import com.google.android.material.navigation.NavigationView;
 
 import java.io.File;
 
@@ -25,7 +27,7 @@ import javax.inject.Inject;
 import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
-import dagger.android.support.HasSupportFragmentInjector;
+import dagger.android.HasAndroidInjector;
 import de.metzgore.beansplan.about.AboutActivity;
 import de.metzgore.beansplan.baseschedule.BaseFragment;
 import de.metzgore.beansplan.databinding.ActivityMainBinding;
@@ -35,10 +37,10 @@ import de.metzgore.beansplan.settings.repository.AppSettings;
 import de.metzgore.beansplan.weeklyschedule.WeeklyScheduleFragment;
 
 public class MainActivity extends AppCompatActivity implements BaseFragment.OnScheduleRefreshedListener,
-        BaseFragment.OnAppBarUpdatedListener, HasSupportFragmentInjector {
+        BaseFragment.OnAppBarUpdatedListener, HasAndroidInjector {
 
     @Inject
-    DispatchingAndroidInjector<Fragment> fragmentInjector;
+    DispatchingAndroidInjector<Object> fragmentInjector;
 
     @Inject
     AppSettings settings;
@@ -249,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnSc
     }
 
     @Override
-    public AndroidInjector<Fragment> supportFragmentInjector() {
+    public AndroidInjector<Object> androidInjector() {
         return fragmentInjector;
     }
 }

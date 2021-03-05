@@ -1,6 +1,6 @@
 package de.metzgore.beansplan.dailyschedule
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import de.metzgore.beansplan.AppExecutors
 import de.metzgore.beansplan.data.room.ScheduleRoomDao
 import de.metzgore.beansplan.data.room.relations.DailyScheduleWithShows

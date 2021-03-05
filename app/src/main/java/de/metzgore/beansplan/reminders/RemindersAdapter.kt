@@ -1,8 +1,8 @@
 package de.metzgore.beansplan.reminders
 
-import android.databinding.DataBindingUtil
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import de.metzgore.beansplan.R
@@ -11,7 +11,7 @@ import de.metzgore.beansplan.data.room.relations.ShowWithReminder
 import de.metzgore.beansplan.databinding.ListItemReminderBinding
 import de.metzgore.beansplan.shared.OnReminderButtonClickListener
 
-class RemindersAdapter(private val viewModel: RemindersViewModel) : RecyclerView.Adapter<ReminderViewHolder>() {
+class RemindersAdapter(private val viewModel: RemindersViewModel) : androidx.recyclerview.widget.RecyclerView.Adapter<ReminderViewHolder>() {
 
     private var showsWithReminder: List<ShowWithReminder>? = null
 
@@ -38,16 +38,8 @@ class RemindersAdapter(private val viewModel: RemindersViewModel) : RecyclerView
                     val newShow = showsWithRemindersList[newItemPosition].show
                     val oldShow = showsWithReminder!![oldItemPosition].show
 
-                    var newReminder: Reminder? = null
-                    var oldReminder: Reminder? = null
-
-                    if (showsWithRemindersList[newItemPosition].reminder != null) {
-                        newReminder = showsWithRemindersList[newItemPosition].reminder!![0]
-                    }
-
-                    if (showsWithReminder!![oldItemPosition].reminder != null) {
-                        oldReminder = showsWithReminder!![oldItemPosition].reminder!![0]
-                    }
+                    val newReminder = showsWithRemindersList[newItemPosition].reminder
+                    val oldReminder = showsWithReminder!![oldItemPosition].reminder
 
                     return newShow == oldShow && newReminder == oldReminder
                 }

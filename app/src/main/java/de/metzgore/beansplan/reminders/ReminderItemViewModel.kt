@@ -23,7 +23,7 @@ OnReminderButtonClickListener?) {
 
 
     fun getReminderDateTimeFormatted(context: Context): String {
-        return DateUtils.formatDateTime(context, showWithReminder.reminder!![0].timestamp.time, DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_SHOW_DATE)
+        return DateUtils.formatDateTime(context, showWithReminder.reminder!!.timestamp.time, DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_SHOW_DATE)
     }
 
     fun upsertReminder() {

@@ -1,9 +1,9 @@
 package de.metzgore.beansplan.weeklyschedule
 
 import TestUtils
-import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import de.metzgore.beansplan.LiveDataTestUtil
 import de.metzgore.beansplan.api.ApiSuccessResponse
 import de.metzgore.beansplan.api.RbtvScheduleApi

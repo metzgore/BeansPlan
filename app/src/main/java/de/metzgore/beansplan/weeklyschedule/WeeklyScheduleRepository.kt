@@ -1,6 +1,6 @@
 package de.metzgore.beansplan.weeklyschedule
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import de.metzgore.beansplan.AppExecutors
 import de.metzgore.beansplan.api.ApiResponse
 import de.metzgore.beansplan.api.RbtvScheduleApi

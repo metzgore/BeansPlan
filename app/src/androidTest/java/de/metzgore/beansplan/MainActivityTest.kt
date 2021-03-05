@@ -3,8 +3,8 @@ package de.metzgore.beansplan
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import android.support.test.InstrumentationRegistry.getInstrumentation
-import android.support.test.rule.ActivityTestRule
+import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
+import androidx.test.rule.ActivityTestRule
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import org.junit.Before
 import org.junit.Rule

@@ -1,6 +1,6 @@
 package de.metzgore.beansplan.api
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import de.metzgore.beansplan.data.WeeklyScheduleResponse
 import retrofit2.http.GET
 

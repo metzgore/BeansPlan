@@ -2,11 +2,11 @@ package de.metzgore.beansplan.shared
 
 import android.app.Dialog
 import android.app.TimePickerDialog
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import android.text.format.DateFormat
 import android.widget.TimePicker
 import dagger.android.support.AndroidSupportInjection
@@ -17,7 +17,7 @@ import de.metzgore.beansplan.util.di.RemindersViewModelFactory
 import java.util.*
 import javax.inject.Inject
 
-class ReminderTimePickerDialogFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
+class ReminderTimePickerDialogFragment : androidx.fragment.app.DialogFragment(), TimePickerDialog.OnTimeSetListener {
 
     @Inject
     lateinit var repo: RemindersRepository
@@ -43,7 +43,7 @@ class ReminderTimePickerDialogFragment : DialogFragment(), TimePickerDialog.OnTi
         }
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
@@ -79,10 +79,7 @@ class ReminderTimePickerDialogFragment : DialogFragment(), TimePickerDialog.OnTi
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
 
-        val showWithReminder = ShowWithReminder()
-        showWithReminder.show = show.show
-        showWithReminder.reminder = listOf(show.reminder!![0].copy(timestamp = calendar.time))
-
+        val showWithReminder = ShowWithReminder(show.show, show.reminder!!.copy(timestamp = calendar.time))
         viewModel.upsertReminder(showWithReminder)
     }
 

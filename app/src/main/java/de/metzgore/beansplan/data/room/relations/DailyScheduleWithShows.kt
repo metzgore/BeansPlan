@@ -1,7 +1,7 @@
 package de.metzgore.beansplan.data.room.relations
 
-import android.arch.persistence.room.Embedded
-import android.arch.persistence.room.Relation
+import androidx.room.Embedded
+import androidx.room.Relation
 import de.metzgore.beansplan.data.room.DailySchedule
 import de.metzgore.beansplan.data.room.Show
 

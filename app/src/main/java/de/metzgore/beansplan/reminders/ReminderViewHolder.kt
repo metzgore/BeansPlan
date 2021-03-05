@@ -1,9 +1,9 @@
 package de.metzgore.beansplan.reminders
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import de.metzgore.beansplan.databinding.ListItemReminderBinding
 
-class ReminderViewHolder(val binding: ListItemReminderBinding) : RecyclerView.ViewHolder(binding.root) {
+class ReminderViewHolder(val binding: ListItemReminderBinding) : androidx.recyclerview.widget.RecyclerView.ViewHolder(binding.root) {
 
     fun bind(itemViewModel: ReminderItemViewModel) {
         binding.viewModel = itemViewModel

@@ -1,9 +1,9 @@
 package de.metzgore.beansplan.shared
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import de.metzgore.beansplan.api.ApiResponse
 import de.metzgore.beansplan.data.Resource
 import de.metzgore.beansplan.mock
