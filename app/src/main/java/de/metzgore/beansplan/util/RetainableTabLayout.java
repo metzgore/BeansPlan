@@ -1,8 +1,9 @@
 package de.metzgore.beansplan.util;
 
 import android.content.Context;
-import android.support.design.widget.TabLayout;
 import android.util.AttributeSet;
+
+import com.google.android.material.tabs.TabLayout;
 
 public class RetainableTabLayout extends TabLayout {
 

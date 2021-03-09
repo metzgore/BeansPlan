@@ -5,8 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import android.support.v4.app.AlarmManagerCompat
-import android.support.v4.app.NotificationCompat
+import androidx.core.app.AlarmManagerCompat
+import androidx.core.app.NotificationCompat
 import android.text.format.DateUtils
 import de.metzgore.beansplan.MainActivity
 import de.metzgore.beansplan.R
@@ -58,7 +58,7 @@ object NotificationHelper {
             priority = NotificationCompat.PRIORITY_MAX
             setSound(Uri.parse(appSettings.ringtonePreferenceValue))
             setContentIntent(pendingIntent)
-            setWhen(showWithReminder.reminder!![0].timestamp.time)
+            setWhen(showWithReminder.reminder!!.timestamp.time)
             setCategory(NotificationCompat.CATEGORY_REMINDER)
             addAction(R.drawable.ic_youtube, context.getString(R.string.notification_action_youtube),
                     PendingIntent.getActivity(context, 1, youtubeIntent, 0))
@@ -77,14 +77,14 @@ object NotificationHelper {
     fun scheduleNotification(context: Context, appSettings: AppSettings, showWithReminder: ShowWithReminder) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         AlarmManagerCompat.setExactAndAllowWhileIdle(alarmManager, AlarmManager.RTC_WAKEUP,
-                showWithReminder.reminder!![0].timestamp.time, getPendingIntent(context, appSettings, showWithReminder))
+                showWithReminder.reminder!!.timestamp.time, getPendingIntent(context, appSettings, showWithReminder))
     }
 
     private fun getPendingIntent(context: Context, appSettings: AppSettings, showWithReminder: ShowWithReminder): PendingIntent {
         val notificationIntent = Intent(context, NotificationPublisher::class.java)
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, showWithReminder.reminder!![0].id)
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, showWithReminder.reminder!!.id)
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, buildNotification(context, appSettings, showWithReminder))
-        return PendingIntent.getBroadcast(context, showWithReminder.reminder!![0].id.toInt(),
+        return PendingIntent.getBroadcast(context, showWithReminder.reminder.id.toInt(),
                 notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 

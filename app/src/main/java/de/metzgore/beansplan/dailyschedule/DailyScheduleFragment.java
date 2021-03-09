@@ -1,17 +1,18 @@
 package de.metzgore.beansplan.dailyschedule;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
 
 import java.util.Date;
 
@@ -123,7 +124,7 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
                 ShowWithReminder content = showWithReminder.getContentIfNotHandled();
                 if (content != null) {
                     ReminderTimePickerDialogFragment dialog = ReminderTimePickerDialogFragment
-                            .Companion.newInstance(content.getReminder().get(0).getTimestamp()
+                            .Companion.newInstance(content.getReminder().getTimestamp()
                                     .getTime());
                     dialog.setTargetFragment(this, 0);
                     dialog.show(getFragmentManager(), "TIME_PICKER_DIALOG");
@@ -166,8 +167,8 @@ public class DailyScheduleFragment extends Fragment implements UpdatableSchedule
         LayoutScheduleBaseBinding binding = DataBindingUtil.inflate(inflater, R.layout
                 .layout_schedule_base, container, false);
 
-        binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
+        binding.setViewModel(viewModel);
         binding.fragmentBaseScheduleShowsList.addItemDecoration(new DividerItemDecoration
                 (getActivity(), DividerItemDecoration.VERTICAL));
         binding.fragmentBaseScheduleShowsList.setHasFixedSize(true);

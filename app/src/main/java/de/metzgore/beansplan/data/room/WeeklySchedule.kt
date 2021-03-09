@@ -1,7 +1,7 @@
 package de.metzgore.beansplan.data.room
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import de.metzgore.beansplan.data.WeeklyScheduleResponse
 
 @Entity

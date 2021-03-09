@@ -1,7 +1,7 @@
 package de.metzgore.beansplan.util
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MediatorLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 
 fun <T> LiveData<T>.distinctUntilChanged(): LiveData<T> {
     var lastValue: Any? = Any()

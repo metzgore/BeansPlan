@@ -1,6 +1,6 @@
 package de.metzgore.beansplan.dailyschedule
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import de.metzgore.beansplan.LiveDataTestUtil
 import de.metzgore.beansplan.data.room.ScheduleRoomDao
 import de.metzgore.beansplan.mock

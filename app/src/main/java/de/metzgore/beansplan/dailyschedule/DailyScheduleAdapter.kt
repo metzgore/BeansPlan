@@ -1,12 +1,11 @@
 package de.metzgore.beansplan.dailyschedule
 
-import android.databinding.DataBindingUtil
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import de.metzgore.beansplan.R
-import de.metzgore.beansplan.data.room.Reminder
 import de.metzgore.beansplan.data.room.relations.ShowWithReminder
 import de.metzgore.beansplan.databinding.ListItemShowBinding
 import de.metzgore.beansplan.reminders.RemindersViewModel
@@ -41,27 +40,8 @@ class DailyScheduleAdapter(private val remindersViewModel: RemindersViewModel) :
                     val newShow = showList[newItemPosition].show
                     val oldShow = showsWithReminder!![oldItemPosition].show
 
-                    var newReminder: Reminder? = null
-                    var oldReminder: Reminder? = null
-
-                    if (showList[newItemPosition].reminder != null) {
-                        newReminder = showList[newItemPosition].reminder!![0]
-                    }
-
-                    if (showsWithReminder!![oldItemPosition].reminder != null) {
-                        oldReminder = showsWithReminder!![oldItemPosition].reminder!![0]
-                    }
-
-                    //TODO move somewhere else
-                    /*if (newReminder != oldReminder) {
-                        if (oldReminder == null && newReminder != null) {
-                            remindersViewModel.triggerReminderInserted()
-                        } else if (oldReminder != null && newReminder == null) {
-                            remindersViewModel.triggerReminderDeleted()
-                        } else {
-                            remindersViewModel.triggerReminderUpdated()
-                        }
-                    }*/
+                    val newReminder = showList[newItemPosition].reminder
+                    val oldReminder = showsWithReminder!![oldItemPosition].reminder
 
                     return newShow == oldShow && newReminder == oldReminder
                 }

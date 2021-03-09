@@ -2,7 +2,6 @@ package de.metzgore.beansplan.about
 
 import android.content.Context
 import android.net.Uri
-import android.support.v4.content.ContextCompat
 import com.danielstone.materialaboutlibrary.ConvenienceBuilder
 import com.danielstone.materialaboutlibrary.MaterialAboutActivity
 import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem
@@ -10,7 +9,9 @@ import com.danielstone.materialaboutlibrary.items.MaterialAboutTitleItem
 import com.danielstone.materialaboutlibrary.model.MaterialAboutCard
 import com.danielstone.materialaboutlibrary.model.MaterialAboutList
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
+import com.mikepenz.iconics.typeface.library.materialdesigniconic.MaterialDesignIconic
+import com.mikepenz.iconics.utils.colorRes
+import com.mikepenz.iconics.utils.sizeDp
 import de.metzgore.beansplan.R
 
 class AboutActivity : MaterialAboutActivity() {
@@ -19,7 +20,7 @@ class AboutActivity : MaterialAboutActivity() {
         return createMaterialAboutList(context, R.color.colorAccent)
     }
 
-    override fun getActivityTitle(): CharSequence? {
+    override fun getActivityTitle(): CharSequence {
         return getString(R.string.activity_about_title)
     }
 
@@ -43,38 +44,26 @@ class AboutActivity : MaterialAboutActivity() {
         }.build())
 
         appCardBuilder.addItem(ConvenienceBuilder.createVersionActionItem(c,
-                IconicsDrawable(c).apply {
-                    icon(MaterialDesignIconic.Icon.gmi_info)
-                    color(ContextCompat.getColor(c, colorIcon))
-                    sizeDp(18)
+                IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_info).apply {
+                    colorRes = colorIcon
+                    sizeDp = 18
                 },
                 getString(R.string.activity_about_version),
                 true))
 
         appCardBuilder.addItem(ConvenienceBuilder.createRateActionItem(c,
-                IconicsDrawable(c).apply {
-                    icon(MaterialDesignIconic.Icon.gmi_star)
-                    color(ContextCompat.getColor(c, colorIcon))
-                    sizeDp(18)
+                IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_star).apply {
+                    colorRes = colorIcon
+                    sizeDp = 18
                 },
                 getString(R.string.activity_about_me_playstore),
                 null
         ))
 
-        /*appCardBuilder.addItem(MaterialAboutActionItem.Builder()
-                .text("Changelog")
-                .icon(IconicsDrawable(c)
-                        .icon(CommunityMaterial.Icon.cmd_history)
-                        .color(ContextCompat.getColor(c, colorIcon))
-                        .sizeDp(18))
-                .setOnClickAction(ConvenienceBuilder.createWebViewDialogOnClickAction(c, "Releases", "https://github.com/daniel-stoneuk/material-about-library/releases", true, false))
-                .build())*/
-
         appCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
-                IconicsDrawable(c).apply {
-                    icon(MaterialDesignIconic.Icon.gmi_view_web)
-                    color(ContextCompat.getColor(c, colorIcon))
-                    sizeDp(18)
+                IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_view_web).apply {
+                    colorRes = colorIcon
+                    sizeDp = 18
                 },
                 getString(R.string.activity_about_misc_data_url),
                 true,
@@ -84,9 +73,9 @@ class AboutActivity : MaterialAboutActivity() {
         appCardBuilder.addItem(MaterialAboutActionItem.Builder().apply {
             text(R.string.activity_about_open_source_licenses_title)
             icon(IconicsDrawable(c).apply {
-                icon(MaterialDesignIconic.Icon.gmi_book)
-                color(ContextCompat.getColor(c, colorIcon))
-                sizeDp(18)
+                icon = MaterialDesignIconic.Icon.gmi_book
+                colorRes = colorIcon
+                sizeDp = 18
             })
             setOnClickAction {
                 val fm = supportFragmentManager
@@ -112,17 +101,17 @@ class AboutActivity : MaterialAboutActivity() {
         meCardBuilder.addItem(MaterialAboutActionItem.Builder().apply {
             text("Nico Riemer")
             icon(IconicsDrawable(c).apply {
-                icon(MaterialDesignIconic.Icon.gmi_account)
-                color(ContextCompat.getColor(c, colorIcon))
-                sizeDp(18)
+                icon = MaterialDesignIconic.Icon.gmi_account
+                colorRes = colorIcon
+                sizeDp = 18
             })
         }.build())
 
         meCardBuilder.addItem(ConvenienceBuilder.createEmailItem(c,
                 IconicsDrawable(c).apply {
-                    icon(MaterialDesignIconic.Icon.gmi_email)
-                    color(ContextCompat.getColor(c, colorIcon))
-                    sizeDp(18)
+                    icon = MaterialDesignIconic.Icon.gmi_email
+                    colorRes = colorIcon
+                    sizeDp = 18
                 },
                 getString(R.string.activity_about_me_mail_title),
                 true,
@@ -132,9 +121,9 @@ class AboutActivity : MaterialAboutActivity() {
         meCardBuilder.addItem(MaterialAboutActionItem.Builder().apply {
             text(R.string.activity_about_me_github)
             icon(IconicsDrawable(c).apply {
-                icon(MaterialDesignIconic.Icon.gmi_github)
-                color(ContextCompat.getColor(c, colorIcon))
-                sizeDp(18)
+                icon = MaterialDesignIconic.Icon.gmi_github
+                colorRes = colorIcon
+                sizeDp = 18
             })
             setOnClickAction(ConvenienceBuilder.createWebsiteOnClickAction(c, Uri.parse("https://github.com/metzgore")))
         }.build())
@@ -142,9 +131,9 @@ class AboutActivity : MaterialAboutActivity() {
         meCardBuilder.addItem(MaterialAboutActionItem.Builder().apply {
             text(R.string.activity_about_me_twitter)
             icon(IconicsDrawable(c).apply {
-                icon(MaterialDesignIconic.Icon.gmi_twitter)
-                color(ContextCompat.getColor(c, colorIcon))
-                sizeDp(18)
+                icon = MaterialDesignIconic.Icon.gmi_twitter
+                colorRes = colorIcon
+                sizeDp = 18
             })
             setOnClickAction(ConvenienceBuilder.createWebsiteOnClickAction(c, Uri.parse("https://twitter.com/metzgor3")))
         }.build())
@@ -159,9 +148,9 @@ class AboutActivity : MaterialAboutActivity() {
 
         rbtvCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
                 IconicsDrawable(c).apply {
-                    icon(MaterialDesignIconic.Icon.gmi_view_web)
-                    color(ContextCompat.getColor(c, colorIcon))
-                    sizeDp(18)
+                    icon = MaterialDesignIconic.Icon.gmi_view_web
+                    colorRes = colorIcon
+                    sizeDp = 18
                 },
                 getString(R.string.activity_about_rbtv_website),
                 true,
@@ -170,9 +159,9 @@ class AboutActivity : MaterialAboutActivity() {
 
         rbtvCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
                 IconicsDrawable(c).apply {
-                    icon(MaterialDesignIconic.Icon.gmi_youtube_play)
-                    color(ContextCompat.getColor(c, colorIcon))
-                    sizeDp(18)
+                    icon = MaterialDesignIconic.Icon.gmi_youtube_play
+                    colorRes = colorIcon
+                    sizeDp = 18
                 },
                 getString(R.string.activity_about_rbtv_youtube),
                 false,
@@ -181,9 +170,9 @@ class AboutActivity : MaterialAboutActivity() {
 
         rbtvCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
                 IconicsDrawable(c).apply {
-                    icon(MaterialDesignIconic.Icon.gmi_youtube_play)
-                    color(ContextCompat.getColor(c, colorIcon))
-                    sizeDp(18)
+                    icon = MaterialDesignIconic.Icon.gmi_youtube_play
+                    colorRes = colorIcon
+                    sizeDp = 18
                 },
                 getString(R.string.activity_about_rbtv_gaming_youtube),
                 false,
@@ -192,9 +181,9 @@ class AboutActivity : MaterialAboutActivity() {
 
         rbtvCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
                 IconicsDrawable(c).apply {
-                    icon(MaterialDesignIconic.Icon.gmi_youtube_play)
-                    color(ContextCompat.getColor(c, colorIcon))
-                    sizeDp(18)
+                    icon = MaterialDesignIconic.Icon.gmi_youtube_play
+                    colorRes = colorIcon
+                    sizeDp = 18
                 },
                 getString(R.string.activity_about_rbtv_haengi_youtube),
                 false,
@@ -203,9 +192,9 @@ class AboutActivity : MaterialAboutActivity() {
 
         rbtvCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
                 IconicsDrawable(c).apply {
-                    icon(MaterialDesignIconic.Icon.gmi_youtube_play)
-                    color(ContextCompat.getColor(c, colorIcon))
-                    sizeDp(18)
+                    icon = MaterialDesignIconic.Icon.gmi_youtube_play
+                    colorRes = colorIcon
+                    sizeDp = 18
                 },
                 getString(R.string.activity_about_rbtv_kinoplus),
                 false,
@@ -214,9 +203,9 @@ class AboutActivity : MaterialAboutActivity() {
 
         rbtvCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
                 IconicsDrawable(c).apply {
-                    icon(MaterialDesignIconic.Icon.gmi_twitch)
-                    color(ContextCompat.getColor(c, colorIcon))
-                    sizeDp(18)
+                    icon = MaterialDesignIconic.Icon.gmi_twitch
+                    colorRes = colorIcon
+                    sizeDp = 18
                 },
                 getString(R.string.activity_about_rbtv_twitch),
                 false,
@@ -225,9 +214,9 @@ class AboutActivity : MaterialAboutActivity() {
 
         rbtvCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
                 IconicsDrawable(c).apply {
-                    icon(MaterialDesignIconic.Icon.gmi_facebook)
-                    color(ContextCompat.getColor(c, colorIcon))
-                    sizeDp(18)
+                    icon = MaterialDesignIconic.Icon.gmi_facebook
+                    colorRes = colorIcon
+                    sizeDp = 18
                 },
                 getString(R.string.activity_about_rbtv_facebook),
                 false,
@@ -236,9 +225,9 @@ class AboutActivity : MaterialAboutActivity() {
 
         rbtvCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
                 IconicsDrawable(c).apply {
-                    icon(MaterialDesignIconic.Icon.gmi_twitter)
-                    color(ContextCompat.getColor(c, colorIcon))
-                    sizeDp(18)
+                    icon = MaterialDesignIconic.Icon.gmi_twitter
+                    colorRes = colorIcon
+                    sizeDp = 18
                 },
                 getString(R.string.activity_about_rbtv_twitter),
                 false,
@@ -247,9 +236,9 @@ class AboutActivity : MaterialAboutActivity() {
 
         rbtvCardBuilder.addItem(ConvenienceBuilder.createWebsiteActionItem(c,
                 IconicsDrawable(c).apply {
-                    icon(MaterialDesignIconic.Icon.gmi_instagram)
-                    color(ContextCompat.getColor(c, colorIcon))
-                    sizeDp(18)
+                    icon = MaterialDesignIconic.Icon.gmi_instagram
+                    colorRes = colorIcon
+                    sizeDp = 18
                 },
                 getString(R.string.activity_about_rbtv_instagram),
                 false,

@@ -1,9 +1,9 @@
 package de.metzgore.beansplan
 
 import TestUtils
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import de.metzgore.beansplan.data.Resource
 import de.metzgore.beansplan.data.ShowResponse
 import de.metzgore.beansplan.data.Status

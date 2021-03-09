@@ -1,7 +1,7 @@
 package de.metzgore.beansplan.util;
 
-import android.arch.lifecycle.LiveData;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.annotation.NonNull;
 
 import java.lang.reflect.Type;
 import java.util.concurrent.atomic.AtomicBoolean;

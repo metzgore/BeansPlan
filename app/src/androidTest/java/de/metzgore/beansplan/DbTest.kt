@@ -1,8 +1,8 @@
 package de.metzgore.beansplan
 
-import android.arch.core.executor.testing.CountingTaskExecutorRule
-import android.arch.persistence.room.Room
-import android.support.test.InstrumentationRegistry
+import androidx.arch.core.executor.testing.CountingTaskExecutorRule
+import androidx.room.Room
+import androidx.test.platform.app.InstrumentationRegistry
 import de.metzgore.beansplan.data.room.BeansPlanDb
 import org.junit.After
 import org.junit.Before

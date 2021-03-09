@@ -1,15 +1,14 @@
 package de.metzgore.beansplan.data.room.relations
 
-import android.arch.persistence.room.Embedded
-import android.arch.persistence.room.Relation
+import androidx.room.Embedded
+import androidx.room.Relation
 import de.metzgore.beansplan.data.room.Reminder
 import de.metzgore.beansplan.data.room.Show
 
-class ShowWithReminder {
+data class ShowWithReminder(
     @Embedded
-    lateinit var show: Show
+    val show: Show,
 
-    //TODO better one-to-one relation
     @Relation(parentColumn = "reminderId", entityColumn = "id")
-    var reminder: List<Reminder>? = null
-}
+    val reminder: Reminder?
+)

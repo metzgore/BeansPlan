@@ -1,11 +1,11 @@
 package de.metzgore.beansplan.reminders
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.content.Context
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +30,7 @@ class RemindersFragment : BaseFragment() {
     @Inject
     lateinit var appSettings: AppSettings
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
@@ -58,15 +58,15 @@ class RemindersFragment : BaseFragment() {
             it?.getContentIfNotHandled()?.let { _ ->
                 val newFragment = ReminderDeletionDialogFragment.newInstance()
                 newFragment.setTargetFragment(this, 0)
-                newFragment.show(fragmentManager, "DELETION_DIALOG")
+                newFragment.show(parentFragmentManager, "DELETION_DIALOG")
             }
         })
 
         viewModel.triggerTimePickerDialog.observe(this, Observer {
             it?.getContentIfNotHandled()?.let { showWithReminder ->
-                val newFragment = ReminderTimePickerDialogFragment.newInstance(showWithReminder.reminder!![0].timestamp.time)
+                val newFragment = ReminderTimePickerDialogFragment.newInstance(showWithReminder.reminder!!.timestamp.time)
                 newFragment.setTargetFragment(this, 0)
-                newFragment.show(fragmentManager, "TIMEPICKET_DIALOG")
+                newFragment.show(parentFragmentManager, "TIMEPICKET_DIALOG")
             }
         })
     }
@@ -76,8 +76,8 @@ class RemindersFragment : BaseFragment() {
         val binding = DataBindingUtil.inflate<FragmentRemindersBinding>(inflater, R.layout.fragment_reminders, container, false)
 
         binding.apply {
+            lifecycleOwner = this@RemindersFragment
             viewModel = remindersViewModel
-            setLifecycleOwner(this@RemindersFragment)
         }
 
         binding.fragmentRemindersList.apply {
@@ -91,7 +91,7 @@ class RemindersFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (activity != null)
-            (activity as FragmentActivity).title = getString(R.string.drawer_item_reminders)
+            (activity as androidx.fragment.app.FragmentActivity).title = getString(R.string.drawer_item_reminders)
     }
 
     companion object {

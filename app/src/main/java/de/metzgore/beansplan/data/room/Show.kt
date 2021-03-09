@@ -1,6 +1,6 @@
 package de.metzgore.beansplan.data.room
 
-import android.arch.persistence.room.*
+import androidx.room.*
 import de.metzgore.beansplan.data.ShowResponse
 import java.util.*
 

@@ -1,7 +1,7 @@
 package de.metzgore.beansplan.util
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import de.metzgore.beansplan.api.ApiResponse
 import retrofit2.Response
 

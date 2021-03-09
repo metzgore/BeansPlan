@@ -1,6 +1,6 @@
 package de.metzgore.beansplan.util;
 
-import android.databinding.BindingAdapter;
+import androidx.databinding.BindingAdapter;
 import android.view.View;
 
 public class BindingAdapters {
