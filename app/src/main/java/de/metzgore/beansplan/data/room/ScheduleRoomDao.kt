@@ -137,14 +137,14 @@ abstract class ScheduleRoomDao {
         val showsWithReminder = getShowsWithRemindersSync()
 
         val showsRoom = arrayListOf<Show>()
-        item.schedule.forEach { (date, shows) ->
+        /*item.schedule.forEach { (date, shows) ->
             shows.forEach { show ->
                 val reminder = showsWithReminder.firstOrNull { it.show.id == show.id }
 
                 showsRoom.add(Show(show.id, date, show.title, show.topic, show.timeStart,
-                        show.timeEnd, show.length, show.game, show.youtubeId, show.type, false, reminder?.reminder?.id))
+                        show.timeEnd, 1, show.game, "s", show.type, false, reminder?.reminder?.id))
             }
-        }
+        }*/
         upsertShows(showsRoom)
 
         markShowsDeleted(*showsRoom.map {

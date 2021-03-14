@@ -7,6 +7,8 @@ import dagger.Provides
 import de.metzgore.beansplan.BuildConfig
 import de.metzgore.beansplan.api.RbtvScheduleApi
 import de.metzgore.beansplan.util.LiveDataCallAdapterFactory
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -23,7 +25,15 @@ class RbtvApiModule {
     @Provides
     @Singleton
     fun retrofit(gsonConverterFactory: GsonConverterFactory, liveDataCallAdapterFactory: LiveDataCallAdapterFactory): Retrofit {
-        return Retrofit.Builder().baseUrl(BuildConfig.HOST).addConverterFactory(gsonConverterFactory).addCallAdapterFactory(liveDataCallAdapterFactory).build()
+        val loggingInterceptor = HttpLoggingInterceptor().apply {
+            this.level = HttpLoggingInterceptor.Level.BASIC
+        }
+
+        val client = OkHttpClient.Builder().apply {
+            this.addInterceptor(loggingInterceptor)
+        }.build()
+
+        return Retrofit.Builder().baseUrl(BuildConfig.HOST).addConverterFactory(gsonConverterFactory).addCallAdapterFactory(liveDataCallAdapterFactory).client(client).build()
     }
 
     @Provides
@@ -35,7 +45,7 @@ class RbtvApiModule {
     @Provides
     @Singleton
     fun provideGson(): Gson {
-        return GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").setDateFormat("dd.MM.yyyy")
+        return GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").setDateFormat("dd.MM.yyyy")
                 .create()
     }
 

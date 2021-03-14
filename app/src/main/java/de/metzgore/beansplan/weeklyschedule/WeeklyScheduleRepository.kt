@@ -49,7 +49,7 @@ class WeeklyScheduleRepository @Inject constructor(private val api: RbtvSchedule
             }
 
             override fun createCall(): LiveData<ApiResponse<WeeklyScheduleResponse>> {
-                return api.scheduleOfCurrentWeek()
+                return api.getScheduleFromTimestamp(1615127964)
             }
         }.asLiveData()
     }

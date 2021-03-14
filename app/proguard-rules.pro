@@ -30,7 +30,7 @@
 #######################################################################
 -keep class de.metzgore.beansplan.data.DailyScheduleResponse { *; }
 -keep class de.metzgore.beansplan.data.WeeklyScheduleResponse { *; }
--keep class de.metzgore.beansplan.data.ShowResponse { *; }
+-keep class de.metzgore.beansplan.data.ScheduleItem { *; }
 
 #######################################################################
 # Android

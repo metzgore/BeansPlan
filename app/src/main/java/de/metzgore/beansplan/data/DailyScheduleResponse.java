@@ -13,9 +13,9 @@ public class DailyScheduleResponse {
 
     @SerializedName("schedule")
     @Expose
-    private List<ShowResponse> shows;
+    private List<ScheduleItem> shows;
 
-    public DailyScheduleResponse(List<ShowResponse> shows) {
+    public DailyScheduleResponse(List<ScheduleItem> shows) {
         this.shows = shows;
     }
 
@@ -23,7 +23,7 @@ public class DailyScheduleResponse {
         this.shows = new ArrayList<>();
     }
 
-    public List<ShowResponse> getShows() {
+    public List<ScheduleItem> getShows() {
         return shows;
     }
 
@@ -35,8 +35,8 @@ public class DailyScheduleResponse {
     public String toString() {
         StringBuilder showsBuilder = new StringBuilder();
 
-        for (ShowResponse showResponse : shows) {
-            showsBuilder.append(showResponse.toString()).append("\n");
+        for (ScheduleItem scheduleItem : shows) {
+            showsBuilder.append(scheduleItem.toString()).append("\n");
         }
 
         return showsBuilder.toString();

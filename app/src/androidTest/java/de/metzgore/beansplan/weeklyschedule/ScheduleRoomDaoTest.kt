@@ -3,7 +3,7 @@ package de.metzgore.beansplan.weeklyschedule
 import TestUtils
 import de.metzgore.beansplan.DbTest
 import de.metzgore.beansplan.LiveDataTestUtil.getValue
-import de.metzgore.beansplan.data.ShowResponse
+import de.metzgore.beansplan.data.ScheduleItem
 import de.metzgore.beansplan.data.room.DailySchedule
 import de.metzgore.beansplan.data.room.Reminder
 import de.metzgore.beansplan.data.room.Show
@@ -468,12 +468,12 @@ class ScheduleRoomDaoTest : DbTest() {
 
         val rawSchedule = TestUtils.createWeeklyScheduleOneWeek()
         val weeklySchedule = WeeklySchedule(timestamp = timestamp, weeklyScheduleRaw = rawSchedule)
-        val show = Show(1, date, "", "", Date(), Date(), 0, "", "", ShowResponse.Type.LIVE, false, 1)
+        val show = Show(1, date, "", "", Date(), Date(), 0, "", "", ScheduleItem.Type.LIVE, false, 1)
 
 
         db.scheduleDao().insert(WeeklySchedule(timestamp = timestamp, weeklyScheduleRaw = rawSchedule))
         db.scheduleDao().insertDailySchedules(DailySchedule(date, weeklySchedule.id))
-        db.scheduleDao().insertShows(Show(1, date, "", "", Date(), Date(), 0, "", "", ShowResponse.Type.LIVE, false))
+        db.scheduleDao().insertShows(Show(1, date, "", "", Date(), Date(), 0, "", "", ScheduleItem.Type.LIVE, false))
 
         val showWithReminder = ShowWithReminder()
         showWithReminder.show = show
@@ -533,7 +533,7 @@ class ScheduleRoomDaoTest : DbTest() {
         db.scheduleDao().insert(WeeklySchedule(timestamp = timestamp, weeklyScheduleRaw = rawSchedule))
         db.scheduleDao().insertDailySchedules(DailySchedule(date, weeklySchedule.id))
         db.scheduleDao().insertReminder(Reminder(1, date))
-        db.scheduleDao().insertShows(Show(1, date, "", "", Date(), Date(), 0, "", "", ShowResponse.Type.LIVE, false, 1))
+        db.scheduleDao().insertShows(Show(1, date, "", "", Date(), Date(), 0, "", "", ScheduleItem.Type.LIVE, false, 1))
 
         var loaded = getValue(db.scheduleDao().getShowsWithReminders())
 
@@ -571,7 +571,7 @@ class ScheduleRoomDaoTest : DbTest() {
         db.scheduleDao().insert(WeeklySchedule(timestamp = timestamp, weeklyScheduleRaw = rawSchedule))
         db.scheduleDao().insertDailySchedules(DailySchedule(date, weeklySchedule.id))
         db.scheduleDao().insertReminder(Reminder(1, date))
-        db.scheduleDao().insertShows(Show(1, date, "", "", Date(), Date(), 0, "", "", ShowResponse.Type.LIVE, false, 1))
+        db.scheduleDao().insertShows(Show(1, date, "", "", Date(), Date(), 0, "", "", ScheduleItem.Type.LIVE, false, 1))
 
         var loaded = getValue(db.scheduleDao().getShowsWithReminders())
 

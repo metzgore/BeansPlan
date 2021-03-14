@@ -1,7 +1,7 @@
 package de.metzgore.beansplan.data.room
 
 import androidx.room.*
-import de.metzgore.beansplan.data.ShowResponse
+import de.metzgore.beansplan.data.ScheduleItem
 import java.util.*
 
 @Entity
@@ -27,7 +27,7 @@ class Show(
         val length: Int,
         val game: String,
         val youtubeId: String,
-        val type: ShowResponse.Type,
+        val type: ScheduleItem.Type,
         val deleted: Boolean,
         var reminderId: Long? = null
 ) {

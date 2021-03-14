@@ -51,7 +51,7 @@ class RbtvScheduleApiTest {
     @Test
     fun scheduleOfCurrentWeek() {
         enqueueResponse("weekly_schedule_one_week.json")
-        val weeklySchedule = (getValue(service.scheduleOfCurrentWeek()) as ApiSuccessResponse).body
+        val weeklySchedule = (getValue(service.getScheduleFromTimestamp()) as ApiSuccessResponse).body
 
         val request = mockWebServer.takeRequest()
         assertThat(request.path, `is`("/v1/schedule/legacy/weekdays"))

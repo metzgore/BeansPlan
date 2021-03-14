@@ -47,7 +47,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
             setValue(Resource.loading(newData, forceRefresh))
         }
         result.addSource(apiResponse) { response ->
-            result.removeSource(apiResponse)
+c            result.removeSource(apiResponse)
             result.removeSource(dbSource)
             when (response) {
                 is ApiSuccessResponse -> {

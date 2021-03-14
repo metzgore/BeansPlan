@@ -10,11 +10,11 @@ import java.util.TreeMap;
 
 public class WeeklyScheduleResponse {
 
-    @SerializedName("schedule")
+    @SerializedName("data")
     @Expose
-    private TreeMap<Date, List<ShowResponse>> scheduleJson = new TreeMap<>();
+    private List<TreeMap<Date, List<ScheduleItem>>> scheduleJson = new ArrayList<>();
 
-    public TreeMap<Date, List<ShowResponse>> getSchedule() {
+    public List<TreeMap<Date, List<ScheduleItem>>> getSchedule() {
         return scheduleJson;
     }
 
@@ -27,7 +27,7 @@ public class WeeklyScheduleResponse {
     }
 
     public List<Date> getDateKeys() {
-        return new ArrayList<>(scheduleJson.keySet());
+        return null;
     }
 
     @Override
@@ -36,9 +36,9 @@ public class WeeklyScheduleResponse {
 
         for (Date key : getDateKeys()) {
             shows.append(key).append("\n");
-            for (ShowResponse showResponse : scheduleJson.get(key)) {
-                shows.append(showResponse.toString()).append("\n");
-            }
+            //for (ScheduleItem scheduleItem : scheduleJson.get(key)) {
+           //     shows.append(scheduleItem.toString()).append("\n");
+            //}
         }
 
         return shows.toString();

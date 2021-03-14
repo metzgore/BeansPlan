@@ -48,7 +48,7 @@ class WeeklyScheduleRepositoryTest {
         val observer = mock<Observer<Resource<WeeklyScheduleWithDailySchedules>>>()
 
         repo.loadSchedule(false).observeForever(observer)
-        verify(rbtvService, never()).scheduleOfCurrentWeek()
+        verify(rbtvService, never()).getScheduleFromTimestamp()
     }
 
 
@@ -58,16 +58,16 @@ class WeeklyScheduleRepositoryTest {
         `when`(scheduleDao.getWeeklyScheduleWithDailySchedules()).thenReturn(dbData)
         val schedule = WeeklyScheduleResponse()
         val call = ApiUtil.successCall(schedule)
-        `when`(rbtvService.scheduleOfCurrentWeek()).thenReturn(call)
+        `when`(rbtvService.getScheduleFromTimestamp()).thenReturn(call)
         val observer = mock<Observer<Resource<WeeklyScheduleWithDailySchedules>>>()
 
         repo.loadSchedule(false).observeForever(observer)
-        verify(rbtvService, never()).scheduleOfCurrentWeek()
+        verify(rbtvService, never()).getScheduleFromTimestamp()
 
         val nullSchedule = null
         `when`(scheduleDao.getWeeklyScheduleWithDailySchedules()).thenReturn(nullSchedule)
         dbData.value = null
-        verify(rbtvService, times(1)).scheduleOfCurrentWeek()
+        verify(rbtvService, times(1)).getScheduleFromTimestamp()
     }
 
     @Test
@@ -76,11 +76,11 @@ class WeeklyScheduleRepositoryTest {
         `when`(scheduleDao.getWeeklyScheduleWithDailySchedules()).thenReturn(dbData)
         val schedule = WeeklyScheduleResponse()
         val call = ApiUtil.successCall(schedule)
-        `when`(rbtvService.scheduleOfCurrentWeek()).thenReturn(call)
+        `when`(rbtvService.getScheduleFromTimestamp()).thenReturn(call)
         val observer = mock<Observer<Resource<WeeklyScheduleWithDailySchedules>>>()
 
         repo.loadSchedule(false).observeForever(observer)
-        verify(rbtvService, never()).scheduleOfCurrentWeek()
+        verify(rbtvService, never()).getScheduleFromTimestamp()
 
         val emptyScheduleLiveData = MutableLiveData<WeeklyScheduleWithDailySchedules>()
         val weeklyScheduleWithDailySchedules = WeeklyScheduleWithDailySchedules()
@@ -88,7 +88,7 @@ class WeeklyScheduleRepositoryTest {
         emptyScheduleLiveData.value = weeklyScheduleWithDailySchedules
         `when`(scheduleDao.getWeeklyScheduleWithDailySchedules()).thenReturn(emptyScheduleLiveData)
         dbData.value = null
-        verify(rbtvService, times(1)).scheduleOfCurrentWeek()
+        verify(rbtvService, times(1)).getScheduleFromTimestamp()
     }
 
 
@@ -100,12 +100,12 @@ class WeeklyScheduleRepositoryTest {
         val schedule = WeeklyScheduleResponse()
         val call = ApiUtil.successCall(schedule)
 
-        `when`(rbtvService.scheduleOfCurrentWeek()).thenReturn(call)
+        `when`(rbtvService.getScheduleFromTimestamp()).thenReturn(call)
         val observer = mock<Observer<Resource<WeeklyScheduleWithDailySchedules>>>()
 
         repo.loadSchedule(true).observeForever(observer)
         dbData.value = null
-        verify(rbtvService, times(1)).scheduleOfCurrentWeek()
+        verify(rbtvService, times(1)).getScheduleFromTimestamp()
     }
 
     @Test
@@ -116,7 +116,7 @@ class WeeklyScheduleRepositoryTest {
         val schedule = WeeklyScheduleResponse()
         val call = ApiUtil.successCall(schedule)
 
-        `when`(rbtvService.scheduleOfCurrentWeek()).thenReturn(call)
+        `when`(rbtvService.getScheduleFromTimestamp()).thenReturn(call)
         val observer = mock<Observer<Resource<WeeklyScheduleWithDailySchedules>>>()
 
         val weeklyScheduleWithDailySchedules = WeeklyScheduleWithDailySchedules()
@@ -124,7 +124,7 @@ class WeeklyScheduleRepositoryTest {
 
         repo.loadSchedule(true).observeForever(observer)
         dbData.value = weeklyScheduleWithDailySchedules
-        verify(rbtvService, times(1)).scheduleOfCurrentWeek()
+        verify(rbtvService, times(1)).getScheduleFromTimestamp()
     }
 
     @Test
@@ -135,7 +135,7 @@ class WeeklyScheduleRepositoryTest {
         val schedule = WeeklyScheduleResponse()
         val call = ApiUtil.successCall(schedule)
 
-        `when`(rbtvService.scheduleOfCurrentWeek()).thenReturn(call)
+        `when`(rbtvService.getScheduleFromTimestamp()).thenReturn(call)
         val observer = mock<Observer<Resource<WeeklyScheduleWithDailySchedules>>>()
 
         val weeklyScheduleWithDailySchedules = WeeklyScheduleWithDailySchedules()
@@ -143,7 +143,7 @@ class WeeklyScheduleRepositoryTest {
 
         repo.loadSchedule(true).observeForever(observer)
         dbData.value = weeklyScheduleWithDailySchedules
-        verify(rbtvService, times(1)).scheduleOfCurrentWeek()
+        verify(rbtvService, times(1)).getScheduleFromTimestamp()
     }
 
     @Test
@@ -151,8 +151,8 @@ class WeeklyScheduleRepositoryTest {
         val schedule = WeeklyScheduleResponse()
         val call = ApiUtil.successCall(schedule)
 
-        `when`(rbtvService.scheduleOfCurrentWeek()).thenReturn(call)
-        val weeklyScheduleResponse = (LiveDataTestUtil.getValue(rbtvService.scheduleOfCurrentWeek()) as ApiSuccessResponse).body
+        `when`(rbtvService.getScheduleFromTimestamp()).thenReturn(call)
+        val weeklyScheduleResponse = (LiveDataTestUtil.getValue(rbtvService.getScheduleFromTimestamp()) as ApiSuccessResponse).body
         val observer = mock<Observer<Resource<WeeklyScheduleWithDailySchedules>>>()
 
         `when`(scheduleDao.getWeeklyScheduleWithDailySchedules()).thenReturn(LiveDataTestUtil
@@ -170,8 +170,8 @@ class WeeklyScheduleRepositoryTest {
         val schedule = WeeklyScheduleResponse()
         val call = ApiUtil.successCall(schedule)
 
-        `when`(rbtvService.scheduleOfCurrentWeek()).thenReturn(call)
-        val weeklyScheduleResponse = (LiveDataTestUtil.getValue(rbtvService.scheduleOfCurrentWeek()) as ApiSuccessResponse).body
+        `when`(rbtvService.getScheduleFromTimestamp()).thenReturn(call)
+        val weeklyScheduleResponse = (LiveDataTestUtil.getValue(rbtvService.getScheduleFromTimestamp()) as ApiSuccessResponse).body
         val observer = mock<Observer<Resource<WeeklyScheduleWithDailySchedules>>>()
 
         `when`(scheduleDao.getWeeklyScheduleWithDailySchedules()).thenReturn(LiveDataTestUtil
@@ -189,8 +189,8 @@ class WeeklyScheduleRepositoryTest {
         val updatedSchedule = TestUtils.createWeeklyScheduleOneWeek()
         val updatedCall = ApiUtil.successCall(updatedSchedule)
 
-        `when`(rbtvService.scheduleOfCurrentWeek()).thenReturn(updatedCall)
-        val weeklyScheduleResponse = (LiveDataTestUtil.getValue(rbtvService.scheduleOfCurrentWeek()) as ApiSuccessResponse).body
+        `when`(rbtvService.getScheduleFromTimestamp()).thenReturn(updatedCall)
+        val weeklyScheduleResponse = (LiveDataTestUtil.getValue(rbtvService.getScheduleFromTimestamp()) as ApiSuccessResponse).body
         val observer = mock<Observer<Resource<WeeklyScheduleWithDailySchedules>>>()
 
         `when`(scheduleDao.getWeeklyScheduleWithDailySchedules()).thenReturn(LiveDataTestUtil

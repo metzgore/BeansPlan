@@ -7,7 +7,7 @@ import android.net.Uri
 import android.text.format.DateUtils
 import androidx.core.content.ContextCompat
 import de.metzgore.beansplan.R
-import de.metzgore.beansplan.data.ShowResponse
+import de.metzgore.beansplan.data.ScheduleItem
 import de.metzgore.beansplan.data.room.Reminder
 import de.metzgore.beansplan.data.room.relations.ShowWithReminder
 
@@ -25,16 +25,16 @@ OnReminderButtonClickListener?) {
     val isReminderIconVisible = !showWithReminder.show.isOver && !showWithReminder.show.isRunning
 
     val typeFormatted: String = when (showWithReminder.show.type) {
-        ShowResponse.Type.LIVE -> "LIVE"
-        ShowResponse.Type.PREMIERE -> "NEU"
-        ShowResponse.Type.NONE -> ""
+        ScheduleItem.Type.LIVE -> "LIVE"
+        ScheduleItem.Type.PREMIERE -> "NEU"
+        ScheduleItem.Type.NONE -> ""
     }
 
     fun getTypeFormatted(context: Context): String {
         return when (showWithReminder.show.type) {
-            ShowResponse.Type.LIVE -> context.getString(R.string.show_type_live)
-            ShowResponse.Type.PREMIERE -> context.getString(R.string.show_type_premiere)
-            ShowResponse.Type.NONE -> ""
+            ScheduleItem.Type.LIVE -> context.getString(R.string.show_type_live)
+            ScheduleItem.Type.PREMIERE -> context.getString(R.string.show_type_premiere)
+            ScheduleItem.Type.NONE -> ""
         }
     }
 
@@ -55,8 +55,8 @@ OnReminderButtonClickListener?) {
 
     fun getTypeBackground(context: Context): Drawable? {
         return when (showWithReminder.show.type) {
-            ShowResponse.Type.LIVE -> ContextCompat.getDrawable(context, R.drawable.background_show_type_live)
-            ShowResponse.Type.PREMIERE -> ContextCompat.getDrawable(context, R.drawable.background_show_type_premiere)
+            ScheduleItem.Type.LIVE -> ContextCompat.getDrawable(context, R.drawable.background_show_type_live)
+            ScheduleItem.Type.PREMIERE -> ContextCompat.getDrawable(context, R.drawable.background_show_type_premiere)
             else -> null
         }
     }
